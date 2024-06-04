@@ -5,6 +5,7 @@
 
     CHANGELOG:
     1. Initial version created (04/06/2024)
+    2. Commented out line 30 to line 37, overlooked this part of the code (04/06/2024)
 
     TO DO:
     1. Once pages are completed, make sure redirect_user function goes to the right pages (CTRL + F 'temp')
@@ -26,13 +27,14 @@ if(isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
     redirect_user('temp');
 
 }
-elseif (isset($_SESSION["admin_id"]) && isset($_SESSION["name"])){
+// !!! NEEDS TO BE REMOVED IF NO SYSTEM ADMIN !!!
+// elseif (isset($_SESSION["admin_id"]) && isset($_SESSION["name"])){
 
-    // Redirects the admin to a page, temporary placeholder for now
-    // !!! REMOVE IF THERE IS NO SYSTEM ADMIN !!!
-	redirect_user('temp');
+//     // Redirects the admin to a page, temporary placeholder for now
+//     // !!! REMOVE IF THERE IS NO SYSTEM ADMIN !!!
+// 	redirect_user('temp');
 
-}
+// }
 else{
 
 	// Check if the form has been submitted:
