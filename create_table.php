@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 // sql to create table
 $sqlMember = "CREATE TABLE Member (userID CHAR(10) PRIMARY KEY 
 ,username VARCHAR(25), firstName VARCHAR(25), 
-astName VARCHAR(25), email VARCHAR(25), 
+lastName VARCHAR(25), email VARCHAR(25), 
 password CHAR(20));";
 
 if ($conn->query($sqlMember) === TRUE) {
