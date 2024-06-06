@@ -5,10 +5,13 @@
     create_task() function creates a task.
     update_task_status() function updates the status of a task.
     get_task_list() function returns an associated array which contains a list of tasks that matches the project_id
-    validate_project_id() function validates the project_id, this is a function cause it's repeatedly used throughout this file.
+    validate_user_project_id() function validates the project_id, this is a function cause it's repeatedly used throughout this file.
 
     CHANGELOG:
     1. Initial version created (05/06/2024)
+    2. Renamed $project_id to $user_project_id. Updated SQL statements to reflect database design. validate_project_id () function was copied to project_functions.php.
+    Fixed a bug for $task_title in create_task(), it was calling a $_POST variable instead of the parameter. Added a return error statement for update_task_status().
+    Include a dependency to redirect_function.php.
 
     TO DO:
     1. Determine max length of title
@@ -19,32 +22,35 @@
     Created on 05/06/2024 by Sean
 */
 
-function create_task($dbc, $project_id, $task_title) {
+// Dependencies
+include ('redirect_function.php');
 
-    $errors = validate_project_id($dbc, $project_id); // Initialize error array and check if project ID is valid
+function create_task($dbc, $user_project_id, $task_title) {
+
+    $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if project ID is valid
 
     // Validate the task title
-	if (empty($_POST['task_title'])){
+	if ($task_title){
 
 		$errors[] = 'You forgot to enter a title for your task';
 
-	} elseif(strlen($_POST['task_title']) > 100){ // Arbitarily set as 100 for now
+	} elseif(strlen($task_title) > 100){ // Arbitarily set as 100 for now
 
         $errors[] = 'The title entered is too long';
 
     } else{
 
-		$task_title = mysqli_real_escape_string($dbc, trim($_POST['task_title']));
+		$task_title = mysqli_real_escape_string($dbc, trim($task_title));
 
 	}
 
     if(empty($errors)){
 
-        $project_id = mysqli_real_escape_string($dbc, $project_id);
+        $user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
 
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        $q = "INSERT INTO task (project_id, task_title, date_created) VALUES ('$project_id', '$task_title', NOW() )";		
+        $q = "INSERT INTO task (userprojectID, taskName, date_created) VALUES ('$user_project_id', '$task_title', NOW() )";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		if ($r) { // If it ran OK.
@@ -77,9 +83,9 @@ function create_task($dbc, $project_id, $task_title) {
 
 }
 
-function update_task_status($dbc, $project_id, $task_id, $status) {
+function update_task_status($dbc, $user_project_id, $task_id, $status) {
 
-    $errors = validate_project_id($dbc, $project_id); // Initialize error array and check if project ID is valid
+    $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if project ID is valid
 
     // Validate task ID
     if (empty($task_id)) {
@@ -92,7 +98,7 @@ function update_task_status($dbc, $project_id, $task_id, $status) {
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if task_id is found
-        $q = "SELECT task_id FROM task WHERE task_id = '$task_id' AND project_id = '$project_id'";
+        $q = "SELECT taskID FROM task WHERE taskID = '$task_id' AND userprojectID = '$user_project_id'";
         $r = @mysqli_query($dbc, $q);
 
         if (mysqli_num_rows($r) == 0){
@@ -143,11 +149,11 @@ function update_task_status($dbc, $project_id, $task_id, $status) {
 
     if (empty($errors)){
 
-        $project_id = mysqli_real_escape_string($dbc, $project_id);
+        $user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
 
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        $q = "UPDATE task SET task_status = '$status' WHERE project_id = '$project_id' AND task_id = '$task_id'";		
+        $q = "UPDATE task SET status = '$status' WHERE userprojectID = '$user_project_id' AND taskID = '$task_id'";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		if ($r) { // If it ran OK.
@@ -180,45 +186,51 @@ function update_task_status($dbc, $project_id, $task_id, $status) {
 
 }
 
-function get_task_list($dbc, $project_id){
+function get_task_list($dbc, $user_project_id){
     
-    $errors = validate_project_id($dbc, $project_id);
+    $errors = validate_user_project_id($dbc, $user_project_id);
 
     if(empty($errors)){
 
+        $user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
+
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Construct the SQL query
-        $q = "SELECT * FROM task where project_id = '$project_id'";
+        $q = "SELECT * FROM task where userprojectID = '$user_project_id'";
         $r = @mysqli_query($dbc, $q);
 
         // Returns an associated array of all matching tasks
         return mysqli_fetch_assoc($r);
 
+    } else{
+        
+        return $errors;
+
     }
 
 }
 
-function validate_project_id ($dbc, $project_id){
+function validate_user_project_id ($dbc, $user_project_id){
 
     $errors = array(); // Initialize error array.
 
     // Validate project ID
-    if (empty($project_id)) {
+    if (empty($user_project_id)) {
 
-        $errors[] = "Project ID has not been properly initialised";
+        $errors[] = "userprojectID has not been properly initialised";
 
     } else{
 
-		$project_id = mysqli_real_escape_string($dbc, $project_id);
+		$user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if project_id is found
-        $q = "SELECT project_id FROM project WHERE project_id = '$project_id'";
+        $q = "SELECT userprojectID FROM User_Project WHERE userprojectID = '$user_project_id'";
         $r = @mysqli_query($dbc, $q);
 
         if (mysqli_num_rows($r) == 0){
 
-            $errors[]= "Project not found!";
+            $errors[]= "userprojectID not found!";
 
         }
 	}

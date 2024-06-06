@@ -5,7 +5,8 @@
     Includes a redirect_user function to redirect users to another page. (To redirect once logged in, or if already logged in)
 
     CHANGELOG:
-    1. Initial version created
+    1. Initial version created (04/06/2024)
+	2. Removed redirect_user function and placed it into its own separate file since it's being referenced by multiple files. Included a dependency to redirect_function.php.
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -14,25 +15,8 @@
     Created on 04/06/2024 by Sean
 */
 
-// Redirects users to the intended page name based on the input String
-function redirect_user ($page) {
-
-	// Start defining the URL...
-	// URL is http:// plus the host name plus the current directory:
-	$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
-	
-	// Remove any trailing slashes:
-	$url = rtrim($url, '/\\');
-	
-	// Add the page:
-	$url .= '/' . $page;
-	
-	// Redirect the user:
-	header("Location: $url");
-	exit(); // Quit the script.
-
-} // End of redirect_user() function.
-
+// Dependencies
+include ('redirect_function.php');
 
 function check_login($dbc, $email = '', $pass = '') {
 
