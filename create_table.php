@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 // sql to create table
-$sqlMember = "CREATE TABLE Member (userID CHAR(10) PRIMARY KEY 
+$sqlMember = "CREATE TABLE Account (userID CHAR(10) PRIMARY KEY 
 ,username VARCHAR(25), firstName VARCHAR(25), 
 lastName VARCHAR(25), email VARCHAR(25), 
 password CHAR(20));";
@@ -36,7 +36,7 @@ $sqluserProject= "CREATE TABLE userProject (
     userID VARCHAR(10) NOT NULL,
     projectID VARCHAR(10) NOT NULL,
     isadmin BOOLEAN,
-    FOREIGN KEY (userID) REFERENCES Member(userID),
+    FOREIGN KEY (userID) REFERENCES Account(userID),
     FOREIGN KEY (projectID) REFERENCES Project(projectID)
 );";
 
