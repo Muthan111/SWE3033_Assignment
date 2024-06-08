@@ -6,7 +6,8 @@
 
     CHANGELOG:
     1. Initial version created (04/06/2024)
-	2. Removed redirect_user function and placed it into its own separate file since it's being referenced by multiple files. Included a dependency to redirect_function.php.
+	2. Removed redirect_user function and placed it into its own separate file since it's being referenced by multiple files. Included a dependency to redirect_function.php. (06/06/2024)
+	3. Partially updated the SQL (08/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -39,8 +40,8 @@ function check_login($dbc, $email = '', $pass = '') {
 	if (empty($errors)) { // If everything's OK.
 
 		// Retrieve the user_id and first_name for that email/password combination:
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-		$q = "SELECT user_id, username FROM user WHERE username='$n' AND password=SHA1('$p')";		
+        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED, HOW IS THE PASSWORD BEING SAVED? NEED TO ENCRYPT?
+		$q = "SELECT userID, username FROM account WHERE username='$n' AND password=SHA1('$p')";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 		
 		// Check the result:

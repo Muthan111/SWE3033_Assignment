@@ -11,13 +11,15 @@
     1. Initial version created (05/06/2024)
     2. Renamed $project_id to $user_project_id. Updated SQL statements to reflect database design. validate_project_id () function was copied to project_functions.php.
     Fixed a bug for $task_title in create_task(), it was calling a $_POST variable instead of the parameter. Added a return error statement for update_task_status().
-    Include a dependency to redirect_function.php.
+    Include a dependency to redirect_function.php. (06/06/2024)
+    3. Set max length for title, added task_description input to create_task(), change status verification code, partially updated SQL statements. (08/06/2024)
 
     TO DO:
-    1. Determine max length of title
-    2. Update SQL statements once database is completed
-    3. Update HTML code once web pages are completed
-    4. Decide what status these tasks have
+    1. Update SQL statements once database is completed
+    2. Update HTML code once web pages are completed
+    3. Decide what status these tasks have
+    4. DETERMINE HOW THE TASK_ID IS GENERATED
+    5. Add a check_status function that will return the status of a task in string rather than int
     
     Created on 05/06/2024 by Sean
 */
@@ -25,16 +27,16 @@
 // Dependencies
 include ('redirect_function.php');
 
-function create_task($dbc, $user_project_id, $task_title) {
+function create_task($dbc, $user_project_id, $task_title, $task_description) {
 
     $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if project ID is valid
 
     // Validate the task title
-	if ($task_title){
+	if (empty($task_title)){
 
 		$errors[] = 'You forgot to enter a title for your task';
 
-	} elseif(strlen($task_title) > 100){ // Arbitarily set as 100 for now
+	} elseif(strlen($task_title) > 30){
 
         $errors[] = 'The title entered is too long';
 
@@ -44,13 +46,28 @@ function create_task($dbc, $user_project_id, $task_title) {
 
 	}
 
+    // Validate the task description
+	if (empty($task_description)){
+
+		$errors[] = 'You forgot to enter a title for your task';
+
+	} elseif(strlen($task_title) > 50){
+
+        $errors[] = 'The title entered is too long';
+
+    } else{
+
+		$task_description = mysqli_real_escape_string($dbc, trim($task_title));
+
+	}
+
     if(empty($errors)){
 
         $user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
 
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        $q = "INSERT INTO task (userprojectID, taskName, date_created) VALUES ('$user_project_id', '$task_title', NOW() )";		
+        $q = "INSERT INTO task (userprojectID, taskName, description) VALUES ('$user_project_id', '$task_title', '$task_description')";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		if ($r) { // If it ran OK.
@@ -85,7 +102,7 @@ function create_task($dbc, $user_project_id, $task_title) {
 
 function update_task_status($dbc, $user_project_id, $task_id, $status) {
 
-    $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if project ID is valid
+    $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if user project ID is valid
 
     // Validate task ID
     if (empty($task_id)) {
@@ -116,32 +133,14 @@ function update_task_status($dbc, $user_project_id, $task_id, $status) {
     } else{
 
         // Depending on the status code, the task will be assigned one of the following statuses
-        // NEED TO DECIDE WHAT STATUS THESE TASKS HAS
-        switch($status){
+        /*
+        status code 1 = "Ongoing"
+        status code 2 = "Completed"
+        status code 3 = "Unassigned"
+        */
+        if ($status > 3 && $status < 1){
 
-            case 1:
-                $status = "Incomplete";
-                break;
-            case 2:
-                $status = "Not Assigned";
-                break;
-            case 3:
-                $status = "Completed";
-                break;
-            case 4:
-                $status = "Suspended";
-                break;
-            case 5:
-                $status = "Paused";
-                break;
-            case 6:
-                $status = "Waiting for other tasks to complete";
-                break;
-            case 7:
-                $status = "Waiting for review";
-                break;
-            default:
-                $errors = "Invalid status";
+            $errors[] = "Incorrect status code";
 
         }
 

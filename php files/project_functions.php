@@ -8,11 +8,12 @@
 
     CHANGELOG:
     1. Initial version created (06/06/2024)
+    2. Partially updated SQL statements, updated input length based on database constraints
 
     TO DO:
     1. Update SQL statements once database is completed
     2. Turn user validation into a function? maybe place it in the user file
-    3. Figure out whether the project id is created by the user, randomly generated in the script, or generated in the database
+    3. How is the project ID generated?
     4. Are the dates required during creation?
     
     Created on 06/06/2024 by Sean
@@ -36,7 +37,7 @@ function create_project($dbc, $creator_id, $project_name, $project_description, 
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if user_id is found
-        $q = "SELECT userID from User where userID = '$user_id'";
+        $q = "SELECT userID from account where userID = '$user_id'";
         $r = @mysqli_query($dbc, $q);
 
         if (mysqli_num_rows($r) == 0){
@@ -48,13 +49,13 @@ function create_project($dbc, $creator_id, $project_name, $project_description, 
 	}
 
     // Validate the project name
-	if ($project_name){
+	if (empty($project_name)){
 
 		$errors[] = 'You forgot to enter a name for your project';
 
-	} elseif(strlen($project_name) > 100){ // Arbitarily set as 100 for now
+	} elseif(strlen($project_name) > 20){ // Arbitarily set as 100 for now
 
-        $errors[] = 'The name entered is too long';
+        $errors[] = "Your project name is too long";
 
     } else{
 
@@ -65,9 +66,14 @@ function create_project($dbc, $creator_id, $project_name, $project_description, 
     // Validate project description
     if (empty($project_description)){
 
-        $errors[] = "You forgot to enter a description fro your project";
+        $errors[] = "You forgot to enter a description for your project";
 
-    } else{
+    } elseif(strlen($project_description) > 25){
+
+        $errors[] = "Your project description is too long";
+
+    }
+    else{
 
         $project_description = mysqli_real_escape_string($dbc, trim($project_description));
 
@@ -127,7 +133,7 @@ function join_project($dbc, $project_id, $user_id){
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED (need to find out how admin is determined)
         // Lets user join a project
-        $q = "INSERT INTO User_Project (userID, projectID, admin) VALUES ('$user_id', '$project_id', FALSE";
+        $q = "INSERT INTO User_Project (userID, projectID, admin) VALUES ('$user_id', '$project_id', 0";
         $r = @mysqli_query($dbc, $q);
 
         if($r){
@@ -177,7 +183,7 @@ function validate_project_id ($dbc, $project_id){
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if project_id is found
-        $q = "SELECT project_id FROM project WHERE project_id = '$project_id'";
+        $q = "SELECT projectID FROM project WHERE projectID = '$project_id'";
         $r = @mysqli_query($dbc, $q);
 
         if (mysqli_num_rows($r) == 0){
