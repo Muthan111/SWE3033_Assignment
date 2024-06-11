@@ -6,6 +6,7 @@
     CHANGELOG:
     1. Initial version created (04/06/2024)
     2. Commented out phone number code, added verification for first name and last name, added validation for long usernames, partially updated SQL. (08/06/2024)
+    3. Moved to root folder, added registration page at the end (11/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed

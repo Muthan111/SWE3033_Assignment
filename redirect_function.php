@@ -5,6 +5,7 @@
 
     CHANGELOG:
     1. Initial version created (06/06/2024)
+	2. Moved to root folder (11/06/2024)
 
     TO DO:
     
