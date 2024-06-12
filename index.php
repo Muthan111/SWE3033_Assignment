@@ -147,13 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		
 	if (empty($errors)) {
 
-    // GENERATES ID BASED ON TIMESTAMP
-    function generate_id($length_of_string) {
-
-        // sha1 the timestamps and returns substring of specified length
-        return substr(sha1(time()), 0, $length_of_string);
-    }
-
 		// Make the query:
     // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
 		$q = "INSERT INTO account (username, firstName, lastName, email, password) VALUES ('$username', '$first_name', '$last_name', '$email', '$password')";		
