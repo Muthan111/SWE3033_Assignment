@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scorpio Task Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #f4f4f4;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+        .sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .sidebar nav a {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            color: #333;
+            text-decoration: none;
+        }
+        .sidebar nav a:hover {
+            background-color: #ddd;
+        }
+        .dropdown {
+            margin: 20px 0;
+        }
+        .dropdown button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f4f4f4;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            text-align: left;
+        }
+        .dropdown-content {
+            display: none;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+        }
+        .dropdown-content a {
+            padding: 10px;
+            display: block;
+            text-decoration: none;
+            color: #333;
+        }
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 40px;
+            background-color: #fff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 150px;
+        }
+        .generate-id {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .generate-id input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        .generate-id button {
+            padding: 15px;
+            background-color: #777;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .generate-id button:hover {
+            background-color: #555;
+        }
+        .create-task {
+            display: flex;
+            justify-content: center;
+        }
+        .create-task button {
+            padding: 15px 30px;
+            background-color: #777;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .create-task button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Scorpio Task Manager</h2>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Join by code</a>
+            <div class="dropdown">
+                <button onclick="toggleDropdown('participating-projects')">Participating Projects</button>
+                <div id="participating-projects" class="dropdown-content">
+                    <a href="#">Main Projects</a>
+                    <a href="#">Add Task by code...</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button onclick="toggleDropdown('hidden-projects')">Hidden Projects</button>
+                <div id="hidden-projects" class="dropdown-content">
+                    <a href="#">Hidden Projects</a>
+                </div>
+            </div>
+            <a href="#">Project Chat</a>
+        </nav>
+    </div>
+    <div class="main-content">
+        <h1>Create a New Project</h1>
+        <div class="generate-id form-group">
+            <input type="text" placeholder="Project ID">
+            <button>Auto Generate</button>
+        </div>
+        <div class="form-group">
+            <label for="project-title">Project Title</label>
+            <input type="text" id="project-title" placeholder="Project Title">
+        </div>
+        <div class="form-group">
+            <label for="project-description">Project Description</label>
+            <textarea id="project-description" placeholder="Project Description"></textarea>
+        </div>
+        <div class="create-task">
+            <button>Create a New Task</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown(id) {
+            const content = document.getElementById(id);
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
