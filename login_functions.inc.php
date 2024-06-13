@@ -5,13 +5,16 @@
     Includes a redirect_user function to redirect users to another page. (To redirect once logged in, or if already logged in)
 
     CHANGELOG:
-    1. Initial version created (04/06/2024)
-	2. Removed redirect_user function and placed it into its own separate file since it's being referenced by multiple files. Included a dependency to redirect_function.php. (06/06/2024)
-	3. Partially updated the SQL (08/06/2024)
+    1. 	Initial version created (04/06/2024)
+	2.	Removed redirect_user function and placed it into its own separate file since it's being referenced by multiple files. Included a dependency to redirect_function.php. (06/06/2024)
+	3. 	Partially updated the SQL (08/06/2024)
+	4. 	Moved to root folder, updated POST submission to email rather than username, temporarily removed password encryption and changed to email for SQL, functions work as intended
+		(11/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
     2. IF NO SYSTEM ADMIN, REMOVE SYSTEM ADMIN PARTS
+	3. Determine if need encryption
     
     Created on 04/06/2024 by Sean
 */
@@ -23,11 +26,11 @@ function check_login($dbc, $email = '', $pass = '') {
 
 	$errors = array(); // Initialize error array.
 
-	// Validate the username
-	if (empty($_POST['username'])){
-		$errors[] = 'You forgot to enter your username';
+	// Validate the email
+	if (empty($_POST['email'])){
+		$errors[] = 'You forgot to enter your email';
 	} else{
-		$n = mysqli_real_escape_string($dbc, trim($_POST['username']));
+		$n = mysqli_real_escape_string($dbc, trim($_POST['email']));
 	}
 	
 	// Validate the password
@@ -41,7 +44,8 @@ function check_login($dbc, $email = '', $pass = '') {
 
 		// Retrieve the user_id and first_name for that email/password combination:
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED, HOW IS THE PASSWORD BEING SAVED? NEED TO ENCRYPT?
-		$q = "SELECT userID, username FROM account WHERE username='$n' AND password=SHA1('$p')";		
+		// $q = "SELECT userID, username FROM account WHERE email='$n' AND password=SHA1('$p')";	
+		$q = "SELECT userID, username FROM account WHERE email='$n' AND password='$p'";	
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 		
 		// Check the result:

@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 // sql to create table
-$sqlMember = "CREATE TABLE Account (userID CHAR(10) PRIMARY KEY 
+$sqlMember = "CREATE TABLE Account (userID INT(10) AUTO_INCREMENT PRIMARY KEY 
 ,username VARCHAR(25), firstName VARCHAR(25), 
 lastName VARCHAR(25), email VARCHAR(25), 
 password CHAR(20));";
@@ -23,7 +23,7 @@ if ($conn->query($sqlMember) === TRUE) {
     echo "Error creating User table: " . $conn->error;
   }
 echo "<br>";
-$sqlProject = "CREATE TABLE Project (projectID CHAR(10) PRIMARY KEY , projectName VARCHAR(20), startDate DATE, dueDate DATE, projectDescription VARCHAR(25));";
+$sqlProject = "CREATE TABLE Project (projectID VARCHAR(10) PRIMARY KEY, projectName VARCHAR(20), startDate DATE, dueDate DATE, projectDescription VARCHAR(25));";
 
 if ($conn->query($sqlProject) === TRUE) {
     echo "Table Project created successfully";
@@ -33,7 +33,7 @@ if ($conn->query($sqlProject) === TRUE) {
 echo "<br>";
 $sqluserProject= "CREATE TABLE userProject (
     userprojectID VARCHAR(10) PRIMARY KEY,
-    userID VARCHAR(10) NOT NULL,
+    userID INT(10) NOT NULL,
     projectID VARCHAR(10) NOT NULL,
     isadmin BOOLEAN,
     FOREIGN KEY (userID) REFERENCES Account(userID),
@@ -46,7 +46,7 @@ if ($conn->query($sqluserProject) === TRUE) {
     echo "Error creating User_Project table: " . $conn->error;
   }
 echo "<br>";
-$sqlTask = "CREATE TABLE Task (taskID CHAR(10) PRIMARY KEY,
+$sqlTask = "CREATE TABLE Task (taskID VARCHAR(10) PRIMARY KEY,
  userprojectID CHAR(10), taskName VARCHAR(30),
   description VARCHAR(50), dueDate Date, status Boolean,
    FOREIGN KEY (userprojectID) REFERENCES userProject(userprojectID));";

@@ -6,6 +6,7 @@
     CHANGELOG:
     1. Initial version created (04/06/2024)
     2. Updated database name (08/06/2024)
+    3. Moved to root folder (11/06/2024)
 
     TO DO:
     

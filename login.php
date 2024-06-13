@@ -4,13 +4,14 @@
     Description: This page processes the login form submission. The script uses sessions.
 
     CHANGELOG:
-    1. Initial version created (04/06/2024)
-    2. Commented out line 30 to line 37, overlooked this part of the code (04/06/2024)
+    1. 	Initial version created (04/06/2024)
+    2. 	Commented out line 30 to line 37, overlooked this part of the code (04/06/2024)
+	3.	Change username input to email input, added html file at the end, moved login.php to root folder, tested login system, works as intended, user is redirected to homepage
+		once logged in. Added the email variable so that users don't have to re-enter their email everytime they fail the login.(11/06/2024)
 
     TO DO:
-    1. Once pages are completed, make sure redirect_user function goes to the right pages (CTRL + F 'temp')
+    1. Once pages are completed, make sure redirect_user function goes to the right pages (CTRL + F 'temp') CURRENTLY SET TO HOMEPAGE
     2. IF NO SYSTEM ADMIN, REMOVE SYSTEM ADMIN PARTS
-    3. login_page.inc.php needs HTML parts done for this page to work
     
     Created on 04/06/2024 by Sean
 */
@@ -20,6 +21,9 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 // LOGIN AUTHENTICATION FILE
 require ('login_functions.inc.php');
+
+// Initialising variables
+$email = "Registererd email";
 
 if(isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
 
@@ -42,8 +46,11 @@ else{
 
 		require ('mysqli_connect.php');
 
+		// Makes sure that the user does not have to input the email for each failed login (the email they entered stays in the text field)
+		$email = $_POST['email'];
+
 		// Check the login:
-		list ($check, $data) = check_login($dbc, $_POST['username'], $_POST['pass']);
+		list ($check, $data) = check_login($dbc, $_POST['email'], $_POST['pass']);
 		
 		if ($check == 1) { // User Verified!
 			
@@ -52,7 +59,7 @@ else{
 			$_SESSION['username'] = $data['username'];
 			
 			// Redirect:
-			redirect_user('temp');	// Redirects the user to a page, temporary placeholder for now
+			redirect_user('Homepage.HTML');	// Redirects the user to a page, temporary placeholder for now
 				
 		}
         // !!! NEEDS TO BE REMOVED IF NO SYSTEM ADMIN !!!
@@ -76,9 +83,8 @@ else{
 
 	} // End of the main submit conditional.
 
-    // NEEDS HTML CODE AND DOCUMENTS
 	// Create the page:
-	// include ('login_page.inc.php');
+	include ('Login_html.php');
 
 }
 ?>

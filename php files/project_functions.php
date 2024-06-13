@@ -8,13 +8,12 @@
 
     CHANGELOG:
     1. Initial version created (06/06/2024)
-    2. Partially updated SQL statements, updated input length based on database constraints
+    2. Partially updated SQL statements, updated input length based on database constraints (08/06/2024)
+    3. Completed create_project function, added a function to create an id of variable length (12/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
     2. Turn user validation into a function? maybe place it in the user file
-    3. How is the project ID generated?
-    4. Are the dates required during creation?
     
     Created on 06/06/2024 by Sean
 */
@@ -82,15 +81,52 @@ function create_project($dbc, $creator_id, $project_name, $project_description, 
     // Validate dates? If dates are suppose to be included here
 
     // Generate a project id
-    if ($generate_project_id){
+    if (empty($generate_project_id)){
 
-        // Generate project id here, to be determined what we want exactly
+        // GENERATES ID BASED ON TIMESTAMP
+        $generate_project_id = generate_id(4);
 
     }
 
     if(empty($errors)){
 
-        // Insert new project into database, need to confirm a few details first
+        // Insert new project into database
+        // Make the query
+        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
+        $q = "INSERT INTO project (projectID, projectName, startDate, dueDate, projectDescription) 
+        VALUES ('$generate_project_id', '$project_name', '$start_date', '$due_date', '$project_description')";		
+		$r = @mysqli_query ($dbc, $q); // Run the query.
+
+		if ($r) { // If it ran OK.
+            
+            // Relate creator to new project
+            $q = "INSERT INTO userproject (userprojectID, userID, projectID, isadmin) VALUES ('". generate_id(4) ."', '$creator_id', '$generate_project_id', 1)";
+            $r = @mysqli_query($dbc, $q); // Run the query
+
+            if ($r){
+                // Redirects the user to a page, temporary placeholder for now
+                redirect_user("Homepage.HTML");	
+            } else{
+                // Public message:
+                // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
+                echo '<h1>System Error</h1>
+                <p class="error">The task encountered an error on our server, your task was not created. We apologised for any incovenience.</p>'; 
+                
+                // Debugging message:
+                echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
+                }
+		
+		} else { // If it did not run OK.
+			
+			// Public message:
+            // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
+            echo '<h1>System Error</h1>
+			<p class="error">The task encountered an error on our server, your task was not created. We apologised for any incovenience.</p>'; 
+			
+			// Debugging message:
+			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
+						
+		} // End of if ($r) IF.
 
     } else{
 
@@ -199,6 +235,12 @@ function validate_project_id ($dbc, $project_id){
 
     }
 
+}
+
+function generate_id($length_of_string) {
+
+    // sha1 the timestamps and returns substring of specified length
+    return substr(sha1(time()), 0, $length_of_string);
 }
 
 
