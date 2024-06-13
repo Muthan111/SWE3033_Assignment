@@ -13,23 +13,23 @@
     Fixed a bug for $task_title in create_task(), it was calling a $_POST variable instead of the parameter. Added a return error statement for update_task_status().
     Include a dependency to redirect_function.php. (06/06/2024)
     3. Set max length for title, added task_description input to create_task(), change status verification code, partially updated SQL statements. (08/06/2024)
+    4. Added validate_task_id and return_task_status functions, added validation process for task due dates and task id (13/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
     2. Update HTML code once web pages are completed
-    3. Decide what status these tasks have
-    4. DETERMINE HOW THE TASK_ID IS GENERATED
-    5. Add a check_status function that will return the status of a task in string rather than int
+    3. Restructure validate_user_project_id() function once database is complete
     
     Created on 05/06/2024 by Sean
 */
 
 // Dependencies
 include ('redirect_function.php');
+include ('project_functions.php');
 
-function create_task($dbc, $user_project_id, $task_title, $task_description) {
+function create_task($dbc, $task_id, $project_id, $task_title, $task_description, $due_date) {
 
-    $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if project ID is valid
+    $errors = validate_project_id($dbc, $project_id); // Initialize error array and check if project ID is valid
 
     // Validate the task title
 	if (empty($task_title)){
@@ -61,13 +61,44 @@ function create_task($dbc, $user_project_id, $task_title, $task_description) {
 
 	}
 
+    // Validate or generate task id
+    if  (empty($task_id)){
+
+        $task_id = substr(sha1(time()), 0, 4);
+        $task_id = mysqli_real_escape_string($dbc, $task_id);
+
+    } elseif (strlen($task_id) > 4){
+
+        $errors[] = 'Task ID is too long';
+
+    } elseif (strlen($task_id) < 2){
+
+        $errors[] = 'Task ID is too short';
+        
+    } else{
+
+        $task_id = mysqli_real_escape_string($dbc, $task_id);
+
+    }
+
+    // Validate due date
+    if (empty($due_date)){
+
+        $errors[] = "No specified due date!";
+
+    } elseif($due_date < date("Y-m-d")){
+
+        $errors[] = "Selected due date has already elapsed! Please select another date";
+        
+    }
+
     if(empty($errors)){
 
-        $user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
+        $project_id = mysqli_real_escape_string($dbc, $project_id);
 
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        $q = "INSERT INTO task (userprojectID, taskName, description) VALUES ('$user_project_id', '$task_title', '$task_description')";		
+        $q = "INSERT INTO task (taskID, projectID, taskName, description, dueDate) VALUES ('$task_id', '$project_id', '$task_title', '$task_description', '$due_date')";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		if ($r) { // If it ran OK.
@@ -104,26 +135,7 @@ function update_task_status($dbc, $user_project_id, $task_id, $status) {
 
     $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if user project ID is valid
 
-    // Validate task ID
-    if (empty($task_id)) {
-
-        $errors[] = "Task ID has not been properly initialised";
-
-    } else{
-
-		$task_id = mysqli_real_escape_string($dbc, $task_id);
-
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        // Find out if task_id is found
-        $q = "SELECT taskID FROM task WHERE taskID = '$task_id' AND userprojectID = '$user_project_id'";
-        $r = @mysqli_query($dbc, $q);
-
-        if (mysqli_num_rows($r) == 0){
-
-            $errors[]= "Task not found!";
-
-        }
-	}
+    $errors += validate_task_id ($dbc, $task_id); // WILL THIS WORK???
 
     // Validate status
     if (empty($status)) {
@@ -185,17 +197,17 @@ function update_task_status($dbc, $user_project_id, $task_id, $status) {
 
 }
 
-function get_task_list($dbc, $user_project_id){
+function get_task_list($dbc, $project_id){
     
-    $errors = validate_user_project_id($dbc, $user_project_id);
+    $errors = validate_project_id($dbc, $project_id);
 
     if(empty($errors)){
 
-        $user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
+        $user_project_id = mysqli_real_escape_string($dbc, $project_id);
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Construct the SQL query
-        $q = "SELECT * FROM task where userprojectID = '$user_project_id'";
+        $q = "SELECT * FROM task where projectID = '$project_id'";
         $r = @mysqli_query($dbc, $q);
 
         // Returns an associated array of all matching tasks
@@ -203,6 +215,73 @@ function get_task_list($dbc, $user_project_id){
 
     } else{
         
+        return $errors;
+
+    }
+
+}
+
+function return_task_status($dbc, $task_id){
+
+    $errors = validate_task_id($dbc, $task_id);
+
+    if (empty($errors)){
+
+        $q = "SELECT status from task WHERE taskID = '$task_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        /*
+        status code 1 = "Ongoing"
+        status code 2 = "Completed"
+        status code 3 = "Unassigned"
+        */
+
+        switch($r){
+            case 1:
+                return "Ongoing";
+            case 2:
+                return "Completed";
+            case 3:
+                return "Unassigned";
+            default:
+                $errors[] = "Invalid status code in the database! Please alert admin!";
+                return $errors;
+        }
+    } else{
+
+        return $errors;
+
+    }
+
+}
+
+function validate_task_id ($dbc, $task_id){
+
+    $errors = array();
+
+     // Validate task ID
+     if (empty($task_id)) {
+
+        $errors[] = "Task ID has not been properly initialised";
+
+    } else{
+
+		$task_id = mysqli_real_escape_string($dbc, $task_id);
+
+        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
+        // Find out if task_id is found
+        $q = "SELECT taskID FROM task WHERE taskID = '$task_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if (mysqli_num_rows($r) == 0){
+
+            $errors[]= "Task not found!";
+
+        }
+	}
+
+    if (!empty($errors)){
+
         return $errors;
 
     }

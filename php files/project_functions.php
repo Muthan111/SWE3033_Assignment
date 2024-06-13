@@ -10,10 +10,12 @@
     1. Initial version created (06/06/2024)
     2. Partially updated SQL statements, updated input length based on database constraints (08/06/2024)
     3. Completed create_project function, added a function to create an id of variable length (12/06/2024)
+    4. Added validation for dates (13/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
     2. Turn user validation into a function? maybe place it in the user file
+    3. Date validation
     
     Created on 06/06/2024 by Sean
 */
@@ -79,6 +81,19 @@ function create_project($dbc, $creator_id, $project_name, $project_description, 
     }
 
     // Validate dates? If dates are suppose to be included here
+    if (empty($start_date) || empty($due_date)){
+
+        $errors[] = "One or both dates are empty!";
+
+    } elseif ($due_date < date("Y-m-d")){
+
+        $errors[] = "The due date has already elapsed! Please select another date!";
+
+    } elseif ($start_date > $due_date){
+
+        $errors[] = "The due date is before the start date! Please reselect your dates!";
+        
+    }
 
     // Generate a project id
     if (empty($generate_project_id)){
