@@ -8,6 +8,7 @@
     2. Commented out phone number code, added verification for first name and last name, added validation for long usernames, partially updated SQL. (08/06/2024)
     3. Moved to root folder, added registration page at the end (11/06/2024)
     4. Integrated registration_script with index page, fixed SQL statements (12/06/2024)
+    5. Fixed sign in link (13/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -309,7 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       var alreadyHaveAn = document.getElementById("alreadyHaveAn");
       if (alreadyHaveAn) {
         alreadyHaveAn.addEventListener("click", function (e) {
-          window.location.href = "./Login.HTML";
+          window.location.href = "./login.php";
         });
       }
       </script>
