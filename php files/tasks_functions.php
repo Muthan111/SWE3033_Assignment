@@ -14,6 +14,7 @@
     3. Set max length for title, added task_description input to create_task(), change status verification code, partially updated SQL statements. (08/06/2024)
     4. Added validate_task_id and return_task_status functions, added validation process for task due dates and task id (13/06/2024)
     5. Updated SQL statements to reflect new database structure, renamed variables to their respective POST submission. Renamed $user_project_id to $project_id.(14/06/2024)
+    6. Added a section to the task id generator to make sure that the generated id is not the same as the ids found in the task table. (14/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -63,8 +64,26 @@ function create_task($dbc, $project_id) {
     // Validate or generate task id
     if  (empty($_POST['task-id'])){
 
-        $task_id = substr(sha1(time()), 0, 4);
-        $task_id = mysqli_real_escape_string($dbc, $task_id);
+        $id_used = true;
+
+        while($id_used){
+
+            $task_id = substr(sha1(time()), 0, 4);
+            $task_id = mysqli_real_escape_string($dbc, $task_id);
+
+            $q = "SELECT projectID FROM project WHERE projectID = '$project_id'";
+            $r = @mysqli_query($dbc, $q);
+
+            if (mysqli_num_rows($r) == 0){
+
+                $id_used = false;
+
+            } else{
+
+                sleep(1);
+
+            }
+        }
 
     } elseif (strlen($_POST['task-id']) > 4){
 
