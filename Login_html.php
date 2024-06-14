@@ -4,8 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-    <link rel="stylesheet" href="./global.CSS" />
-    <link rel="stylesheet" href="https://muthan111.github.io/Login.CSS" />
+    <link rel="stylesheet" href="./global.css" />
+    <link rel="stylesheet" href="./Login.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -14,13 +14,13 @@
   <body>
     <div class="login">
       <main class="login1">
-        <form class="content5" id="content">
+        <form class="content5" id="content" action = "login.php" method = "post">
           <div class="content-inner">
             <img
               class="frame-child"
               loading="lazy"
               alt=""
-              src="C:\Users\user\Desktop\ScorpioTaskManager\scorpio-icon.png"
+              src="scorpio-icon.png"
             />
           </div>
           <div class="scorpio-task-manager-wrapper">
@@ -37,13 +37,25 @@
             </div>
           </div>
           <div class="field1">
-            <input class="label1" placeholder="Registered Email" type="text" />
+            <input id = "email" name = "email" class="label1" value="<?php echo $email; ?>" type="text" />
           </div>
           <div class="field2">
-            <input class="label2" placeholder="Password" type="text" />
+            <input id = "pass" name = "pass" class="label2" placeholder="Password" type="password" />
+          </div>
+          <div class="errors">
+            <?php
+              // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
+              if (isset($errors) && !empty($errors)) {
+                echo '<p class="errorclass">The following error(s) occurred:<br />';
+                foreach ($errors as $msg) {
+                    echo " - $msg<br />\n";
+                }
+                echo '</p><p class="errorclass">Please try again.</p>';
+            }
+            ?>
           </div>
           <div class="button-wrapper">
-            <button class="button2">
+            <button class="button2" type = "submit" form = "content" value = "Submit">
               <div class="login-now">Login Now</div>
             </button>
           </div>
