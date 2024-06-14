@@ -5,8 +5,7 @@
     create_task() function creates a task.
     update_task_status() function updates the status of a task.
     get_task_list() function returns an associated array which contains a list of tasks that matches the project_id
-    validate_user_project_id() function validates the project_id, this is a function cause it's repeatedly used throughout this file.
-
+    
     CHANGELOG:
     1. Initial version created (05/06/2024)
     2. Renamed $project_id to $user_project_id. Updated SQL statements to reflect database design. validate_project_id () function was copied to project_functions.php.
@@ -14,11 +13,11 @@
     Include a dependency to redirect_function.php. (06/06/2024)
     3. Set max length for title, added task_description input to create_task(), change status verification code, partially updated SQL statements. (08/06/2024)
     4. Added validate_task_id and return_task_status functions, added validation process for task due dates and task id (13/06/2024)
+    5. Updated SQL statements to reflect new database structure, renamed variables to their respective POST submission. Renamed $user_project_id to $project_id.(14/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
     2. Update HTML code once web pages are completed
-    3. Restructure validate_user_project_id() function once database is complete
     
     Created on 05/06/2024 by Sean
 */
@@ -27,69 +26,73 @@
 include ('redirect_function.php');
 include ('project_functions.php');
 
-function create_task($dbc, $task_id, $project_id, $task_title, $task_description, $due_date) {
+function create_task($dbc, $project_id) {
 
     $errors = validate_project_id($dbc, $project_id); // Initialize error array and check if project ID is valid
 
     // Validate the task title
-	if (empty($task_title)){
+	if (empty($_POST['task-title'])){
 
 		$errors[] = 'You forgot to enter a title for your task';
 
-	} elseif(strlen($task_title) > 30){
+	} elseif(strlen($_POST['task-title']) > 30){
 
         $errors[] = 'The title entered is too long';
 
     } else{
 
-		$task_title = mysqli_real_escape_string($dbc, trim($task_title));
+		$task_title = mysqli_real_escape_string($dbc, trim($_POST['task-title']));
 
 	}
 
     // Validate the task description
-	if (empty($task_description)){
+	if (empty($_POST['task-description'])){
 
 		$errors[] = 'You forgot to enter a title for your task';
 
-	} elseif(strlen($task_title) > 50){
+	} elseif(strlen($_POST['task-description']) > 50){
 
         $errors[] = 'The title entered is too long';
 
     } else{
 
-		$task_description = mysqli_real_escape_string($dbc, trim($task_title));
+		$task_description = mysqli_real_escape_string($dbc, trim($_POST['task-description']));
 
 	}
 
     // Validate or generate task id
-    if  (empty($task_id)){
+    if  (empty($_POST['task-id'])){
 
         $task_id = substr(sha1(time()), 0, 4);
         $task_id = mysqli_real_escape_string($dbc, $task_id);
 
-    } elseif (strlen($task_id) > 4){
+    } elseif (strlen($_POST['task-id']) > 4){
 
         $errors[] = 'Task ID is too long';
 
-    } elseif (strlen($task_id) < 2){
+    } elseif (strlen($_POST['task-id']) < 2){
 
         $errors[] = 'Task ID is too short';
         
     } else{
 
-        $task_id = mysqli_real_escape_string($dbc, $task_id);
+        $task_id = mysqli_real_escape_string($dbc, $_POST['task-id']);
 
     }
 
     // Validate due date
-    if (empty($due_date)){
+    if (empty($_POST['task-due-date'])){
 
         $errors[] = "No specified due date!";
 
-    } elseif($due_date < date("Y-m-d")){
+    } elseif($_POST['task-due-date'] < date("Y-m-d")){
 
         $errors[] = "Selected due date has already elapsed! Please select another date";
         
+    } else{
+
+        $due_date = mysqli_real_escape_string($dbc, trim($_POST['task-due-date']));
+
     }
 
     if(empty($errors)){
@@ -131,9 +134,9 @@ function create_task($dbc, $task_id, $project_id, $task_title, $task_description
 
 }
 
-function update_task_status($dbc, $user_project_id, $task_id, $status) {
+function update_task_status($dbc, $project_id, $task_id, $status) {
 
-    $errors = validate_user_project_id($dbc, $user_project_id); // Initialize error array and check if user project ID is valid
+    $errors = validate_project_id($dbc, $project_id); // Initialize error array and check if user project ID is valid
 
     $errors += validate_task_id ($dbc, $task_id); // WILL THIS WORK???
 
@@ -160,11 +163,11 @@ function update_task_status($dbc, $user_project_id, $task_id, $status) {
 
     if (empty($errors)){
 
-        $user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
+        $project_id = mysqli_real_escape_string($dbc, $project_id);
 
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        $q = "UPDATE task SET status = '$status' WHERE userprojectID = '$user_project_id' AND taskID = '$task_id'";		
+        $q = "UPDATE task SET status = '$status' WHERE projectID = '$project_id' AND taskID = '$task_id'";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		if ($r) { // If it ran OK.
@@ -203,7 +206,7 @@ function get_task_list($dbc, $project_id){
 
     if(empty($errors)){
 
-        $user_project_id = mysqli_real_escape_string($dbc, $project_id);
+        $project_id = mysqli_real_escape_string($dbc, $project_id);
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Construct the SQL query
@@ -276,39 +279,6 @@ function validate_task_id ($dbc, $task_id){
         if (mysqli_num_rows($r) == 0){
 
             $errors[]= "Task not found!";
-
-        }
-	}
-
-    if (!empty($errors)){
-
-        return $errors;
-
-    }
-
-}
-
-function validate_user_project_id ($dbc, $user_project_id){
-
-    $errors = array(); // Initialize error array.
-
-    // Validate project ID
-    if (empty($user_project_id)) {
-
-        $errors[] = "userprojectID has not been properly initialised";
-
-    } else{
-
-		$user_project_id = mysqli_real_escape_string($dbc, $user_project_id);
-
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        // Find out if project_id is found
-        $q = "SELECT userprojectID FROM User_Project WHERE userprojectID = '$user_project_id'";
-        $r = @mysqli_query($dbc, $q);
-
-        if (mysqli_num_rows($r) == 0){
-
-            $errors[]= "userprojectID not found!";
 
         }
 	}

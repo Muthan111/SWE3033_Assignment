@@ -51,7 +51,7 @@
                     echo " - $msg<br />\n";
                 }
                 echo '</p><p class="errorclass">Please try again.</p>';
-            }
+              } 
             ?>
           </div>
           <div class="button-wrapper">

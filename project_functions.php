@@ -11,11 +11,12 @@
     2. Partially updated SQL statements, updated input length based on database constraints (08/06/2024)
     3. Completed create_project function, added a function to create an id of variable length (12/06/2024)
     4. Added validation for dates (13/06/2024)
+    5. Updated generate ID function to account for possible repeated ID and moved project_functions.php to root folder. Fixed some SQL statement that could have
+       assigned a user to a non-existing project ID. RENAMED VARIABLES AS I REALISED THAT THE POST DATA IS A GLOBAL VARIABLE THUS NO NEED TO PASS IT AS A PARAMETER.(14/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
     2. Turn user validation into a function? maybe place it in the user file
-    3. Date validation
     
     Created on 06/06/2024 by Sean
 */
@@ -23,18 +24,18 @@
 // Dependencies
 include ('redirect_function.php');
 
-function create_project($dbc, $creator_id, $project_name, $project_description, $start_date, $due_date, $generate_project_id){
+function create_project($dbc, $creator_id){
 
     $errors = array();
 
     // Validate user (probably should turn this into a function)
-	if (empty($user_id)){
+	if (empty($creator_id)){
 
 		$errors[] = "User ID is missing!";
 
 	} else{
 
-		$user_id = mysqli_real_escape_string($dbc, $user_id);
+		$user_id = mysqli_real_escape_string($dbc, $creator_id);
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if user_id is found
@@ -50,56 +51,64 @@ function create_project($dbc, $creator_id, $project_name, $project_description, 
 	}
 
     // Validate the project name
-	if (empty($project_name)){
+	if (empty($_POST['project-title'])){
 
 		$errors[] = 'You forgot to enter a name for your project';
 
-	} elseif(strlen($project_name) > 20){ // Arbitarily set as 100 for now
+	} elseif(strlen($_POST['project-title']) > 20){ // Arbitarily set as 100 for now
 
         $errors[] = "Your project name is too long";
 
     } else{
 
-		$project_name = mysqli_real_escape_string($dbc, trim($project_name));
+		$project_name = mysqli_real_escape_string($dbc, trim($_POST['project-title']));
 
 	}
 
     // Validate project description
-    if (empty($project_description)){
+    if (empty($_POST['project-description'])){
 
         $errors[] = "You forgot to enter a description for your project";
 
-    } elseif(strlen($project_description) > 25){
+    } elseif(strlen($_POST['project-description']) > 25){
 
         $errors[] = "Your project description is too long";
 
     }
     else{
 
-        $project_description = mysqli_real_escape_string($dbc, trim($project_description));
+        $project_description = mysqli_real_escape_string($dbc, trim($_POST['project-description']));
 
     }
 
     // Validate dates? If dates are suppose to be included here
-    if (empty($start_date) || empty($due_date)){
+    if (empty($_POST['project-start-date']) || empty($_POST['project-due-date'])){
 
         $errors[] = "One or both dates are empty!";
 
-    } elseif ($due_date < date("Y-m-d")){
+    } elseif ($_POST['project-due-date'] < date("Y-m-d")){
 
         $errors[] = "The due date has already elapsed! Please select another date!";
 
-    } elseif ($start_date > $due_date){
+    } elseif ($_POST['project-start-date'] > $_POST['project-due-date']){
 
         $errors[] = "The due date is before the start date! Please reselect your dates!";
         
+    } else{
+
+        $start_date = mysqli_real_escape_string($dbc, trim($_POST['project-start-date']));
+        $due_date = mysqli_real_escape_string($dbc, trim($_POST['project-due-date']));
+
     }
 
     // Generate a project id
-    if (empty($generate_project_id)){
+    if (empty($_POST['project-id'])){
 
-        // GENERATES ID BASED ON TIMESTAMP
-        $generate_project_id = generate_id(4);
+        $project_id = mysqli_real_escape_string($dbc, trim(generate_id($dbc, 4)));
+
+    } else{
+
+        $project_id = mysqli_real_escape_string($dbc, trim($_POST['project-id']));
 
     }
 
@@ -109,13 +118,13 @@ function create_project($dbc, $creator_id, $project_name, $project_description, 
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         $q = "INSERT INTO project (projectID, projectName, startDate, dueDate, projectDescription) 
-        VALUES ('$generate_project_id', '$project_name', '$start_date', '$due_date', '$project_description')";		
+        VALUES ('$project_id', '$project_name', '$start_date', '$due_date', '$project_description')";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		if ($r) { // If it ran OK.
             
             // Relate creator to new project
-            $q = "INSERT INTO userproject (userprojectID, userID, projectID, isadmin) VALUES ('". generate_id(4) ."', '$creator_id', '$generate_project_id', 1)";
+            $q = "INSERT INTO userproject (userprojectID, userID, projectID, isadmin) VALUES ('". $project_id ."', '$creator_id', '$project_id', 1)";
             $r = @mysqli_query($dbc, $q); // Run the query
 
             if ($r){
@@ -252,11 +261,29 @@ function validate_project_id ($dbc, $project_id){
 
 }
 
-function generate_id($length_of_string) {
+function generate_id($dbc, $length_of_string) {
 
-    // sha1 the timestamps and returns substring of specified length
-    return substr(sha1(time()), 0, $length_of_string);
+    $id_used = true;
+
+        while($id_used){
+
+            // GENERATES ID BASED ON TIMESTAMP
+            // sha1 the timestamps and returns substring of specified length
+            $project_id = substr(sha1(time()), 0, $length_of_string);
+
+            $q = "SELECT projectID FROM project WHERE projectID = '$project_id'";
+            $r = @mysqli_query($dbc, $q);
+
+            if (mysqli_num_rows($r) == 0){
+
+                $id_used = false;
+
+            } else{
+
+                sleep(1);
+
+            }
+        }
+
+    return $project_id;
 }
-
-
-?>
