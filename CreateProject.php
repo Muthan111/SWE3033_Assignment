@@ -1,3 +1,36 @@
+<?php
+    /*
+
+    Description: Main html page to create project
+
+    CHANGELOG:
+    1. Initial version created (14/06/2024)
+
+    TO DO:
+    1. NEED START AND DUE DATE INPUT
+
+    Created on 14/06/2024 by Sean
+    */
+
+    session_start(); // To get currently logged in user ID
+
+    include ("project_functions.php");
+    include ("mysqli_connect.php");
+
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+        // Incomplete due to no start date and due date
+        $errors = create_project($dbc, $_SESSION['user_id'], $_POST['project-title'], $_POST['project-description']);
+
+        if(empty($errors)){
+
+            redirect_user("Homepage.HTML"); // Might change to the specific project page
+
+        }
+
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,6 +151,10 @@
         .create-task button:hover {
             background-color: #555;
         }
+        .errorclass{
+            font-family: var(--small-text);
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -142,15 +179,15 @@
             <a href="#">Project Chat</a>
         </nav>
     </div>
-    <div class="main-content">
+    <form class="main-content" action="CreateProject.php" method="post">
         <h1>Create a New Project</h1>
         <div class="generate-id form-group">
-            <input type="text" placeholder="Project ID">
-            <button>Auto Generate</button>
+            <input type="text" id="project-id" name="project-id" value="<?php echo generate_id($dbc, 4) ?>">
+            <button id="Auto-Generate" onclick>Auto Generate</button>
         </div>
         <div class="form-group">
             <label for="project-title">Project Title</label>
-            <input type="text" id="project-title" placeholder="Project Title">
+            <input type="text" id="project-title" name="project-title" placeholder="Project Title">
         </div>
         <div class="form-group">
             <label for="project-start-date">Project Start Date</label>
@@ -162,17 +199,43 @@
         </div>
         <div class="form-group">
             <label for="project-description">Project Description</label>
-            <textarea id="project-description" placeholder="Project Description"></textarea>
+            <textarea id="project-description" name="project-description" placeholder="Project Description"></textarea>
         </div>
-        <div class="create-task">
+        <!--
+        !!!CREATE THE INPUTS FOR START DATE AND DUE DATE HERE!!!
+
+        SET THE NAME ATTRIBUTE FOR START DATE INPUT AS "project-start-date"
+        <input name="project-start-date" ...>
+        SET THE NAME ATTRIBUTE FOR DUE DATE INPUT AS "project-due-date"
+        <input name="project-due-date" ...>
+
+        IF THE NAMES VALUES DOES NOT MATCH THE ABOVE, THE PHP WILL NOT WORK
+        -->
+        <div>
+            <?php
+            // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
+            if (isset($errors) && !empty($errors)) {
+                echo '<p class="errorclass">The following error(s) occurred:<br />';
+                foreach ($errors as $msg) {
+                    echo " - $msg<br />\n";
+                }
+                echo '</p><p class="errorclass">Please try again.</p>';
+              } 
+            ?>
+        </div>
+        <div class="create-task" type = "submit" form = "content" value = "Submit">
             <button>Create a New Task</button>
         </div>
-    </div>
+    </form>
 
     <script>
         function toggleDropdown(id) {
             const content = document.getElementById(id);
             content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        }
+        function generateID() {
+            const content = document.getElementById("project-id");
+            location.reload()
         }
     </script>
 </body>
