@@ -23,7 +23,7 @@ if($resultMember->num_rows == 1) {
   $sqlMember = "CREATE TABLE Account (userID INT(10) AUTO_INCREMENT PRIMARY KEY 
   ,username VARCHAR(25), firstName VARCHAR(25), 
   lastName VARCHAR(25), email VARCHAR(25), 
-  password CHAR(20));";
+  password VARCHAR(20));";
 
   if ($conn->query($sqlMember) === TRUE) {
     echo "Table User created successfully";
@@ -41,7 +41,7 @@ if($resultProject->num_rows == 1) {
   echo "Table Project already exists";
   echo "<br>";
 } else {
-  $sqlProject = "CREATE TABLE Project (projectID VARCHAR(10) PRIMARY KEY, projectName VARCHAR(20), startDate DATE, dueDate DATE, projectDescription VARCHAR(25));";
+  $sqlProject = "CREATE TABLE Project (projectID VARCHAR(10) PRIMARY KEY, projectName VARCHAR(20), startDate DATE, dueDate DATE, projectDescription VARCHAR(50));";
 
   if ($conn->query($sqlProject) === TRUE) {
     echo "Table Project created successfully";
@@ -86,7 +86,6 @@ if($resultTask->num_rows == 1) {
 } else {
   $sqlTask = "CREATE TABLE Task (
   taskID VARCHAR(10) PRIMARY KEY,
-  userprojectID CHAR(10), 
   taskName VARCHAR(30),
   description VARCHAR(50), 
   dueDate Date, 
@@ -113,10 +112,10 @@ if($resultuserProjectTask->num_rows == 1) {
   echo "<br>";
 } else {
   $sqluserProjectTask = "CREATE TABLE userProjectTask (
-    userProjectTaskID INT(10) PRIMARY KEY AUTO_INCREMENT,
     userID INT(10),
     projectID VARCHAR(10),
     taskID VARCHAR(10),
+    PRIMARY KEY (userID,projectID,taskID),
     FOREIGN KEY (userID, projectID) REFERENCES userProject(userID, projectID),
     FOREIGN KEY (taskID) REFERENCES Task(taskID)
   );";
