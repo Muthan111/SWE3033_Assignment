@@ -1,166 +1,219 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-
-    <link rel="stylesheet" href="./global.css" />
-    <link rel="stylesheet" href="./Homepage.css" />
+    <link rel="stylesheet" href="./Homepage.CSS" />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700&display=swap"
     />
-  </head>
-  <body>
-    <div class="homepage">
-      <div class="homepage-sidebar">
-        <div class="projects-side-bar-container">
-          <div class="side-bar-top-container">
-            <div class="side-bar-mid-container">
-              <div class="side-bar-bottom-container">
-                <div class="title">Scorpio Task Manager</div>
-              </div>
-              <img
-                class="side-bar-mid-container-child"
-                loading="lazy"
-                alt=""
-                src="./public/rectangle-161@2x.png"
-              />
-            </div>
-          </div>
-          <div class="home-menu">
-            <div class="menu-item">
-              <b class="join-projects">Join Projects</b>
-            </div>
-            <div class="menu-item1">
-              <img class="home-icon" alt="" src="./public/home.svg" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto Sans:wght@400&display=swap"
+    />
+</head>
+<body>
+    <main class="homepage" id="Main">
+        <section class="homepage-sidebar2" id="SidebarSection">
+            <h1 class="app-title" id="ScorpioTaskManager">Scorpio Task Manager</h1>
+            <img class="scorpio-icon" loading="lazy" alt="" src="scorpio-icon.png" />
 
-              <div class="home">Home</div>
+            <nav class="sidebarui">
+                <nav class="navigation" id="JoinProjectNavigator">
+                    <b class="menu-item13">
+                        <b class="join-projects2">Join Projects</b>
+                    </b>
+                    <button class="homebutton" id="HomeButton">
+                        <img class="home-icon3" alt="" src="home-icon.png" />
+                        <div class="home2">Home</div>
+                    </button>
+                    <button class="joinbycodebutton" id="JoinByCodeButton">
+                        <img class="add-icon3" alt="" src="add-icon.png" />
+                        <div class="join-by-code2">Join by code</div>
+                    </button>
+                </nav>
+                <nav class="list5" id="ProjectSelectNavigator">
+                    <div class="title6">
+                        <b class="participating-projects2">Participating Projects</b>
+                    </div>
+                    <div class="select-container">
+                        <img src="select-icon.png" alt="Project Select Dropdown Icon" />
+                        <select class="menu-item14">
+                            <option value="" disabled selected>Select Project</option>
+                            <option value="project1">- Project 1</option>
+                            <option value="project2">- Project 2</option>
+                            <option value="project3">- Project 3</option>
+                        </select>
+                    </div>
+                </nav>
+                <nav class="list6" id="ChatSelectNavigation">
+                    <b class="title7" id="ProjectForum">
+                        <b class="project-forum2">Project Forum</b>
+                    </b>
+                    <div class="select-container">
+                        <img src="chat-icon.png" alt="Project Chat Select Dropdown Icon" />
+                        <select class="menu-item15" id="SelectChat">
+                            <option value="" disabled selected>Select Chat</option>
+                            <option value="chat1">- Chat 1</option>
+                            <option value="chat2">- Chat 2</option>
+                            <option value="chat3">- Chat 3</option>
+                        </select>
+                    </div>
+                </nav>
+            </nav>
+        </section>
+        <section class="main-container">
+            <div class="header">
+                <h2 class="recent-projects" id="RecentProjectHeader">Recent Projects</h2>
             </div>
-            <div class="menu-item2">
-              <img class="search-icon" alt="" src="./public/search.svg" />
-
-              <div class="join-by-code">Join by code</div>
+            <div class="project-list">
+                <button class="pressproject" id="ProjectOneButton">
+                    <div class="pressproject-label">Project One</div>
+                    <div class="dd-mm-yyyy-group">
+                      <div class="dd-mm-yyyy2">DD-MM-YYYY</div>
+                      <div class="div1">&gt;</div>
+                      <div class="dd-mm-yyyy3">DD-MM-YYYY</div>
+                    </div>
+                    <div class="lorem-ipsum-dolor-sit-amet-co-container">
+                      <div class="lorem-ipsum-dolor-container2">
+                        <span class="lorem-ipsum-dolor-container3">
+                          <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="project-inner">
+                      <div class="frame-child2">
+                      </div>
+                    </div>
+                    <div class="project-child">
+                      <div class="frame-child3">
+                      </div>
+                    </div>
+                  </button>
+                <button class="pressproject" id="ProjectTwoButton">
+                    <div class="pressproject-label">Project Two</div>
+                    <div class="dd-mm-yyyy-group">
+                        <div class="dd-mm-yyyy2">DD-MM-YYYY</div>
+                        <div class="div1">&gt;</div>
+                        <div class="dd-mm-yyyy3">DD-MM-YYYY</div>
+                    </div>
+                    <div class="lorem-ipsum-dolor-sit-amet-co-container">
+                        <div class="lorem-ipsum-dolor-container2">
+                            <span class="lorem-ipsum-dolor-container3">
+                                <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="project-inner">
+                        <div class="frame-child2">
+                        </div>
+                    </div>
+                    <div class="project-child">
+                        <div class="frame-child3">
+                        </div>
+                    </div>
+                </button>
+                <button class="pressproject" id="ProjectThreeButton">
+                    <div class="pressproject-label">Project Three</div>
+                    <div class="dd-mm-yyyy-group">
+                        <div class="dd-mm-yyyy2">DD-MM-YYYY</div>
+                        <div class="div1">&gt;</div>
+                        <div class="dd-mm-yyyy3">DD-MM-YYYY</div>
+                    </div>
+                    <div class="lorem-ipsum-dolor-sit-amet-co-container">
+                        <div class="lorem-ipsum-dolor-container2">
+                            <span class="lorem-ipsum-dolor-container3">
+                                <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="project-inner">
+                        <div class="frame-child2">
+                        </div>
+                    </div>
+                    <div class="project-child">
+                        <div class="frame-child3">
+                        </div>
+                    </div>
+                </button>
+                <button class="pressproject" id="ProjectFourButton">
+                    <div class="pressproject-label">Project Four</div>
+                    <div class="dd-mm-yyyy-group">
+                        <div class="dd-mm-yyyy2">DD-MM-YYYY</div>
+                        <div class="div1">&gt;</div>
+                        <div class="dd-mm-yyyy3">DD-MM-YYYY</div>
+                    </div>
+                    <div class="lorem-ipsum-dolor-sit-amet-co-container">
+                        <div class="lorem-ipsum-dolor-container2">
+                            <span class="lorem-ipsum-dolor-container3">
+                                <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="project-inner">
+                        <div class="frame-child2">
+                        </div>
+                    </div>
+                    <div class="project-child">
+                        <div class="frame-child3">
+                        </div>
+                    </div>
+                </button>
+                <button class="pressproject" id="ProjectFiveButton">
+                    <div class="pressproject-label">Project Five</div>
+                    <div class="dd-mm-yyyy-group">
+                        <div class="dd-mm-yyyy2">DD-MM-YYYY</div>
+                        <div class="div1">&gt;</div>
+                        <div class="dd-mm-yyyy3">DD-MM-YYYY</div>
+                    </div>
+                    <div class="lorem-ipsum-dolor-sit-amet-co-container">
+                        <div class="lorem-ipsum-dolor-container2">
+                            <span class="lorem-ipsum-dolor-container3">
+                                <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="project-inner">
+                        <div class="frame-child2">
+                        </div>
+                    </div>
+                    <div class="project-child">
+                        <div class="frame-child3">
+                        </div>
+                    </div>
+                </button>
+                <button class="pressproject" id="ProjectSixButton">
+                    <div class="pressproject-label">Project Six</div>
+                    <div class="dd-mm-yyyy-group">
+                        <div class="dd-mm-yyyy2">DD-MM-YYYY</div>
+                        <div class="div1">&gt;</div>
+                        <div class="dd-mm-yyyy3">DD-MM-YYYY</div>
+                    </div>
+                    <div class="lorem-ipsum-dolor-sit-amet-co-container">
+                        <div class="lorem-ipsum-dolor-container2">
+                            <span class="lorem-ipsum-dolor-container3">
+                                <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="project-inner">
+                        <div class="frame-child2">
+                        </div>
+                    </div>
+                    <div class="project-child">
+                        <div class="frame-child3">
+                        </div>
+                    </div>
+                </button>
             </div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="title1">
-            <b class="participating-projects">Participating Projects</b>
-          </div>
-          <select class="menu-item3"></select>
-          <button class="menu-item4">
-            <img
-              class="add-icon"
-              loading="lazy"
-              alt=""
-              src="./public/add-icon.svg"
-            />
-
-            <div class="add-task-by-container">
-              <p class="add-task-by">Add Task by code</p>
+            <div class="footer">
+                <button class="project-create" id="ProjectCreateButton">
+                    <img class="CreateAddIcon" alt="" src="add-icon.png">
+                    <div class="CreateProjectLabel">Create a New Project</div>
+                </button> 
             </div>
-          </button>
-        </div>
-        <div class="list1">
-          <div class="title2">
-            <b class="hidden-projects">Hidden Projects</b>
-          </div>
-          <select class="menu-item5"></select>
-        </div>
-        <div class="chat-menu">
-          <div class="menu-item6">
-            <b class="project-forum">Project Forum</b>
-          </div>
-          <div class="menu-item7">
-            <img class="home-icon1" alt="" src="./public/home.svg" />
-
-            <div class="project-chat">Project Chat</div>
-          </div>
-        </div>
-      </div>
-      <section class="content6">
-        <div class="project-container">
-          <div class="recent-projects-container">
-            <h1 class="recent-projects">Recent Projects</h1>
-            <div class="project-one-container">
-              <div class="project-one-container-child"></div>
-              <u class="project-one">Project One</u>
-              <div class="project-one-description">
-                <div class="lorem-ipsum-dolor">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </div>
-                <div class="chevron-container">
-                  <img
-                    class="chevron-down-icon"
-                    loading="lazy"
-                    alt=""
-                    src="./public/chevrondown-2.svg"
-                    id="chevronDown"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="project-titles">
-            <div class="project-titles-child"></div>
-            <u class="project-two">Project Two</u>
-            <div class="project-description">
-              <div class="lorem-ipsum-dolor1">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </div>
-              <div class="description-chevron">
-                <img
-                  class="chevron-down-icon1"
-                  loading="lazy"
-                  alt=""
-                  src="./public/chevrondown-2.svg"
-                />
-              </div>
-            </div>
-          </div>
-          <footer class="project-titles1">
-            <div class="project-titles-item"></div>
-            <u class="project-three">Project Three</u>
-          </footer>
-        </div>
-        <div class="add-project-container-wrapper">
-          <div class="add-project-container" id="addProjectContainer">
-            <button class="add-project-button">
-              <div class="add-project-button-child"></div>
-              <div class="menu-item8">
-                <img class="add-icon1" alt="" src="./public/add-icon-1.svg" />
-
-                <div class="create-project-label-container">
-                  <div class="create-new-project">Create a New Project</div>
-                </div>
-              </div>
-            </button>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <script>
-      var chevronDown = document.getElementById("chevronDown");
-      if (chevronDown) {
-        chevronDown.addEventListener("click", function (e) {
-          // Please sync "Homepage" to the project
-        });
-      }
-      
-      var addProjectContainer = document.getElementById("addProjectContainer");
-      if (addProjectContainer) {
-        addProjectContainer.addEventListener("click", function (e) {
-          // Please sync "Project Admin " to the project
-        });
-      }
-      </script>
-  </body>
+        </section>
+    </main>
+</body>
 </html>
