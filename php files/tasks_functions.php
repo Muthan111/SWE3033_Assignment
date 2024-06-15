@@ -120,6 +120,7 @@ function create_task($dbc, $project_id) {
 
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
+        //Project ID needs to be created first
         $q = "INSERT INTO task (taskID, projectID, taskName, description, dueDate) VALUES ('$task_id', '$project_id', '$task_title', '$task_description', '$due_date')";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
