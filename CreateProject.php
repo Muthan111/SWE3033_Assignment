@@ -6,6 +6,7 @@
     CHANGELOG:
     1. Initial version created (14/06/2024)
     2. Assign start date and due date input to form. Changed button to "Create a New Project"  (15/06/2024)
+    3. Fixed the Auto-generate button that triggered a POST request because it's type wasnt specified... (15/06/2024)
 
     TO DO:
     1. TESTING
@@ -18,7 +19,7 @@
     include ("project_functions.php");
     include ("mysqli_connect.php");
 
-    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         // Incomplete due to no start date and due date
         $errors = create_project($dbc, $_SESSION['user_id']);
@@ -184,7 +185,7 @@
         <h1>Create a New Project</h1>
         <div class="generate-id form-group">
             <input type="text" id="project-id" name="project-id" value="<?php echo generate_id($dbc, 4) ?>">
-            <button id="Auto-Generate" onclick>Auto Generate</button>
+            <button id="Auto-Generate" onclick="refresh()" type="button">Auto Generate</button>
         </div>
         <div class="form-group">
             <label for="project-title">Project Title</label>
@@ -224,9 +225,8 @@
             const content = document.getElementById(id);
             content.style.display = content.style.display === 'block' ? 'none' : 'block';
         }
-        function generateID() {
-            const content = document.getElementById("project-id");
-            location.reload()
+        function refresh() {
+            window.top.location = window.top.location;
         }
     </script>
 </body>
