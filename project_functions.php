@@ -13,6 +13,7 @@
     4. Added validation for dates (13/06/2024)
     5. Updated generate ID function to account for possible repeated ID and moved project_functions.php to root folder. Fixed some SQL statement that could have
        assigned a user to a non-existing project ID. RENAMED VARIABLES AS I REALISED THAT THE POST DATA IS A GLOBAL VARIABLE THUS NO NEED TO PASS IT AS A PARAMETER.(14/06/2024)
+    6. Fixed some minor SQL errors, create_project function works now (15/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -124,7 +125,7 @@ function create_project($dbc, $creator_id){
 		if ($r) { // If it ran OK.
             
             // Relate creator to new project
-            $q = "INSERT INTO userproject (userprojectID, userID, projectID, isadmin) VALUES ('". $project_id ."', '$creator_id', '$project_id', 1)";
+            $q = "INSERT INTO userproject (userID, projectID, isadmin) VALUES ('$creator_id', '$project_id', 1)";
             $r = @mysqli_query($dbc, $q); // Run the query
 
             if ($r){

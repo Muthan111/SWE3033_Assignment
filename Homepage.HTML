@@ -208,12 +208,20 @@
                 </button>
             </div>
             <div class="footer">
-                <button class="project-create" id="ProjectCreateButton">
+                <button class="project-create" id="ProjectCreateButton" onclick="">
                     <img class="CreateAddIcon" alt="" src="add-icon.png">
                     <div class="CreateProjectLabel">Create a New Project</div>
                 </button> 
             </div>
         </section>
     </main>
+    <script>
+        var createProjectButton = document.getElementById("ProjectCreateButton");
+        if (createProjectButton) {
+            createProjectButton.addEventListener("click", function (e) {
+            window.location.href = "./CreateProject.php";
+            });
+        }
+    </script>
 </body>
 </html>

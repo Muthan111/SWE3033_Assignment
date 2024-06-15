@@ -9,6 +9,7 @@
     3. Moved to root folder, added registration page at the end (11/06/2024)
     4. Integrated registration_script with index page, fixed SQL statements (12/06/2024)
     5. Fixed sign in link (13/06/2024)
+    6. Redirect user to Homepage and properly assigned userID to session variables. Removed phone validation to reduce cluttering. (15/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -22,7 +23,7 @@ require ('login_functions.inc.php');
 // Check if user already logged in
 session_start();
 if (isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
-	redirect_user("user_page.php");
+	redirect_user("Homepage.HTML");
 }
 // !!! NEEDS TO BE REMOVED IF NO SYSTEM ADMIN !!!
 // elseif (isset($_SESSION["admin_id"]) && isset($_SESSION["name"])){
@@ -34,7 +35,6 @@ $username = "username";
 $email = "email";
 $first_name = "First Name";
 $last_name = "Last Name";
-// $phone = "+60XXXXXXXXX";
 
 // Check for form submission:
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -90,61 +90,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 	}
 
+  // Validate password
+  if (empty($_POST['pass1'])) {
+      $errors[] = "Password is required";
+  }
+  else{
+    $password = mysqli_real_escape_string($dbc, $_POST['pass1']);
+  }
 
-    // // Validate phone number
-	  // $phone_regex = "/^(\+?6?01)[02-46-9]-*[0-9]{7}$|^(\+?6?01)[1]-*[0-9]{8}$/"; //Includes optional +60, only accepts Malaysian phone numbers
-    // if (empty($_POST['phone'])) {
-    //     $errors[] = "Phone number is required";
-    // }
-    // elseif (!preg_match($phone_regex, $_POST['phone'])) {
-    // 	$errors[] = "Phone number is invalid";
-    // }
-    // else{
-    // 	$phone = mysqli_real_escape_string($dbc, trim($_POST['phone']));
-    // }
-	
-    // //  Test for unique phone number
-    // // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-    // $q = "SELECT user_id FROM user WHERE phone_no = '$phone'";
-    // $r = @mysqli_query($dbc, $q);
-    // if (mysqli_num_rows($r) != 0){
-    //     $errors[]= "The phone number has already been registered";
-    // }
-
-
-    // Validate password
-    if (empty($_POST['pass1'])) {
-        $errors[] = "Password is required";
-    }
-    else{
-      $password = mysqli_real_escape_string($dbc, $_POST['pass1']);
-    }
-
-    // Validate confirm password
-    if (empty($_POST['pass2'])) {
-        $errors[] = "Confirm password is required";
-    } 
-    elseif ($password !== $_POST['pass2']) {
-        $errors[] = "Password and re-entered password do not match";
-    }
+  // Validate confirm password
+  if (empty($_POST['pass2'])) {
+      $errors[] = "Confirm password is required";
+  } 
+  elseif ($password !== $_POST['pass2']) {
+      $errors[] = "Password and re-entered password do not match";
+  }
 
 	// Validate Password Requirements
 	// Requirement 1: At least 8 characters long
-    if (strlen($password) < 8) {
-        $errors[] = "Password must be at least 8 characters long";
-    }
-    // Requirement 2: A combination of uppercase and lowercase letters
-    if (!preg_match('/[a-z]/', $password) || !preg_match('/[A-Z]/', $password)) {
-        $errors[] = "Password must contain a combination of uppercase and lowercase letters";
-    }
-    // Requirement 3: At least 1 number
-    if (!preg_match('/\d/', $password)) {
-        $errors[] = "Password must contain at least 1 number";
-    }
-    // Requirement 4: At most 20 characters long
-    if (strlen($password) > 20){
-        $errors[] = "Password must be less than 20 characters long";
-    }
+  if (strlen($password) < 8) {
+      $errors[] = "Password must be at least 8 characters long";
+  }
+  // Requirement 2: A combination of uppercase and lowercase letters
+  if (!preg_match('/[a-z]/', $password) || !preg_match('/[A-Z]/', $password)) {
+      $errors[] = "Password must contain a combination of uppercase and lowercase letters";
+  }
+  // Requirement 3: At least 1 number
+  if (!preg_match('/\d/', $password)) {
+      $errors[] = "Password must contain at least 1 number";
+  }
+  // Requirement 4: At most 20 characters long
+  if (strlen($password) > 20){
+      $errors[] = "Password must be less than 20 characters long";
+  }
 		
 	if (empty($errors)) {
 
@@ -160,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       $row = mysqli_fetch_assoc($r);
 			// Set Session
-      $_SESSION['user_id'] = $row['user_id'];
+      $_SESSION['user_id'] = $row['userID'];
 			$_SESSION['username'] = $row['username'];
       // Redirects the user to a page, temporary placeholder for now
       redirect_user("Homepage.HTML");	

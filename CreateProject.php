@@ -5,9 +5,10 @@
 
     CHANGELOG:
     1. Initial version created (14/06/2024)
+    2. Assign start date and due date input to form. Changed button to "Create a New Project"  (15/06/2024)
 
     TO DO:
-    1. NEED START AND DUE DATE INPUT
+    1. TESTING
 
     Created on 14/06/2024 by Sean
     */
@@ -20,7 +21,7 @@
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
         // Incomplete due to no start date and due date
-        $errors = create_project($dbc, $_SESSION['user_id'], $_POST['project-title'], $_POST['project-description']);
+        $errors = create_project($dbc, $_SESSION['user_id']);
 
         if(empty($errors)){
 
@@ -191,26 +192,16 @@
         </div>
         <div class="form-group">
             <label for="project-start-date">Project Start Date</label>
-            <input type="date" id="project-start-date">
+            <input name="project-start-date" type="date" id="project-start-date">
         </div>
         <div class="form-group">
             <label for="project-end-date">Project End Date</label>
-            <input type="date" id="project-end-date">
+            <input name="project-due-date" type="date" id="project-end-date">
         </div>
         <div class="form-group">
             <label for="project-description">Project Description</label>
             <textarea id="project-description" name="project-description" placeholder="Project Description"></textarea>
         </div>
-        <!--
-        !!!CREATE THE INPUTS FOR START DATE AND DUE DATE HERE!!!
-
-        SET THE NAME ATTRIBUTE FOR START DATE INPUT AS "project-start-date"
-        <input name="project-start-date" ...>
-        SET THE NAME ATTRIBUTE FOR DUE DATE INPUT AS "project-due-date"
-        <input name="project-due-date" ...>
-
-        IF THE NAMES VALUES DOES NOT MATCH THE ABOVE, THE PHP WILL NOT WORK
-        -->
         <div>
             <?php
             // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
@@ -224,7 +215,7 @@
             ?>
         </div>
         <div class="create-task" type = "submit" form = "content" value = "Submit">
-            <button>Create a New Task</button>
+            <button>Create a Project</button>
         </div>
     </form>
 

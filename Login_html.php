@@ -93,7 +93,7 @@
       var dontHaveAn = document.getElementById("dontHaveAn");
       if (dontHaveAn) {
         dontHaveAn.addEventListener("click", function (e) {
-          window.location.href = "./index.HTML";
+          window.location.href = "./index.php";
         });
       }
       </script>
