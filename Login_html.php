@@ -68,12 +68,6 @@
               <div class="frame-inner"></div>
             </div>
           </div>
-          <button class="button3">
-            <div class="google-container">
-              <img class="google-icon1" alt="" src="C:\Users\user\Desktop\ScorpioTaskManager\google-icon.png" />
-            </div>
-            <div class="secondary1">Google</div>
-          </button>
           <a class="dont-have-an-container" id="dontHaveAn">
             <span class="dont-have-an">Don’t have an account yet? </span>
             <span class="sign-up">Sign up</span>
