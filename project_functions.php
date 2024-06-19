@@ -14,10 +14,11 @@
     5. Updated generate ID function to account for possible repeated ID and moved project_functions.php to root folder. Fixed some SQL statement that could have
        assigned a user to a non-existing project ID. RENAMED VARIABLES AS I REALISED THAT THE POST DATA IS A GLOBAL VARIABLE THUS NO NEED TO PASS IT AS A PARAMETER.(14/06/2024)
     6. Fixed some minor SQL errors, create_project function works now (15/06/2024)
+    7. Created validate_user_id function and return_project_list, fixed a bug where a user could have entered a Project ID that is already in used which could have
+    caused an SQL error. (19/06/2024)
 
     TO DO:
-    1. Update SQL statements once database is completed
-    2. Turn user validation into a function? maybe place it in the user file
+    1. Testing
     
     Created on 06/06/2024 by Sean
 */
@@ -27,29 +28,7 @@ include ('redirect_function.php');
 
 function create_project($dbc, $creator_id){
 
-    $errors = array();
-
-    // Validate user (probably should turn this into a function)
-	if (empty($creator_id)){
-
-		$errors[] = "User ID is missing!";
-
-	} else{
-
-		$user_id = mysqli_real_escape_string($dbc, $creator_id);
-
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        // Find out if user_id is found
-        $q = "SELECT userID from account where userID = '$user_id'";
-        $r = @mysqli_query($dbc, $q);
-
-        if (mysqli_num_rows($r) == 0){
-
-            $errors[] = "User not found!";
-
-        }
-
-	}
+    $errors = validate_user_id($dbc, $creator_id);
 
     // Validate the project name
 	if (empty($_POST['project-title'])){
@@ -105,12 +84,28 @@ function create_project($dbc, $creator_id){
     // Generate a project id
     if (empty($_POST['project-id'])){
 
-        $project_id = mysqli_real_escape_string($dbc, trim(generate_id($dbc, 4)));
+        $project_id = generate_id($dbc, 4);
 
+    } elseif (strlen($_POST['task-id']) > 4){
+
+        $errors[] = 'Task ID is too long';
+
+    } elseif (strlen($_POST['task-id']) < 2){
+
+        $errors[] = 'Task ID is too short';
+    
     } else{
 
         $project_id = mysqli_real_escape_string($dbc, trim($_POST['project-id']));
 
+        $q = "SELECT projectID FROM project WHERE projectID = '$project_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if(mysqli_num_rows($r) > 0){
+
+            $errors[] = "Projoect ID is in used";
+
+        }
     }
 
     if(empty($errors)){
@@ -135,7 +130,7 @@ function create_project($dbc, $creator_id){
                 // Public message:
                 // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
                 echo '<h1>System Error</h1>
-                <p class="error">The task encountered an error on our server, your task was not created. We apologised for any incovenience.</p>'; 
+                <p class="error">The project encountered an error on our server, your project was not created. We apologised for any incovenience.</p>'; 
                 
                 // Debugging message:
                 echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
@@ -146,7 +141,7 @@ function create_project($dbc, $creator_id){
 			// Public message:
             // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
             echo '<h1>System Error</h1>
-			<p class="error">The task encountered an error on our server, your task was not created. We apologised for any incovenience.</p>'; 
+			<p class="error">The project encountered an error on our server, your project was not created. We apologised for any incovenience.</p>'; 
 			
 			// Debugging message:
 			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
@@ -164,29 +159,7 @@ function create_project($dbc, $creator_id){
 
 function join_project($dbc, $project_id, $user_id){
 
-    $errors = validate_project_id($dbc, $project_id);
-
-    // Validate user (probably should turn this into a function)
-	if (empty($user_id)){
-
-		$errors[] = "You forgot to enter a title for your task";
-
-	} else{
-
-		$user_id = mysqli_real_escape_string($dbc, $user_id);
-
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        // Find out if user_id is found
-        $q = "SELECT userID from User where userID = '$user_id'";
-        $r = @mysqli_query($dbc, $q);
-
-        if (mysqli_num_rows($r) == 0){
-
-            $errors[] = "User not found!";
-
-        }
-
-	}
+    $errors = validate_project_id($dbc, $project_id) + validate_user_id($dbc, $user_id);
 
     if (empty($errors)){
 
@@ -226,8 +199,6 @@ function join_project($dbc, $project_id, $user_id){
     }
 
 }
-
-
 
 function validate_project_id ($dbc, $project_id){
 
@@ -271,6 +242,7 @@ function generate_id($dbc, $length_of_string) {
             // GENERATES ID BASED ON TIMESTAMP
             // sha1 the timestamps and returns substring of specified length
             $project_id = substr(sha1(time()), 0, $length_of_string);
+            $project_id = mysqli_real_escape_string($dbc, $project_id);
 
             $q = "SELECT projectID FROM project WHERE projectID = '$project_id'";
             $r = @mysqli_query($dbc, $q);
@@ -287,4 +259,67 @@ function generate_id($dbc, $length_of_string) {
         }
 
     return $project_id;
+}
+
+function return_project_list($dbc, $user_id, $check_admin){
+
+    $errors = validate_user_id($dbc, $user_id); // Initialise error array and check if user id is valid
+
+    if(empty($check_admin)){
+
+        $errors[] = "Function was not called with a check admin boolean!";
+
+    } elseif($check_admin != 0 && $check_admin != 1){
+
+        $errors[] = "Check admin boolean possess an invalid value!";
+
+    }
+
+    if(empty($errors)){
+
+        // Sub-query to select the project name where the projec is associated with the user id and whether that user is an admin
+        $q = "SELECT projectName FROM project WHERE projectID IN (SELECT projectID FROM userproject WHERE userID = '$user_id' AND isAdmin = '$check_admin')";
+        $r = @mysqli_query($dbc, $q);
+
+        if($r){
+
+            return array(1, mysqli_fetch_assoc($r)); // Returns a 1 if successful and the SQL results
+
+        }
+
+    } else{
+
+        return array(0, $errors); // Returns a 0 if failure and the errors involved
+
+    }
+
+}
+
+function validate_user_id($dbc, $user_id){
+
+    $errors = array();
+
+    if (empty($user_id)){
+
+		$errors[] = "You forgot to enter a title for your task";
+
+	} else{
+
+		$user_id = mysqli_real_escape_string($dbc, $user_id);
+
+        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
+        // Find out if user_id is found
+        $q = "SELECT userID from User where userID = '$user_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if (mysqli_num_rows($r) == 0){
+
+            $errors[] = "User not found!";
+
+        }
+
+	}
+
+    return $errors;
+
 }

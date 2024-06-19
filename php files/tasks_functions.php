@@ -15,10 +15,12 @@
     4. Added validate_task_id and return_task_status functions, added validation process for task due dates and task id (13/06/2024)
     5. Updated SQL statements to reflect new database structure, renamed variables to their respective POST submission. Renamed $user_project_id to $project_id.(14/06/2024)
     6. Added a section to the task id generator to make sure that the generated id is not the same as the ids found in the task table. (14/06/2024)
+    7. Created join_task function and generate_id function, fixed a bug where a user could have entered a Task ID that was already in used which could have caused an SQL error. (19/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
     2. Update HTML code once web pages are completed
+    3. Join task function
     
     Created on 05/06/2024 by Sean
 */
@@ -64,26 +66,7 @@ function create_task($dbc, $project_id) {
     // Validate or generate task id
     if  (empty($_POST['task-id'])){
 
-        $id_used = true;
-
-        while($id_used){
-
-            $task_id = substr(sha1(time()), 0, 4);
-            $task_id = mysqli_real_escape_string($dbc, $task_id);
-
-            $q = "SELECT projectID FROM project WHERE projectID = '$project_id'";
-            $r = @mysqli_query($dbc, $q);
-
-            if (mysqli_num_rows($r) == 0){
-
-                $id_used = false;
-
-            } else{
-
-                sleep(1);
-
-            }
-        }
+        $task_id = generate_id($dbc, 4);
 
     } elseif (strlen($_POST['task-id']) > 4){
 
@@ -96,6 +79,15 @@ function create_task($dbc, $project_id) {
     } else{
 
         $task_id = mysqli_real_escape_string($dbc, $_POST['task-id']);
+
+        $q = "SELECT taskID FROM task WHERE taskID = '$task_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if(mysqli_num_rows($r) > 0){
+
+            $errors[] = "Task ID is in used";
+
+        }
 
     }
 
@@ -154,11 +146,84 @@ function create_task($dbc, $project_id) {
 
 }
 
+function join_task($dbc, $project_id, $task_id, $user_id){
+
+    $errors = validate_project_id($dbc, $project_id) + validate_task_id($dbc, $task_id); // Initialize error array and check if task ID and project ID is valid // Will this work?
+
+    // Validate user ID
+    if(empty($user_id)){
+
+        $errors[] = "User ID is empty";
+        
+    } else{
+
+        $user_id = mysqli_real_escape_string($dbc, $user_id);
+
+        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
+        // Find out if user_id is found
+        $q = "SELECT userID from User where userID = '$user_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if (mysqli_num_rows($r) == 0){
+
+            $errors[] = "User not found!";
+
+        } else{
+
+            // Checks if the user is actually part of the project
+            $q = "SELECT projectID WHERE projectID = '$project_id' AND userID = '$user_id";
+            $r = @mysqli_query($dbc, $q);
+
+            if (mysqli_num_rows($r) == 0){
+
+                $errors[] = "User not part of this project!";
+    
+            } else{
+
+                // Checks if the user is already part of the task
+                $q = "SELECT userProjectTaskID FROM userprojecttask WHERE projectID = '$project_id' AND userID = '$user_id' AND taskID = '$task_id'";
+                $r = @mysqli_query($dbc, $q);
+
+                if(mysqli_num_rows($r) > 0 ){
+
+                    $errors[] = "User has already been assigned to this task!";
+
+                }
+
+            }
+
+        }
+
+    }
+
+    if(empty($errors)){
+
+        $q = "INSERT INTO userprojecttask (userID, projectID, taskID) VALUES ('$user_id', '$project_id', '$task_id')";
+        $r = @mysqli_query($dbc, $q);
+
+        if($r){
+            redirect_user("Temp"); // Redirect user back to the project page
+        } else{
+            // Public message:
+            // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
+            echo '<h1>System Error</h1>
+            <p class="error">The task encountered an error on our server, you were not added to this task. We apologised for any incovenience.</p>'; 
+            
+            // Debugging message:
+            echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
+        }
+
+    } else{
+
+        return $errors;
+
+    }
+
+}
+
 function update_task_status($dbc, $project_id, $task_id, $status) {
 
-    $errors = validate_project_id($dbc, $project_id); // Initialize error array and check if user project ID is valid
-
-    $errors += validate_task_id ($dbc, $task_id); // WILL THIS WORK???
+    $errors = validate_project_id($dbc, $project_id) + validate_task_id ($dbc, $task_id); // Initialize error array and check if task ID and project ID is valid // WILL THIS WORK???
 
     // Validate status
     if (empty($status)) {
@@ -277,6 +342,35 @@ function return_task_status($dbc, $task_id){
     }
 
 }
+
+function generate_id($dbc, $length_of_string) {
+
+    $id_used = true;
+
+        while($id_used){
+
+            // GENERATES ID BASED ON TIMESTAMP
+            // sha1 the timestamps and returns substring of specified length
+            $task_id = substr(sha1(time()), 0, $length_of_string);
+            $task_id = mysqli_real_escape_string($dbc, $task_id);
+
+            $q = "SELECT taskID FROM task WHERE taskID = '$task_id'";
+            $r = @mysqli_query($dbc, $q);
+
+            if (mysqli_num_rows($r) == 0){
+
+                $id_used = false;
+
+            } else{
+
+                sleep(1);
+
+            }
+        }
+
+    return $task_id;
+}
+
 
 function validate_task_id ($dbc, $task_id){
 
