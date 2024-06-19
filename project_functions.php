@@ -278,7 +278,7 @@ function return_project_list($dbc, $user_id, $check_admin){
     if(empty($errors)){
 
         // Sub-query to select the project name where the projec is associated with the user id and whether that user is an admin
-        $q = "SELECT projectName FROM project WHERE projectID IN (SELECT projectID FROM userproject WHERE userID = '$user_id' AND isAdmin = '$check_admin')";
+        $q = "SELECT projectName FROM project WHERE projectID IN (SELECT projectID FROM userproject WHERE userID = '$user_id' AND isadmin = '$check_admin')";
         $r = @mysqli_query($dbc, $q);
 
         if($r){

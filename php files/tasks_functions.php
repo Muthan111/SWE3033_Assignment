@@ -15,7 +15,8 @@
     4. Added validate_task_id and return_task_status functions, added validation process for task due dates and task id (13/06/2024)
     5. Updated SQL statements to reflect new database structure, renamed variables to their respective POST submission. Renamed $user_project_id to $project_id.(14/06/2024)
     6. Added a section to the task id generator to make sure that the generated id is not the same as the ids found in the task table. (14/06/2024)
-    7. Created join_task function and generate_id function, fixed a bug where a user could have entered a Task ID that was already in used which could have caused an SQL error. (19/06/2024)
+    7. Created join_task function and generate_id function, fixed a bug where a user could have entered a Task ID that was already in used which could have caused an SQL error.
+    Updated get_task_list function to account for admin and normal member's task differences. (19/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -285,25 +286,58 @@ function update_task_status($dbc, $project_id, $task_id, $status) {
 
 }
 
-function get_task_list($dbc, $project_id){
+function get_task_list($dbc, $project_id, $user_id){
     
     $errors = validate_project_id($dbc, $project_id);
 
-    if(empty($errors)){
+    // Validate user ID
+    if(empty($user_id)){
 
-        $project_id = mysqli_real_escape_string($dbc, $project_id);
+        $errors[] = "User ID is empty";
+        
+    } else{
+
+        $user_id = mysqli_real_escape_string($dbc, $user_id);
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        // Construct the SQL query
-        $q = "SELECT * FROM task where projectID = '$project_id'";
+        // Find out if user_id is found
+        $q = "SELECT userID FROM User WHERE userID = '$user_id'";
         $r = @mysqli_query($dbc, $q);
 
-        // Returns an associated array of all matching tasks
-        return mysqli_fetch_assoc($r);
+        if (mysqli_num_rows($r) == 0){
 
-    } else{
-        
-        return $errors;
+            $errors[] = "User not found!";
+
+        } else{
+
+            // Check whether the user is part of a project and if they are an admin
+            $q = "SELECT isadmin FROM userproject WHERE projectID = '$project_id' AND userID = '$user_id'";
+            $r = @mysqli_query($dbc, $q);
+
+            if(mysqli_num_rows($r) < 0){
+
+                $errors[] = "User is not part of this project";
+
+            } else{
+
+                $row = mysqli_fetch_assoc($r);
+
+            }
+
+        }
+    }
+
+    if(empty($errors)){
+
+        if($row['isadmin'] == 1){
+            $q = "SELECT * FROM task WHERE projectID = '$project_id'"; // IF the user is an admin
+        } else{
+            $q = "SELECT * FROM task WHERE taskID IN (SELECT taskID FROM userprojecttask WHERE projectID = '$project_id' AND userID = '$user_id'"; // IF the user is assigned
+        }
+
+        $r = @mysqli_query($dbc, $q);
+
+        return mysqli_fetch_assoc($r);
 
     }
 
