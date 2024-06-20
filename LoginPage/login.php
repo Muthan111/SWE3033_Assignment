@@ -21,15 +21,15 @@ session_start();
 error_reporting(E_ERROR | E_WARNING | E_PARSE); 
 
 // LOGIN AUTHENTICATION FILE
-require ('login_functions.inc.php');
+require ('../PHP/login_functions.inc.php');
 
 // Initialising variables
-$email = "Registererd email";
+$email = "Registered email";
 
 if(isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
 
 	// Redirects the user to a page, temporary placeholder for now
-    redirect_user('Homepage.HTML');
+    redirect_user('../HomePage/Homepage.HTML');
 
 }
 // !!! NEEDS TO BE REMOVED IF NO SYSTEM ADMIN !!!
@@ -45,7 +45,7 @@ else{
 	// Check if the form has been submitted:
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-		require ('mysqli_connect.php');
+		require ('../PHP/mysqli_connect.php');
 
 		// Makes sure that the user does not have to input the email for each failed login (the email they entered stays in the text field)
 		$email = $_POST['email'];
@@ -60,7 +60,7 @@ else{
 			$_SESSION['username'] = $data['username'];
 			
 			// Redirect:
-			redirect_user('Homepage.HTML');	// Redirects the user to a page, temporary placeholder for now
+			redirect_user('../HomePage/Homepage.HTML');	// Redirects the user to a page, temporary placeholder for now
 				
 		}
         // !!! NEEDS TO BE REMOVED IF NO SYSTEM ADMIN !!!
@@ -85,7 +85,7 @@ else{
 	} // End of the main submit conditional.
 
 	// Create the page:
-	include ('Login_html.php');
+	include ('login_html.php');
 
 }
 ?>

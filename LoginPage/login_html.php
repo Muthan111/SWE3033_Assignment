@@ -3,13 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-
-    <link rel="stylesheet" href="./global.css" />
     <link rel="stylesheet" href="./Login.css" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"/>
   </head>
   <body>
     <div class="login">
@@ -37,7 +32,7 @@
             </div>
           </div>
           <div class="field1">
-            <input id = "email" name = "email" class="label1" value="<?php echo $email; ?>" type="text" />
+            <input id = "email" name = "email" class="label1" placeholder="Registered Email" type="text" />
           </div>
           <div class="field2">
             <input id = "pass" name = "pass" class="label2" placeholder="Password" type="password" />
@@ -77,17 +72,10 @@
     </div>
 
     <script>
-      var content = document.getElementById("content");
-      if (content) {
-        content.addEventListener("click", function (e) {
-          // window.location.href = "./Homepage.HTML";
-        });
-      }
-
       var dontHaveAn = document.getElementById("dontHaveAn");
       if (dontHaveAn) {
         dontHaveAn.addEventListener("click", function (e) {
-          window.location.href = "./index.php";
+          window.location.href = "../RegistrationPage/index.php";
         });
       }
       </script>

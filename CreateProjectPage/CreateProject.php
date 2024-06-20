@@ -16,8 +16,8 @@
 
     session_start(); // To get currently logged in user ID
 
-    include ("project_functions.php");
-    include ("mysqli_connect.php");
+    include ("../PHP/project_functions.php");
+    include ("../PHP/mysqli_connect.php");
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
