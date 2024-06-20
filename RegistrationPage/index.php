@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       $row = mysqli_fetch_assoc($r);
       // Redirects the user to a page, temporary placeholder for now
-      redirect_user("../Login/Homepage.HTML");	
+      redirect_user("../LoginPage/login.php");	
 		
 		} else { // If it did not run OK.
 			
