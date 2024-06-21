@@ -49,7 +49,7 @@
                     </div>
                     <div class="select-container">
                         <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                        <select class="menu-item14">
+                        <select class="menu-item14" id="adminProjectSelect">
                             <option value="" disabled selected>Select Project</option>
                             <?php
                                 list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
@@ -58,7 +58,7 @@
                                     while($project = mysqli_fetch_assoc($data)){
                                         $project_name = $project['projectName'];
                                         $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'><a href='../DisplayProjectPage/display_project.php?id=$project_id'> - $project_name</a></option>";
+                                        echo "<option value='$project_id'>$project_name</option>";
                                     }
                                 }
                             ?>
@@ -71,7 +71,7 @@
                     </div>
                     <div class="select-container">
                         <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                        <select class="menu-item14">
+                        <select class="menu-item14" id="memberProjectSelect">
                             <option value="" disabled selected>Select Project</option>
                             <?php
                                 list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
@@ -80,7 +80,7 @@
                                     while($project = mysqli_fetch_assoc($data)){
                                         $project_name = $project['projectName'];
                                         $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'><a href='../DisplayProjectPage/display_project.php?id=$project_id'> - $project_name</a></option>";
+                                        echo "<option value='$project_id'>$project_name</option>";
                                     }
                                 }
                             ?>
@@ -175,6 +175,14 @@
         function displayProject(projectID){
             window.location.href = "../DisplayProjectPage/display_project.php?id=" + projectID;
         }
+
+        document.getElementById('adminProjectSelect').addEventListener('change', function(e){
+                window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            });
+        
+        document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
+                window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            });
     </script>
 </body>
 </html>
