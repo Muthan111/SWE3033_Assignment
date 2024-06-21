@@ -58,7 +58,7 @@
                                     while($project = mysqli_fetch_assoc($data)){
                                         $project_name = $project['projectName'];
                                         $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'> - $project_name</option>";
+                                        echo "<option value='$project_id'><a href='../DisplayProjectPage/display_project.php?id=$project_id'> - $project_name</a></option>";
                                     }
                                 }
                             ?>
@@ -80,7 +80,7 @@
                                     while($project = mysqli_fetch_assoc($data)){
                                         $project_name = $project['projectName'];
                                         $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'> - $project_name</option>";
+                                        echo "<option value='$project_id'><a href='../DisplayProjectPage/display_project.php?id=$project_id'> - $project_name</a></option>";
                                     }
                                 }
                             ?>

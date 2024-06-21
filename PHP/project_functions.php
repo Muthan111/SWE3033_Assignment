@@ -17,6 +17,7 @@
     7. Created validate_user_id function and return_project_list, fixed a bug where a user could have entered a Project ID that is already in used which could have
     caused an SQL error. (19/06/2024)
     8. Updated return_project_list so that the homepage can return all of the projects details regardless of the user's status (as long as they are part of the project). (21/06/2024)
+    9. Fixed a bug where the return_project_list did not account for a situation where there was no project. (21/06/2024)
 
     TO DO:
     1. Testing
@@ -288,9 +289,13 @@ function return_project_list($dbc, $user_id, $check_admin){
 
         $r = @mysqli_query($dbc, $q);
 
-        if($r){
+        if(mysqli_num_rows($r) > 0){
 
             return array(1, $r); // Returns a 1 if successful and the SQL results
+
+        } else{
+
+            return array(2, "placholder"); // Returns a 2 if there are no results
 
         }
 
