@@ -168,6 +168,17 @@
             </div>
         </section>
     </main>
+
+    <div id="joinCodePopup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <form id="joinCodeForm">
+                <input type="text" id="projectCode" placeholder="Enter Project Code" class="popupInputField" name="projectCode" required>
+                <button type="submit">Join Project</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         var createProject = document.getElementById("ProjectCreateButton");
         if (createProject) {
@@ -181,12 +192,47 @@
         }
 
         document.getElementById('adminProjectSelect').addEventListener('change', function(e){
-                window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+                window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
         
         document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
-                window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+                window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
+
+        // Get the popup
+        var popup = document.getElementById("joinCodePopup");
+
+        // Get the button that opens the popup
+        var btn = document.getElementById("JoinByCodeButton");
+
+        // Get the <span> element that closes the popup
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the popup 
+        btn.onclick = function() {
+            popup.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the popup
+        span.onclick = function() {
+            popup.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the popup, close it
+        window.onclick = function(event) {
+            if (event.target == popup) {
+                popup.style.display = "none";
+            }
+        }       
+
+        // Handle the form submission
+        document.getElementById("joinCodeForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var projectCode = document.getElementById("projectCode").value;
+            // Perform your AJAX request or form submission logic here
+            // For example, you can redirect to a PHP page with the project code
+            window.location.href = "../DisplayProjectPage/display_project.php?id=" + projectCode;
+        });
     </script>
 </body>
 </html>
