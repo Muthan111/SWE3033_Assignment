@@ -58,7 +58,7 @@
                                     while($project = mysqli_fetch_assoc($data)){
                                         $project_name = $project['projectName'];
                                         $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'>$project_name</option>";
+                                        echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
                                     }
                                 }
                             ?>
@@ -80,7 +80,7 @@
                                     while($project = mysqli_fetch_assoc($data)){
                                         $project_name = $project['projectName'];
                                         $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'>$project_name</option>";
+                                        echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
                                     }
                                 }
                             ?>
@@ -122,9 +122,13 @@
                             $start = $project['startDate'];
                             $due = $project['dueDate'];
 
-                            echo "
+                            echo 
+                            "   
                                 <button class='pressproject' id='ProjectOneButton' onclick='displayProject(\"".$project_id."\")'>
-                                    <div class='pressproject-label'>$project_name</div>
+                                        <div class='project-info'>
+                                            <div class='pressproject-label'>$project_name</div>
+                                            <div class='projectid-label'>PID: $project_id</div>
+                                        </div>
                                         <div class='dd-mm-yyyy-group'>
                                             <div class='dd-mm-yyyy2'>$start</div>
                                             <div class='div1'>-&gt;</div>
@@ -145,8 +149,8 @@
                                         <div class='frame-child3'>
                                         </div>
                                     </div>
-                                </button>";
-
+                                </button>
+                            ";
                         }
 
                     } else{

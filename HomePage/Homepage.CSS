@@ -63,7 +63,7 @@
   cursor: pointer;
   border: 0;
   padding: var(--padding-5xs) var(--padding-base);
-  background-color: var(--color-white);
+  background-color: var(--color-gainsboro-100);
   align-self: stretch;
   border-radius: var(--br-5xs);
   display: flex;
@@ -410,6 +410,19 @@ body {
 
 .pressproject:hover{
   background-color: var(--color-gainsboro-100)
+}
+
+.project-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.projectid-label{
+  font-family: 'Noto Sans', sans-serif; /* Font family */
+  font-weight: 400; /* Regular */
+  font-size: 12px; /* Font size */
+  margin-bottom: 10px; /* Adjust spacing */
 }
 
 .pressproject-label {
