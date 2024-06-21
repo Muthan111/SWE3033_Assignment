@@ -34,31 +34,56 @@
                         <div class="join-by-code2">Join by code</div>
                     </button>
                 </nav>
+                <?php
+                    // This section is to call upon the session variables and dependencies that will be used in this file
+                    session_start();
+                    $user_id = $_SESSION['user_id'];
+                    $username = $_SESSION['username'];
+
+                    include ('../PHP/project_functions.php');
+                    include ('../PHP/mysqli_connect.php');
+                ?>
                 <nav class="list5" id="ProjectSelectNavigator">
                     <div class="title6">
-                        <b class="participating-projects2">Admin Project Select</b>
+                        <b class="participating-projects2">Admin Project List</b>
                     </div>
                     <div class="select-container">
                         <img src="select-icon.png" alt="Project Select Dropdown Icon" />
                         <select class="menu-item14">
                             <option value="" disabled selected>Select Project</option>
-                            <option value="project1">- Project 1</option>
-                            <option value="project2">- Project 2</option>
-                            <option value="project3">- Project 3</option>
+                            <?php
+                                list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
+
+                                if($check == 1){
+                                    while($project = mysqli_fetch_assoc($data)){
+                                        $project_name = $project['projectName'];
+                                        $project_id = $project['projectID'];
+                                        echo "<option value='$project_id'> - $project_name</option>";
+                                    }
+                                }
+                            ?>
                         </select>
                     </div>
                 </nav>
-                <nav class="list5" id="ProjectSelectNavigator">
+                <nav class="list5" id="ProjectSelectNavigatorAdmin">
                     <div class="title6">
-                        <b class="participating-projects2">Member Project Select</b>
+                        <b class="participating-projects2">Member Project List</b>
                     </div>
                     <div class="select-container">
                         <img src="select-icon.png" alt="Project Select Dropdown Icon" />
                         <select class="menu-item14">
                             <option value="" disabled selected>Select Project</option>
-                            <option value="project1">- Project 1</option>
-                            <option value="project2">- Project 2</option>
-                            <option value="project3">- Project 3</option>
+                            <?php
+                                list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
+
+                                if($check == 1){
+                                    while($project = mysqli_fetch_assoc($data)){
+                                        $project_name = $project['projectName'];
+                                        $project_id = $project['projectID'];
+                                        echo "<option value='$project_id'> - $project_name</option>";
+                                    }
+                                }
+                            ?>
                         </select>
                     </div>
                 </nav>
@@ -84,6 +109,52 @@
                 <h2 class="recent-projects" id="RecentProjectHeader">Recent Projects</h2>
             </div>
             <div class="project-list">
+                <?php
+                    list($check, $data) = return_project_list($dbc, $user_id, 2);
+
+                    if ($check == 1){
+
+                        while($project = mysqli_fetch_assoc($data)){
+                            
+                            $project_name = $project['projectName'];
+                            $project_id = $project['projectID'];
+                            $project_desc = $project['projectDescription'];
+                            $start = $project['startDate'];
+                            $due = $project['dueDate'];
+
+                            echo "
+                                <button class='pressproject' id='ProjectOneButton' onclick='displayProject(\"".$project_id."\")'>
+                                    <div class='pressproject-label'>$project_name</div>
+                                        <div class='dd-mm-yyyy-group'>
+                                            <div class='dd-mm-yyyy2'>$start</div>
+                                            <div class='div1'>-&gt;</div>
+                                            <div class='dd-mm-yyyy3'>$due</div>
+                                        </div>
+                                    <div class='lorem-ipsum-dolor-sit-amet-co-container'>
+                                        <div class='lorem-ipsum-dolor-container2'>
+                                            <span class='lorem-ipsum-dolor-container3'>
+                                                <p class='lorem-ipsum-dolor1'>$project_desc</p>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class='project-inner'>
+                                        <div class='frame-child2'>
+                                        </div>
+                                    </div>
+                                    <div class='project-child'>
+                                        <div class='frame-child3'>
+                                        </div>
+                                    </div>
+                                </button>";
+
+                        }
+
+                    } else{
+                        echo "<p class='lorem-ipsum-dolor1'>Currently not part of any Project</p>";
+                    }
+
+                    mysqli_close($dbc); // Close database connection
+                ?>
                 <button class="pressproject" id="ProjectOneButton">
                     <div class="pressproject-label">Project One</div>
                     <div class="dd-mm-yyyy-group">
@@ -94,7 +165,7 @@
                     <div class="lorem-ipsum-dolor-sit-amet-co-container">
                       <div class="lorem-ipsum-dolor-container2">
                         <span class="lorem-ipsum-dolor-container3">
-                          <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                          <p class="lorem-ipsum-dolor1">Lorem ipsum dolor sit amet</p>
                         </span>
                       </div>
                     </div>
@@ -106,7 +177,7 @@
                       <div class="frame-child3">
                       </div>
                     </div>
-                  </button>
+                </button>
                 <button class="pressproject" id="ProjectTwoButton">
                     <div class="pressproject-label">Project Two</div>
                     <div class="dd-mm-yyyy-group">
@@ -228,16 +299,21 @@
                     <img class="CreateAddIcon" alt="" src="add-icon.png">
                     <div class="CreateProjectLabel">Create a New Project</div>
                 </button> 
-                <script>
-                    var createProject = document.getElementById("ProjectCreateButton");
-                        if (createProject) {
-                        createProject.addEventListener("click", function (e) {
-                        window.location.href = "../CreateProjectPage/CreateProject.php";
-                        });
-                        }
-                </script>
+                
             </div>
         </section>
     </main>
+    <script>
+        var createProject = document.getElementById("ProjectCreateButton");
+        if (createProject) {
+            createProject.addEventListener("click", function (e) {
+                window.location.href = "../CreateProjectPage/CreateProject.php";
+                }
+            );
+        }
+        function displayProject(projectID){
+            window.location.href = "../DisplayProjectPage/display_project.php?id=" + projectID;
+        }
+    </script>
 </body>
 </html>

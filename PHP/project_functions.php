@@ -16,6 +16,7 @@
     6. Fixed some minor SQL errors, create_project function works now (15/06/2024)
     7. Created validate_user_id function and return_project_list, fixed a bug where a user could have entered a Project ID that is already in used which could have
     caused an SQL error. (19/06/2024)
+    8. Updated return_project_list so that the homepage can return all of the projects details regardless of the user's status (as long as they are part of the project). (21/06/2024)
 
     TO DO:
     1. Testing
@@ -86,11 +87,11 @@ function create_project($dbc, $creator_id){
 
         $project_id = generate_id($dbc, 4);
 
-    } elseif (strlen($_POST['task-id']) > 4){
+    } elseif (strlen($_POST['project-id']) > 4){
 
         $errors[] = 'Task ID is too long';
 
-    } elseif (strlen($_POST['task-id']) < 2){
+    } elseif (strlen($_POST['project-id']) < 2){
 
         $errors[] = 'Task ID is too short';
     
@@ -125,7 +126,7 @@ function create_project($dbc, $creator_id){
 
             if ($r){
                 // Redirects the user to a page, temporary placeholder for now
-                redirect_user("Homepage.HTML");	
+                redirect_user("../HomePage/Homepage.php");	
             } else{
                 // Public message:
                 // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
@@ -269,7 +270,7 @@ function return_project_list($dbc, $user_id, $check_admin){
 
         $errors[] = "Function was not called with a check admin boolean!";
 
-    } elseif($check_admin != 0 && $check_admin != 1){
+    } elseif($check_admin < 0 || $check_admin > 2){
 
         $errors[] = "Check admin boolean possess an invalid value!";
 
@@ -277,13 +278,19 @@ function return_project_list($dbc, $user_id, $check_admin){
 
     if(empty($errors)){
 
-        // Sub-query to select the project name where the projec is associated with the user id and whether that user is an admin
-        $q = "SELECT projectName FROM project WHERE projectID IN (SELECT projectID FROM userproject WHERE userID = '$user_id' AND isadmin = '$check_admin')";
+        if($check_admin < 2){
+            // Sub-query to select the project name where the projec is associated with the user id and whether that user is an admin
+            $q = "SELECT projectName, projectID FROM project WHERE projectID IN (SELECT projectID FROM userproject WHERE userID = '$user_id' AND isadmin = '$check_admin')";
+        } else{
+            // Sub-query to select all of the projects and its details that a user is part of regardless whether the user is an admin or member
+            $q = "SELECT * FROM project WHERE projectID IN (SELECT projectID FROM userproject WHERE userID = '$user_id')";
+        }
+
         $r = @mysqli_query($dbc, $q);
 
         if($r){
 
-            return array(1, mysqli_fetch_assoc($r)); // Returns a 1 if successful and the SQL results
+            return array(1, $r); // Returns a 1 if successful and the SQL results
 
         }
 
@@ -309,7 +316,7 @@ function validate_user_id($dbc, $user_id){
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if user_id is found
-        $q = "SELECT userID from User where userID = '$user_id'";
+        $q = "SELECT userID from account where userID = '$user_id'";
         $r = @mysqli_query($dbc, $q);
 
         if (mysqli_num_rows($r) == 0){

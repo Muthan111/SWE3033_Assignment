@@ -34,6 +34,15 @@
                             <div class="join-by-code2">Join by code</div>
                         </button>
                     </nav>
+                    <?php
+                        // This section is to call upon the session variables and dependencies that will be used in this file
+                        session_start();
+                        $user_id = $_SESSION['user_id'];
+                        $username = $_SESSION['username'];
+
+                        include ('../PHP/project_functions.php');
+                        include ('../PHP/mysqli_connect.php');
+                    ?>
                     <nav class="list5" id="ProjectSelectNavigator">
                         <div class="title6">
                             <b class="participating-projects2">Admin Project List</b>
@@ -42,9 +51,17 @@
                             <img src="select-icon.png" alt="Project Select Dropdown Icon" />
                             <select class="menu-item14">
                                 <option value="" disabled selected>Select Project</option>
-                                <option value="project1">- Project 1</option>
-                                <option value="project2">- Project 2</option>
-                                <option value="project3">- Project 3</option>
+                                <?php
+                                    list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
+
+                                    if($check == 1){
+                                        while($project = mysqli_fetch_assoc($data)){
+                                            $project_name = $project['projectName'];
+                                            $project_id = $project['projectID'];
+                                            echo "<option value='$project_id'> - $project_name</option>";
+                                        }
+                                    }
+                                ?>
                             </select>
                         </div>
                     </nav>
@@ -56,9 +73,19 @@
                             <img src="select-icon.png" alt="Project Select Dropdown Icon" />
                             <select class="menu-item14">
                                 <option value="" disabled selected>Select Project</option>
-                                <option value="project1">- Project 1</option>
-                                <option value="project2">- Project 2</option>
-                                <option value="project3">- Project 3</option>
+                                <?php
+                                    list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
+
+                                    if($check == 1){
+                                        while($project = mysqli_fetch_assoc($data)){
+                                            $project_name = $project['projectName'];
+                                            $project_id = $project['projectID'];
+                                            echo "<option value='$project_id'> - $project_name</option>";
+                                        }
+                                    }
+
+                                    mysqli_close($dbc); // Close database connection
+                                ?>
                             </select>
                         </div>
                     </nav>
