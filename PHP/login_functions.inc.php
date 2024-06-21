@@ -10,11 +10,9 @@
 	3. 	Partially updated the SQL (08/06/2024)
 	4. 	Moved to root folder, updated POST submission to email rather than username, temporarily removed password encryption and changed to email for SQL, functions work as intended
 		(11/06/2024)
+	5.	Removed system admin parts (21/06/2024)
 
     TO DO:
-    1. Update SQL statements once database is completed
-    2. IF NO SYSTEM ADMIN, REMOVE SYSTEM ADMIN PARTS
-	3. Determine if need encryption
     
     Created on 04/06/2024 by Sean
 */
@@ -43,8 +41,6 @@ function check_login($dbc, $email = '', $pass = '') {
 	if (empty($errors)) { // If everything's OK.
 
 		// Retrieve the user_id and first_name for that email/password combination:
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED, HOW IS THE PASSWORD BEING SAVED? NEED TO ENCRYPT?
-		// $q = "SELECT userID, username FROM account WHERE email='$n' AND password=SHA1('$p')";	
 		$q = "SELECT userID, username FROM account WHERE email='$n' AND password='$p'";	
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 		
@@ -58,26 +54,6 @@ function check_login($dbc, $email = '', $pass = '') {
 			return array(1, $row);
 			
 		} 
-
-        // !!! NEEDS TO BE REMOVED IF NO SYSTEM ADMIN !!!
-        // else { // Not a match in user table!
-			
-        //     // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        //     $q = "SELECT admin_id, name FROM admin WHERE name='$n' AND password=SHA1('$p')";
-        //     $r = @mysqli_query ($dbc, $q); // Run the query.
-            
-        //     if (mysqli_num_rows($r) == 1) {
-
-        //         // Fetch the record:
-        //         $row = mysqli_fetch_array ($r, MYSQLI_ASSOC);
-        
-        //         // Return true and the record:
-        //         return array(2, $row);
-                
-        //     } else { // Not a match in admin table!
-        //         $errors[] = 'The username and password entered do not match those on file.';
-        //     }
-		// }
 
         else{ // Not a match in user table!
             $errors[] = 'The username and password entered do not match those on file.';

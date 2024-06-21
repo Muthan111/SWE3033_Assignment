@@ -10,10 +10,9 @@
     4. Integrated registration_script with index page, fixed SQL statements (12/06/2024)
     5. Fixed sign in link (13/06/2024)
     6. Redirect user to Homepage and properly assigned userID to session variables. Removed phone validation to reduce cluttering. (15/06/2024)
+    7. Removed system admin parts (21/06/2024)
 
     TO DO:
-    1. Update SQL statements once database is completed
-    2. IF NO SYSTEM ADMIN, REMOVE SYSTEM ADMIN PARTS
 
     Created on 04/06/2024 by Sean
 */
@@ -25,10 +24,6 @@ session_start();
 if (isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
 	redirect_user("../HomePage/Homepage.HTML");
 }
-// !!! NEEDS TO BE REMOVED IF NO SYSTEM ADMIN !!!
-// elseif (isset($_SESSION["admin_id"]) && isset($_SESSION["name"])){
-// 	redirect_user("admin_register.php");
-// }
 
 // Initialising variables
 $username = "Username";
