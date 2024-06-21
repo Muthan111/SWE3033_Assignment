@@ -106,3 +106,13 @@
                 </nav>
             </section>    
         </div>
+    </main>
+    <script>
+        document.getElementById('adminProjectSelect').addEventListener('change', function(e){
+            window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            });
+        
+        document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
+            window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            });
+    </script>
