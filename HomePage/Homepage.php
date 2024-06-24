@@ -166,7 +166,7 @@
                         }
 
                     } else{
-                        echo "<p class='lorem-ipsum-dolor1'>Currently not part of any Project</p>";
+                        echo "<p class='lorem-ipsum-dolor1'>&nbsp &nbsp &nbsp Currently not part of any Project</p>";
                     }
 
                     ?>

@@ -116,7 +116,7 @@
       var alreadyHaveAn = document.getElementById("alreadyHaveAn");
       if (alreadyHaveAn) {
         alreadyHaveAn.addEventListener("click", function (e) {
-          window.location.href = "../LoginPage/login.php";
+          window.location.href = "LoginPage/login.php";
         });
       }
       </script>
