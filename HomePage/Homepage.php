@@ -37,8 +37,20 @@
                 <?php
                     // This section is to call upon the session variables and dependencies that will be used in this file
                     session_start();
-                    $user_id = $_SESSION['user_id'];
-                    $username = $_SESSION['username'];
+                    
+
+                    if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
+
+                        // Redirects the user to a page, temporary placeholder for now
+                        include('../PHP/redirect_function.php');
+                        redirect_user('../LoginPage/login.php');
+                    
+                    } else{
+
+                        $user_id = $_SESSION['user_id'];
+                        $username = $_SESSION['username'];
+
+                    }
 
                     include ('../PHP/project_functions.php');
                     include ('../PHP/mysqli_connect.php');
@@ -74,7 +86,7 @@
                         <select class="menu-item14" id="memberProjectSelect">
                             <option value="" disabled selected>Select Project</option>
                             <?php
-                                list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
+                                list($check, $data) = return_project_list($dbc, $user_id, 0); // Is an admin
 
                                 if($check == 1){
                                     while($project = mysqli_fetch_assoc($data)){
@@ -157,8 +169,22 @@
                         echo "<p class='lorem-ipsum-dolor1'>Currently not part of any Project</p>";
                     }
 
-                    mysqli_close($dbc); // Close database connection?>
+                    ?>
             </div>
+            <?php
+                if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+                    $errors = join_project($dbc, $_POST['projectCode'], $user_id);
+                    // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
+                    if (isset($errors) && !empty($errors)) {
+                        echo '<p class="errorclass">The following error(s) occurred:<br />';
+                        foreach ($errors as $msg) {
+                            echo " - $msg<br />\n";
+                        }
+                        echo '</p><p class="errorclass">Please try again.</p>';
+                    } 
+                }
+                mysqli_close($dbc); // Close database connection
+            ?>
             <div class="footer">
                 <button class="project-create" id="ProjectCreateButton">
                     <img class="CreateAddIcon" alt="" src="add-icon.png">
@@ -172,9 +198,9 @@
     <div id="joinCodePopup" class="popup">
         <div class="popup-content">
             <span class="close">&times;</span>
-            <form id="joinCodeForm">
+            <form id="joinCodeForm" action="Homepage.php" method="post">
                 <input type="text" id="projectCode" placeholder="Enter Project Code" class="popupInputField" name="projectCode" required>
-                <button type="submit">Join Project</button>
+                <button type = "submit" value = "Submit" form = "joinCodeForm">Join Project</button>
             </form>
         </div>
     </div>
@@ -226,13 +252,13 @@
         }       
 
         // Handle the form submission
-        document.getElementById("joinCodeForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            var projectCode = document.getElementById("projectCode").value;
-            // Perform your AJAX request or form submission logic here
-            // For example, you can redirect to a PHP page with the project code
-            window.location.href = "../DisplayProjectPage/display_project.php?id=" + projectCode;
-        });
+        // document.getElementById("joinCodeForm").addEventListener("submit", function(event) {
+        //     event.preventDefault();
+        //     var projectCode = document.getElementById("projectCode").value;
+        //     // Perform your AJAX request or form submission logic here
+        //     // For example, you can redirect to a PHP page with the project code
+        //     window.location.href = "../DisplayProjectPage/display_project.php?id=" + projectCode;
+        // });
     </script>
 </body>
 </html>

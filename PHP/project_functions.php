@@ -18,6 +18,8 @@
     caused an SQL error. (19/06/2024)
     8. Updated return_project_list so that the homepage can return all of the projects details regardless of the user's status (as long as they are part of the project). (21/06/2024)
     9. Fixed a bug where the return_project_list did not account for a situation where there was no project. (21/06/2024)
+    10. Fixed bugs regarding input validation and how the errors are processed as arrays. Fixed the join_project function and the SQL. Also fixed another bug in the return_project_list
+    function, where 0 is considered as empty... (24/06/2024)
 
     TO DO:
     1. Testing
@@ -161,7 +163,7 @@ function create_project($dbc, $creator_id){
 
 function join_project($dbc, $project_id, $user_id){
 
-    $errors = validate_project_id($dbc, $project_id) + validate_user_id($dbc, $user_id);
+    $errors = array_merge(validate_project_id($dbc, $project_id), validate_user_id($dbc, $user_id));
 
     if (empty($errors)){
 
@@ -169,13 +171,13 @@ function join_project($dbc, $project_id, $user_id){
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED (need to find out how admin is determined)
         // Lets user join a project
-        $q = "INSERT INTO User_Project (userID, projectID, admin) VALUES ('$user_id', '$project_id', 0";
+        $q = "INSERT INTO userproject (userID, projectID, isadmin) VALUES ('$user_id', '$project_id', 0)";
         $r = @mysqli_query($dbc, $q);
 
         if($r){
 
             // Redirects the user to a page, temporary placeholder for now
-            redirect_user("temp");
+            redirect_user("../DisplayProjectPage/display_project.php?id=$project_id");
 
         } else{ // If it did not run OK.
 
@@ -227,11 +229,7 @@ function validate_project_id ($dbc, $project_id){
         }
 	}
 
-    if (!empty($errors)){
-
-        return $errors;
-
-    }
+    return $errors;
 
 }
 
@@ -267,7 +265,7 @@ function return_project_list($dbc, $user_id, $check_admin){
 
     $errors = validate_user_id($dbc, $user_id); // Initialise error array and check if user id is valid
 
-    if(empty($check_admin)){
+    if(empty($check_admin) && $check_admin != 0){
 
         $errors[] = "Function was not called with a check admin boolean!";
 

@@ -9,7 +9,8 @@
 	3.	Change username input to email input, added html file at the end, moved login.php to root folder, tested login system, works as intended, user is redirected to homepage
 		once logged in. Added the email variable so that users don't have to re-enter their email everytime they fail the login.(11/06/2024)
 	4.	Fixed user ID not being set in the session variables and redirect users to hompage once they are logged in(15/06/2024)
-	5. Removed system admin and udpated redirect_user to go to the correct page (21/06/2024)
+	5.	Removed system admin and udpated redirect_user to go to the correct page (21/06/2024)
+	6.	Fixed the redirect function (it was .html instead of .php) (24/06/2024)
 
     TO DO:
     
@@ -28,7 +29,7 @@ $email = "Registered email";
 if(isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
 
 	// Redirects the user to a page, temporary placeholder for now
-    redirect_user('../HomePage/Homepage.HTML');
+    redirect_user('../HomePage/Homepage.php');
 
 }
 else{

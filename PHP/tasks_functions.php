@@ -17,6 +17,7 @@
     6. Added a section to the task id generator to make sure that the generated id is not the same as the ids found in the task table. (14/06/2024)
     7. Created join_task function and generate_id function, fixed a bug where a user could have entered a Task ID that was already in used which could have caused an SQL error.
     Updated get_task_list function to account for admin and normal member's task differences. (19/06/2024)
+    8. Fixed bugs regarding input validation and how the errors are processed as arrays. (24/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -149,7 +150,7 @@ function create_task($dbc, $project_id) {
 
 function join_task($dbc, $project_id, $task_id, $user_id){
 
-    $errors = validate_project_id($dbc, $project_id) + validate_task_id($dbc, $task_id); // Initialize error array and check if task ID and project ID is valid // Will this work?
+    $errors = array_merge(validate_project_id($dbc, $project_id), validate_task_id($dbc, $task_id)); // Initialize error array and check if task ID and project ID is valid // Will this work?
 
     // Validate user ID
     if(empty($user_id)){
@@ -224,7 +225,7 @@ function join_task($dbc, $project_id, $task_id, $user_id){
 
 function update_task_status($dbc, $project_id, $task_id, $status) {
 
-    $errors = validate_project_id($dbc, $project_id) + validate_task_id ($dbc, $task_id); // Initialize error array and check if task ID and project ID is valid // WILL THIS WORK???
+    $errors = array_merge(validate_project_id($dbc, $project_id), validate_task_id ($dbc, $task_id)); // Initialize error array and check if task ID and project ID is valid // WILL THIS WORK???
 
     // Validate status
     if (empty($status)) {
