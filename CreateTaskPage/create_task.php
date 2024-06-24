@@ -55,7 +55,7 @@ include ('../PHP/mysqli_connect.php');
                         </div>
                         <div class="select-container">
                             <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                            <select class="menu-item14">
+                            <select class="menu-item14" id="memberProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
                                     list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
@@ -77,7 +77,7 @@ include ('../PHP/mysqli_connect.php');
                         </div>
                         <div class="select-container">
                             <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                            <select class="menu-item14">
+                            <select class="menu-item14" id="adminProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
                                     list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
