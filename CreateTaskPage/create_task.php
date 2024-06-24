@@ -150,6 +150,14 @@ include ('../PHP/mysqli_connect.php');
             </section>
     </main>
     <script>
+        var goHome = document.getElementById("HomeButton");
+        if (goHome) {
+            goHome.addEventListener("click", function (e) {
+                window.location.href = "../index.php";
+                }
+            );
+        }
+
         document.getElementById('adminProjectSelect').addEventListener('change', function(e){
             window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
             });
