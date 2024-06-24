@@ -1,5 +1,35 @@
 <!DOCTYPE html>
 <html>
+<?php
+session_start();
+
+if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
+    include('../PHP/redirect_function.php');
+    redirect_user('../LoginPage/login.php');
+} else{
+    $user_id = $_SESSION['user_id'];
+    $username = $_SESSION['username'];
+}
+
+include ('../PHP/project_functions.php');
+include ('../PHP/mysqli_connect.php');
+
+$error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
+    $projectCode = $_POST['projectCode'];
+    $already_joined = join_project($dbc, $projectCode, $user_id);
+
+    if (!$already_joined) {
+        $redirect_url = '../DisplayProjectPage/display_project.php?id='. $projectCode;
+        echo "<script>window.open('$redirect_url', '_blank');</script>";
+        echo "<script>location.reload</script>";
+        exit();
+    } else {
+        $error_message = "You have already joined this project";
+    }
+}
+?>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -13,27 +43,6 @@
       href="https://fonts.googleapis.com/css2?family=Noto Sans:wght@400&display=swap"
     />
 </head>
-<?php
-    // This section is to call upon the session variables and dependencies that will be used in this file
-    session_start();
-    
-
-    if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
-
-        // Redirects the user to a page, temporary placeholder for now
-        include('../PHP/redirect_function.php');
-        redirect_user('../LoginPage/login.php');
-    
-    } else{
-
-        $user_id = $_SESSION['user_id'];
-        $username = $_SESSION['username'];
-
-    }
-
-    include ('../PHP/project_functions.php');
-    include ('../PHP/mysqli_connect.php');
-?>
 <body>
     <main class="mainpage" id="Main">
         <div class="background-fill" id="bg-fill">
@@ -54,22 +63,6 @@
                         <img class="add-icon3" alt="" src="add-icon.png" />
                         <div class="join-by-code2">Join by code</div>
                     </button>
-                    <div>
-                        <?php
-                            if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-                                $errors = join_project($dbc, $_POST['projectCode'], $user_id);
-                                // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
-                                if (isset($errors) && !empty($errors)) {
-                                    echo '<p class="errorclass" style="color:red;">The following error(s) occurred:<br />';
-                                    foreach ($errors as $msg) {
-                                        echo " - $msg<br />\n";
-                                    }
-                                    echo '</p><p class="errorclass">Please try again.</p>';
-                                } 
-                            }
-                            
-                        ?> 
-                    </div>
                 </nav>
                 
                 <nav class="list5" id="ProjectSelectNavigator">
@@ -111,28 +104,27 @@
                                         $project_id = $project['projectID'];
                                         echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
                                     }
-                                }
-                            ?>
+                                }?>
                         </select>
                     </div>
                 </nav>
                 <nav class="list6" id="ChatSelectNavigation">
-                    <b class="title7" id="ProjectForum">
-                        <b class="project-forum2">Project Forum</b>
-                    </b>
-                    <div class="select-container">
-                        <img src="chat-icon.png" alt="Project Chat Select Dropdown Icon" />
-                        <select class="menu-item15" id="SelectChat">
-                            <option value="" disabled selected>Select Chat</option>
-                            <option value="chat1">- Chat 1</option>
-                            <option value="chat2">- Chat 2</option>
-                            <option value="chat3">- Chat 3</option>
-                        </select>
-                    </div>
-                </nav>
-            </nav>
-        </section>
-    </div>
+                                <b class="title7" id="ProjectForum">
+                                    <b class="project-forum2">Project Forum</b>
+                                </b>
+                                <div class="select-container">
+                                    <img src="chat-icon.png" alt="Project Chat Select Dropdown Icon" />
+                                    <select class="menu-item15" id="SelectChat">
+                                        <option value="" disabled selected>Select Chat</option>
+                                        <option value="chat1">- Chat 1</option>
+                                        <option value="chat2">- Chat 2</option>
+                                        <option value="chat3">- Chat 3</option>
+                                    </select>
+                                </div>
+                            </nav>
+                        </nav>
+                    </section>               
+        </div>
    
         <section class="main-container">
             <div class="header">
@@ -198,19 +190,22 @@
                 
             </div>
         </section>
+        <div id="joinCodePopup" class="popup">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <form id="joinCodeForm" method="post">
+                    <input type="text" id="projectCode" placeholder="Enter Project Code" class="popupInputField" name="projectCode" required>
+                    <button type="submit" value="Submit">Join Project</button>
+                    <div id="error-message" style="color: red;"><?php echo $error_message; ?></div>
+                    <input type="hidden" id="phpErrorMessage" value="<?php echo $error_message; ?>" />
+                </form>
+            </div>
+        </div>
     </main>
 
-    <div id="joinCodePopup" class="popup">
-        <div class="popup-content">
-            <span class="close">&times;</span>
-            <form id="joinCodeForm" action="Homepage.php" method="post">
-                <input type="text" id="projectCode" placeholder="Enter Project Code" class="popupInputField" name="projectCode" required>
-                <button type = "submit" value = "Submit" form = "joinCodeForm">Join Project</button>
-            </form>
-        </div>
-    </div>
-
     <script>
+        // JavaScript for handling the pop-up and form submission
+
         var createProject = document.getElementById("ProjectCreateButton");
         if (createProject) {
             createProject.addEventListener("click", function (e) {
@@ -218,17 +213,18 @@
                 }
             );
         }
+
         function displayProject(projectID){
             window.location.href = "../DisplayProjectPage/display_project.php?id=" + projectID;
         }
 
         document.getElementById('adminProjectSelect').addEventListener('change', function(e){
-                window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
-            });
+            window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
+        });
         
         document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
-                window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
-            });
+            window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
+        });
 
         // Get the popup
         var popup = document.getElementById("joinCodePopup");
@@ -254,16 +250,16 @@
             if (event.target == popup) {
                 popup.style.display = "none";
             }
-        }       
+        }
 
-        // Handle the form submission
-        // document.getElementById("joinCodeForm").addEventListener("submit", function(event) {
-        //     event.preventDefault();
-        //     var projectCode = document.getElementById("projectCode").value;
-        //     // Perform your AJAX request or form submission logic here
-        //     // For example, you can redirect to a PHP page with the project code
-        //     window.location.href = "../DisplayProjectPage/display_project.php?id=" + projectCode;
-        // });
+        // Show error message if exists
+        var phpErrorMessage = document.getElementById("phpErrorMessage").value;
+        if (phpErrorMessage) {
+            var errorMessage = document.getElementById("error-message");
+            errorMessage.style.display = "block";
+            errorMessage.innerText = phpErrorMessage;
+            popup.style.display = "block";
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Project Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 70%;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2em;
+        }
+
+        .project-dates {
+            font-size: 0.8em;
+        }
+
+        .project-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .project-details div {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .project-details div:last-child {
+            margin-right: 0;
+        }
+
+        .project-details label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .project-details span {
+            display: block;
+            padding: 10px;
+            font-size: 1em;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .project-description {
+            margin-bottom: 20px;
+        }
+
+        .project-description label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .project-description span {
+            display: block;
+            padding: 10px;
+            font-size: 1em;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            height: 100px;
+            overflow-y: auto;
+        }
+
+        .tasks {
+            margin-bottom: 20px;
+        }
+
+        .tasks h2 {
+            margin-bottom: 10px;
+        }
+
+        .tasks ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tasks ul li {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+            align-items: center;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .task-details {
+            display: flex;
+            align-items: center;
+        }
+
+        .task-status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .status-unassigned {
+            background-color: grey;
+        }
+
+        .status-ongoing {
+            background-color: yellow;
+            color: black;
+        }
+
+        .status-completed {
+            background-color: green;
+        }
+
+        .status-expired {
+            background-color: red;
+        }
+
+        .task-form {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .task-form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .task-form input,
+        .task-form select {
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .task-form button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .task-form button:hover {
+            background-color: #45a049;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .buttons button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .buttons button:hover {
+            background-color: #45a049;
+        }
+
+        .buttons #updateProjectButton {
+            background-color: #007BFF;
+        }
+
+        .buttons #updateProjectButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="project-title">Project One</h1>
+            <div class="project-dates">
+                <span id="project-start-date">Start Date: 2024-01-01</span> |
+                <span id="project-end-date">End Date: 2024-12-31</span>
+            </div>
+        </header>
+        <section class="project-details">
+            <div class="project-name">
+                <label for="project-name">Project Name</label>
+                <span id="project-name">Example Project Name</span>
+            </div>
+            <div class="project-id">
+                <label for="project-id">Project ID</label>
+                <span id="project-id">12345</span>
+            </div>
+        </section>
+        <section class="project-description">
+            <label for="project-description">Project Description</label>
+            <span id="project-description">This is an example project description.</span>
+        </section>
+        <section class="tasks">
+            <h2>Tasks</h2>
+            <ul id="task-list">
+                <!-- Tasks will be added here dynamically -->
+            </ul>
+            <div class="buttons">
+                <button id="createTaskButton">Create Task</button>
+                <button id="updateProjectButton">Update Project</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="taskFormContainer" style="display: none;">
+        <div class="task-form">
+            <label for="task-name">Task Name</label>
+            <input type="text" id="task-name">
+
+            <label for="task-description">Task Description</label>
+            <input type="text" id="task-description">
+
+            <label for="task-status">Task Status</label>
+            <select id="task-status">
+                <option value="unassigned">Unassigned</option>
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+                <option value="expired">Expired</option>
+            </select>
+
+            <label for="task-due-date">Due Date</label>
+            <input type="date" id="task-due-date">
+
+            <label for="task-days-remaining">Days Remaining</label>
+            <input type="text" id="task-days-remaining" readonly>
+
+            <button id="saveTaskButton">Save Task</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const projectData = {
+                title: "Project One",
+                startDate: "2024-01-01",
+                endDate: "2024-12-31",
+                name: "Example Project Name",
+                id: "12345",
+                description: "This is an example project description.",
+                tasks: [
+                    { name: "Task 1", description: "Description for Task One", status: "unassigned", dueDate: "2024-07-10" },
+                    { name: "Task 2", description: "Description for Task Two", status: "ongoing", dueDate: "2024-08-10" },
+                    { name: "Task 3", description: "Description for Task Three", status: "completed", dueDate: "2024-05-10" },
+                    { name: "Task 4", description: "Description for Task Four", status: "expired", dueDate: "2024-04-10" },
+                ]
+            };
+
+            document.getElementById('project-title').innerText = projectData.title;
+            document.getElementById('project-start-date').innerText = `Start Date: ${projectData.startDate}`;
+            document.getElementById('project-end-date').innerText = `End Date: ${projectData.endDate}`;
+            document.getElementById('project-name').innerText = projectData.name;
+            document.getElementById('project-id').innerText = projectData.id;
+            document.getElementById('project-description').innerText = projectData.description;
+
+            const taskList = document.getElementById('task-list');
+            projectData.tasks.forEach(task => {
+                addTaskToList(taskList, task.name, task.description, task.status, task.dueDate);
+            });
+
+            document.getElementById('createTaskButton').addEventListener('click', function() {
+                document.getElementById('taskFormContainer').style.display = 'block';
+            });
+
+            document.getElementById('task-due-date').addEventListener('change', function() {
+                const dueDate = new Date(document.getElementById('task-due-date').value);
+                const currentDate = new Date();
+                const timeDiff = dueDate - currentDate;
+                const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                document.getElementById('task-days-remaining').value = daysRemaining;
+            });
+
+            document.getElementById('saveTaskButton').addEventListener('click', function() {
+                const name = document.getElementById('task-name').value;
+                const description = document.getElementById('task-description').value;
+                const status = document.getElementById('task-status').value;
+                const dueDate = document.getElementById('task-due-date').value;
+
+                addTaskToList(taskList, name, description, status, dueDate);
+
+                document.getElementById('taskFormContainer').style.display = 'none';
+            });
+
+            document.getElementById('updateProjectButton').addEventListener('click', function() {
+                alert("Update Project functionality is not implemented yet.");
+            });
+        });
+
+        function addTaskToList(taskList, name, description, status, dueDate) {
+            const taskItem = document.createElement('li');
+
+            const taskName = document.createElement('span');
+            taskName.innerText = name;
+
+            const taskDescription = document.createElement('span');
+            taskDescription.innerText = description;
+
+            const taskStatus = document.createElement('select');
+            const statuses = ["unassigned", "ongoing", "completed", "expired"];
+            statuses.forEach(stat => {
+                const option = document.createElement('option');
+                option.value = stat;
+                option.innerText = stat.charAt(0).toUpperCase() + stat.slice(1);
+                if (stat === status) option.selected = true;
+                taskStatus.appendChild(option);
+            });
+            taskStatus.addEventListener('change', function() {
+                updateTaskStatus(taskName.innerText, taskStatus.value);
+            });
+
+            const taskDueDate = document.createElement('input');
+            taskDueDate.type = 'date';
+            taskDueDate.value = dueDate;
+            taskDueDate.addEventListener('change', function() {
+                const dueDate = new Date(taskDueDate.value);
+                const currentDate = new Date();
+                const timeDiff = dueDate - currentDate;
+                const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                updateTaskDaysRemaining(taskName.innerText, daysRemaining);
+                taskDaysRemaining.value = daysRemaining;
+            });
+
+            const taskDaysRemaining = document.createElement('input');
+            taskDaysRemaining.type = 'text';
+            const dueDateObj = new Date(dueDate);
+            const currentDate = new Date();
+            const timeDiff = dueDateObj - currentDate;
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            taskDaysRemaining.value = daysRemaining;
+            taskDaysRemaining.readOnly = true;
+
+            taskItem.appendChild(taskName);
+            taskItem.appendChild(taskDescription);
+            taskItem.appendChild(taskStatus);
+            taskItem.appendChild(taskDueDate);
+            taskItem.appendChild(taskDaysRemaining);
+            taskList.appendChild(taskItem);
+        }
+
+        function updateTaskStatus(name, newStatus) {
+            console.log(`Updated task "${name}" to status "${newStatus}"`);
+        }
+
+        function updateTaskDaysRemaining(name, newDaysRemaining) {
+            console.log(`Updated task "${name}" to have ${newDaysRemaining} days remaining`);
+        }
+    </script>
+</body>
+</html>
+
+
+

@@ -1,8 +1,7 @@
-
 .app-title,
 .scorpio-icon {
-  position: fixed;
-  margin: 0;
+  position: absolute;
+  margin: 0 !important;
   top: 21px;
 }
 .app-title {
@@ -14,7 +13,6 @@
   font-family: inherit;
 }
 .scorpio-icon {
-  position: fixed;
   height: 36px;
   width: 36px;
   left: 224px;
@@ -63,7 +61,7 @@
   cursor: pointer;
   border: 0;
   padding: var(--padding-5xs) var(--padding-base);
-  background-color: var(--color-gainsboro-100);
+  background-color: var(--color-white);
   align-self: stretch;
   border-radius: var(--br-5xs);
   display: flex;
@@ -122,7 +120,7 @@
   gap: var(--gap-9xs);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 99;
   text-align: left;
   font-size: var(--small-text-size);
   color: var(--color-black);
@@ -236,7 +234,6 @@
   flex-direction: row;
   align-items: flex-start;
 }
-
 .homepage-sidebar2 {
   width: 272px;
   border-right: 1px solid var(--color-gainsboro-200);
@@ -361,241 +358,5 @@ body {
 
 .menu-item14, .menu-item15 {
     width: calc(100% - 30px); /* Adjust the width considering icon and padding */
-}
-
-/* THIS PART ONWARDS FOR THE HOME PAGE-----------------------------------------------------------------------------------------------------------------------------------*/
-
-.header {
-  padding: 10px;
-  flex-shrink: 0;
-}
-
-.recent-projects {
-  text-decoration: underline; /* Underline the text */
-  font-family: 'Inter', sans-serif; /* Change font to Inter */
-  font-weight: 500; /* Medium font style */
-  margin-left: 25px; /* Shift to the right by 25 pixels */
-}
-
-.main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
-  min-height: 100vh; /* Ensure main-container takes at least full viewport height */
-  padding-bottom: 137px; /* Adjust padding to accommodate footer height */
-  padding-left: 272px;
-  z-index: 1;
-}
-
-.project-list {
-  overflow-y: scroll; 
-  height: 732px; 
-  width: 780px;
-  background-color: white;
-}
-
-.pressproject {
-  height: 200px;
-  width: 750px;
-  display: flex;
-  flex-direction: column;
-  padding: 10px; /* Adjust padding as needed */
-  margin: 10px;
-  background: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 22px; /* Rounded corners */
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1); /* Optional: Add shadow */
-}
-
-.pressproject:hover{
-  background-color: var(--color-gainsboro-100)
-}
-
-.project-info {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.projectid-label{
-  font-family: 'Noto Sans', sans-serif; /* Font family */
-  font-weight: 400; /* Regular */
-  font-size: 12px; /* Font size */
-  margin-bottom: 10px; /* Adjust spacing */
-}
-
-.pressproject-label {
-  font-family: 'Noto Sans', sans-serif; /* Font family */
-  font-weight: 400; /* Regular */
-  font-size: 30px; /* Font size */
-  margin-bottom: 10px; /* Adjust spacing */
-}
-
-.dd-mm-yyyy-group {
-  display: flex;
-  align-items: center;
-  font-family: 'Inter', sans-serif; /* Font family */
-  font-weight: 500; /* Medium */
-  font-size: 16px; /* Font size */
-  color: #828282; /* Color */
-}
-
-.dd-mm-yyyy2, .div1, .dd-mm-yyyy3 {
-  margin-right: 5px; /* Adjust spacing between elements */
-}
-
-.lorem-ipsum-dolor1 {
-  font-family: 'Inter', sans-serif; /* Font family */
-  font-weight: 200; /* Extra light */
-  font-size: 20px; /* Font size */
-  color: #828282; /* Color */
-  margin-top: 10px; /* Adjust spacing */
-  text-align: left;
-}
-
-.project-inner, .project-child {
-  margin-top: 10px; /* Adjust spacing */
-}
-
-.footer {
-  height: 120px;
-  flex-shrink: 0;
-}
-
-.project-create {
-  width: 200px; /* Set button width */
-  height: 60px; /* Set button height */
-  background-color: #727272; /* Button background color */
-  border: none; /* Remove default border */
-  border-radius: 90px; /* Rounded corners */
-  padding: 10px 20px; /* Adjust padding */
-  display: flex; /* Enable flexbox layout */
-  align-items: center; /* Center items vertically */
-  position: relative;
-  top: 28px;
-  left: 10px;
-}
-
-.project-create:hover {
-  background-color: #525252
-}
-
-.CreateAddIcon {
-  height: 24px; /* Icon height */
-  width: 24px; /* Icon width */
-  flex-shrink: 0; /* Prevent icon from shrinking */
-  object-fit: cover; /* Maintain aspect ratio */
-  margin-right: 10px; /* Adjust spacing between icon and text */
-}
-
-.CreateProjectLabel {
-  font-family: 'Inter', sans-serif; /* Font family */
-  font-weight: 500; /* Medium */
-  font-size: 10px; /* Font size */
-  color: #000; /* Text color */
-  text-align: left; /* Align text to the left */
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflow text */
-  text-overflow: ellipsis; /* Display ellipsis (...) for overflow text */
-}
-
-/* Target the scrollbar */
-::-webkit-scrollbar {
-  width: 10px; /* width of the scrollbar */
-}
-
-/* Track (the area behind the scrollbar) */
-::-webkit-scrollbar-track {
-  background: #f1f1f1; /* color of the track */
-}
-
-/* Handle (the draggable part of the scrollbar) */
-::-webkit-scrollbar-thumb {
-  background: #888; /* color of the scrollbar handle */
-  border-radius: 5px; /* roundness of the scrollbar handle */
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555; /* color of the scrollbar handle on hover */
-}
-
-
-.popup {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  padding-top: 60px;
-}
-
-.popup-content {
-  position: fixed;
-  background-color: #fefefe;
-  margin-left: 292px; /* 272px (sidebar width) + 20px (gap) */
-  margin-top: 102px;
-  padding: 20px;
-  border: 1px solid #888;
-  border-radius: var(--br-5xs); /* Same border radius as the page */
-  width: 200px; 
-  font-family: var(--small-text); /* Use the same font family */
-  font-size: var(--small-text-size); /* Use the same font size */
-  line-height: 150%;
-  font-weight: 500; 
-}
-
-.popupInputField{
-  width: 100%;
-  padding: var(--padding-5xs);
-  border: 1px solid #888;
-  border-radius: var(--br-5xs); 
-  font-family: var(--small-text); 
-  font-size: var(--small-text-size); 
-  box-sizing: border-box;
-}
-
-.popup-content button {
-  margin-top: 10px;
-  cursor: pointer;
-  padding: var(--padding-5xs) var(--padding-base);
-  background-color: #727272;
-  border: none;
-  border-radius: 90px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--small-text); 
-  font-size: var(--small-text-size); 
-  font-weight: 500; 
-}
-
-.popup-content button:hover {
-  background-color: #525252;
-}
-
-.close {
-  position: absolute;
-  top: 0px;
-  right: 9px;
-  color: #aaa;
-  float: right;
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
 }
 

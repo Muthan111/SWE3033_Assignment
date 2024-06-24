@@ -162,55 +162,17 @@ function create_project($dbc, $creator_id){
 }
 
 function join_project($dbc, $project_id, $user_id){
-
-    $errors = array_merge(validate_project_id($dbc, $project_id), validate_user_id($dbc, $user_id));
-
     $q = "SELECT projectID FROM userproject WHERE projectID = '$project_id' AND userID = '$user_id'";
     $r = @mysqli_query($dbc, $q);
 
     if(mysqli_num_rows($r) > 0){
-
-        $errors[] = "You have already joined this project";
-
-    }
-
-    if (empty($errors)){
-
-        $project_id = mysqli_real_escape_string($dbc, $project_id);
-
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED (need to find out how admin is determined)
-        // Lets user join a project
+        return true; // User has already joined the project
+    } else {
+        // Insert user into userproject table
         $q = "INSERT INTO userproject (userID, projectID, isadmin) VALUES ('$user_id', '$project_id', 0)";
         $r = @mysqli_query($dbc, $q);
-
-        if($r){
-
-            // Redirects the user to a page, temporary placeholder for now
-            redirect_user("../DisplayProjectPage/display_project.php?id=$project_id");
-
-        } else{ // If it did not run OK.
-
-            // Public message:
-            // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
-            echo '<h1>System Error</h1>
-			<p class="error">Your request encountered an error on our server, your request to join this project was not made. We apologised for any incovenience.</p>'; 
-			
-			// Debugging message:
-			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
-						
-		} // End of if ($r) IF.
-
-		mysqli_close($dbc); // Close the database connection.
-
-		exit();
-
-    } else{
-
-        // Returns error messages
-        return $errors;
-
+        return false; // User has not joined the project
     }
-
 }
 
 function validate_project_id ($dbc, $project_id){
