@@ -1,201 +1,144 @@
-<?php
-    /*
+<!-- 
+Description: Main html page to create project
 
-    Description: Main html page to create project
+CHANGELOG:
+1. Initial version created (14/06/2024)
+2. Assign start date and due date input to form. Changed button to "Create a New Project"  (15/06/2024)
+3. Fixed the Auto-generate button that triggered a POST request because it's type wasnt specified... (15/06/2024)
+4. Added check if user is logged in, if not, the user will be redirected to the login page (24/06/2024)
 
-    CHANGELOG:
-    1. Initial version created (14/06/2024)
-    2. Assign start date and due date input to form. Changed button to "Create a New Project"  (15/06/2024)
-    3. Fixed the Auto-generate button that triggered a POST request because it's type wasnt specified... (15/06/2024)
-    4. Added check if user is logged in, if not, the user will be redirected to the login page (24/06/2024)
+TO DO:
+1. TESTING
 
-    TO DO:
-    1. TESTING
-
-    Created on 14/06/2024 by Sean
-    */
-
-    session_start(); // To get currently logged in user ID
-
-    if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
-
-        // Redirects the user to a page, temporary placeholder for now
-        include('../PHP/redirect_function.php');
-        redirect_user('../LoginPage/login.php');
-    
-    } else{
-
-        $user_id = $_SESSION['user_id'];
-        $username = $_SESSION['username'];
-
-    }
-
-    include ("../PHP/project_functions.php");
-    include ("../PHP/mysqli_connect.php");
-
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
-        // Incomplete due to no start date and due date
-        $errors = create_project($dbc, $user_id);
-
-        if(empty($errors)){
-
-            redirect_user("Homepage.HTML"); // Might change to the specific project page
-
-        }
-
-    }
-?>
+Created on 14/06/2024 by Sean -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
+<?php
+session_start(); // To get currently logged in user ID
+if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
+    // Redirects the user to a page, temporary placeholder for now
+    include('../PHP/redirect_function.php');
+    redirect_user('../LoginPage/login.php');
+} else{
+    $user_id = $_SESSION['user_id'];
+    $username = $_SESSION['username'];
+}
+include ("../PHP/project_functions.php");
+include ("../PHP/mysqli_connect.php");
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+    // Incomplete due to no start date and due date
+    $errors = create_project($dbc, $user_id);
+
+    if(empty($errors)){
+
+        redirect_user("Homepage.HTML"); // Might change to the specific project page
+
+    }
+}?>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scorpio Task Manager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            margin: 0;
-            padding: 0;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #f4f4f4;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        }
-        .sidebar h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .sidebar nav a {
-            display: block;
-            padding: 10px;
-            margin: 5px 0;
-            color: #333;
-            text-decoration: none;
-        }
-        .sidebar nav a:hover {
-            background-color: #ddd;
-        }
-        .dropdown {
-            margin: 20px 0;
-        }
-        .dropdown button {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            text-align: left;
-        }
-        .dropdown-content {
-            display: none;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-        }
-        .dropdown-content a {
-            padding: 10px;
-            display: block;
-            text-decoration: none;
-            color: #333;
-        }
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 40px;
-            background-color: #fff;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .form-group textarea {
-            resize: vertical;
-            height: 150px;
-        }
-        .generate-id {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .generate-id input {
-            flex-grow: 1;
-            margin-right: 10px;
-        }
-        .generate-id button {
-            padding: 15px;
-            background-color: #777;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .generate-id button:hover {
-            background-color: #555;
-        }
-        .create-task {
-            display: flex;
-            justify-content: center;
-        }
-        .create-task button {
-            padding: 15px 30px;
-            background-color: #777;
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .create-task button:hover {
-            background-color: #555;
-        }
-        .errorclass{
-            font-family: var(--small-text);
-            color: red;
-        }
-    </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="stylesheet" href="./CreateProject.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto Sans:wght@400&display=swap"
+    />
 </head>
 <body>
-    <div class="sidebar">
-        <h2>Scorpio Task Manager</h2>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Join by code</a>
-            <div class="dropdown">
-                <button onclick="toggleDropdown('participating-projects')">Participating Projects</button>
-                <div id="participating-projects" class="dropdown-content">
-                    <a href="#">Main Projects</a>
-                    <a href="#">Add Task by code...</a>
-                </div>
-            </div>
-            <div class="dropdown">
-                <button onclick="toggleDropdown('hidden-projects')">Hidden Projects</button>
-                <div id="hidden-projects" class="dropdown-content">
-                    <a href="#">Hidden Projects</a>
-                </div>
-            </div>
-            <a href="#">Project Chat</a>
-        </nav>
-    </div>
-    <form class="main-content" action="CreateProject.php" method="post">
+    <main class="mainpage" id="Main">
+        <div class="background-fill" id="bg-fill">
+            <section class="homepage-sidebar2" id="SidebarSection">
+                <h1 class="app-title" id="ScorpioTaskManager">Scorpio Task Manager</h1>
+                <img class="scorpio-icon" loading="lazy" alt="" src="scorpio-icon.png" />
+    
+                <nav class="sidebarui">
+                    <nav class="navigation" id="JoinProjectNavigator">
+                        <b class="menu-item13">
+                            <b class="join-projects2">Join Projects</b>
+                        </b>
+                        <button class="homebutton" id="HomeButton">
+                            <img class="home-icon3" alt="" src="home-icon.png" />
+                            <div class="home2">Home</div>
+                        </button>
+                        <button class="joinbycodebutton" id="JoinByCodeButton">
+                            <img class="add-icon3" alt="" src="add-icon.png" />
+                            <div class="join-by-code2">Join by code</div>
+                        </button>
+                    </nav>
+                    <nav class="list5" id="ProjectSelectNavigator">
+                        <div class="title6">
+                            <b class="participating-projects2">Admin Project List</b>
+                        </div>
+                        <div class="select-container">
+                            <img src="select-icon.png" alt="Project Select Dropdown Icon" />
+                            <select class="menu-item14">
+                                <option value="" disabled selected>Select Project</option>
+                                <?php
+                                    list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
+
+                                    if($check == 1){
+                                        while($project = mysqli_fetch_assoc($data)){
+                                            $project_name = $project['projectName'];
+                                            $project_id = $project['projectID'];
+                                            echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                        }
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </nav>
+                    <nav class="list5" id="ProjectSelectNavigatorAdmin">
+                        <div class="title6">
+                            <b class="participating-projects2">Member Project List</b>
+                        </div>
+                        <div class="select-container">
+                            <img src="select-icon.png" alt="Project Select Dropdown Icon" />
+                            <select class="menu-item14">
+                                <option value="" disabled selected>Select Project</option>
+                                <?php
+                                    list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
+
+                                    if($check == 1){
+                                        while($project = mysqli_fetch_assoc($data)){
+                                            $project_name = $project['projectName'];
+                                            $project_id = $project['projectID'];
+                                            echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                        }
+                                    }
+
+                                    mysqli_close($dbc); // Close database connection
+                                ?>
+                            </select>
+                        </div>
+                    </nav>
+                    <nav class="list6" id="ChatSelectNavigation">
+                        <b class="title7" id="ProjectForum">
+                            <b class="project-forum2">Project Forum</b>
+                        </b>
+                        <div class="select-container">
+                            <img src="chat-icon.png" alt="Project Chat Select Dropdown Icon" />
+                            <select class="menu-item15" id="SelectChat">
+                                <option value="" disabled selected>Select Chat</option>
+                                <option value="chat1">- Chat 1</option>
+                                <option value="chat2">- Chat 2</option>
+                                <option value="chat3">- Chat 3</option>
+                            </select>
+                        </div>
+                    </nav>
+                </nav>
+            </section>    
+        </div>
+        <section class="main-container">
+        <form class="main-content" action="CreateProject.php" method="post">
         <h1>Create a New Project</h1>
         <div class="generate-id form-group">
             <input type="text" id="project-id" name="project-id" value="<?php echo generate_id($dbc, 4) ?>">
@@ -233,12 +176,16 @@
             <button>Create a Project</button>
         </div>
     </form>
-
+        </section>
+    </main>
     <script>
-        function toggleDropdown(id) {
-            const content = document.getElementById(id);
-            content.style.display = content.style.display === 'block' ? 'none' : 'block';
-        }
+        document.getElementById('adminProjectSelect').addEventListener('change', function(e){
+            window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            });
+        
+        document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
+            window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            });
         function refresh() {
             window.top.location = window.top.location;
         }

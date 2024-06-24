@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
     if (!$already_joined) {
         $redirect_url = '../DisplayProjectPage/display_project.php?id='. $projectCode;
         echo "<script>window.open('$redirect_url', '_blank');</script>";
-        echo "<script>location.reload</script>";
+        echo "<script>refresh()</script>";
         exit();
     } else {
         $error_message = "You have already joined this project";
@@ -259,6 +259,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             errorMessage.style.display = "block";
             errorMessage.innerText = phpErrorMessage;
             popup.style.display = "block";
+        }
+
+        function refresh() {
+            window.top.location = window.top.location;
         }
     </script>
 </body>
