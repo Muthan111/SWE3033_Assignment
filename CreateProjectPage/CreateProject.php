@@ -7,6 +7,7 @@
     1. Initial version created (14/06/2024)
     2. Assign start date and due date input to form. Changed button to "Create a New Project"  (15/06/2024)
     3. Fixed the Auto-generate button that triggered a POST request because it's type wasnt specified... (15/06/2024)
+    4. Added check if user is logged in, if not, the user will be redirected to the login page (24/06/2024)
 
     TO DO:
     1. TESTING
@@ -16,13 +17,26 @@
 
     session_start(); // To get currently logged in user ID
 
+    if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
+
+        // Redirects the user to a page, temporary placeholder for now
+        include('../PHP/redirect_function.php');
+        redirect_user('../LoginPage/login.php');
+    
+    } else{
+
+        $user_id = $_SESSION['user_id'];
+        $username = $_SESSION['username'];
+
+    }
+
     include ("../PHP/project_functions.php");
     include ("../PHP/mysqli_connect.php");
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         // Incomplete due to no start date and due date
-        $errors = create_project($dbc, $_SESSION['user_id']);
+        $errors = create_project($dbc, $user_id);
 
         if(empty($errors)){
 

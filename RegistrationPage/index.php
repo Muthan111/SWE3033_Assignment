@@ -11,6 +11,7 @@
     5. Fixed sign in link (13/06/2024)
     6. Redirect user to Homepage and properly assigned userID to session variables. Removed phone validation to reduce cluttering. (15/06/2024)
     7. Removed system admin parts (21/06/2024)
+    8. Fixed redirect to homepage.php (24/06/2024)
 
     TO DO:
 
@@ -22,7 +23,7 @@ require ('../PHP/login_functions.inc.php');
 // Check if user already logged in
 session_start();
 if (isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
-	redirect_user("../HomePage/Homepage.HTML");
+	redirect_user("../HomePage/Homepage.php");
 }
 
 // Initialising variables
