@@ -63,7 +63,7 @@
   cursor: pointer;
   border: 0;
   padding: var(--padding-5xs) var(--padding-base);
-  background-color: var(--color-gainsboro-100);
+  background-color: var(--color-white);
   align-self: stretch;
   border-radius: var(--br-5xs);
   display: flex;
