@@ -375,12 +375,13 @@ body {
   padding-bottom: 137px;
   padding-left: 272px;
   z-index: 1;
+  background-color: white; /* Added background color */
 }
-
 
 .main-content {
   flex: 1;
   padding: 40px;
+  font-family: 'Inter', sans-serif; /* Added font family */
 }
 
 .header {
@@ -388,16 +389,24 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  padding: 10px; /* Added padding */
+  background-color: #f4f4f4; /* Added background color */
+  border-bottom: 1px solid #e0e0e0; /* Added border */
 }
 
- .project-id-box {
+.project-id-box {
   display: flex;
   align-items: center;
+  margin-right: 10px; /* Added margin */
+  font-family: 'Noto Sans', sans-serif; /* Added font family */
+  font-weight: 400; /* Added font weight */
+  font-size: 12px; /* Added font size */
 }
 
- .project-id-box .project-id-title {
+.project-id-box .project-id-title {
   margin-right: 10px;
   font-weight: bold;
+  font-size: 18px; /* Changed font size */
 }
 
 .project-id-box .project-id-value {
@@ -405,37 +414,44 @@ body {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f9f9f9;
+  cursor: pointer; /* Added cursor */
 }
 
 .project-id-box .generate-button {
   margin-left: 10px;
   padding: 8px 16px;
-  background-color: #777;
+  background-color: #727272;
   color: white;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 90px;
+  cursor: pointer; /* Added cursor */
 }
 
 .header .header-title {
   font-size: 24px;
   font-weight: bold;
+  margin-bottom: 10px; /* Added margin */
 }
 
 .description-box {
   margin-bottom: 20px;
+  padding: 10px; /* Added padding */
+  background-color: #f9f9f9; /* Added background color */
+  border: 1px solid #ccc; /* Added border */
+  border-radius: 8px; /* Added border radius */
 }
 
 .description-box.description-title {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* Added margin */
 }
 
 .description-box.description-inner-box {
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #eee;
+  padding: 10px; /* Added padding */
 }
 
 .description-box textarea {
@@ -446,16 +462,24 @@ body {
   padding: 10px;
   resize: none;
   border-radius: 6px;
+  font-family: 'Inter', sans-serif; /* Added font family */
+  font-size: 16px; /* Added font size */
 }
 
 .task-inputs {
   display: flex;
   margin-bottom: 20px;
+  padding: 10px; /* Added padding */
+  background-color: #f9f9f9; /* Added background color */
+  border: 1px solid #ccc; /* Added border */
+  border-radius: 8px; /* Added border radius */
 }
 
 .task-inputs.task-name {
   flex: 1;
   margin-right: 20px;
+  font-family: 'Inter', sans-serif; /* Added font family */
+  font-size: 16px; /* Added font size */
 }
 
 .task-inputs input[type="text"],
@@ -464,11 +488,17 @@ body {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-family: 'Inter', sans-serif; /* Added font family */
+  font-size: 16px; /* Added font size */
 }
 
 .task-inputs.project-id-box {
   display: flex;
   align-items: center;
+  margin-right: 10px; /* Added margin */
+  font-family: 'Noto Sans', sans-serif; /* Added font family */
+  font-weight: 400; /* Added font weight */
+  font-size: 12px; /* Added font size */
 }
 
 .task-inputs.project-id-box.project-id-value {
@@ -476,7 +506,7 @@ body {
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 4px;
-  cursor: pointer;
+  cursor: pointer; /* Added cursor */
 }
 
 .task-button {
@@ -484,16 +514,23 @@ body {
   align-items: center;
   justify-content: center;
   margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #727272;
+  color: white;
+  border: none;
+  border-radius: 90px;
+  cursor: pointer; /* Added cursor */
 }
 
 .task-button.task-button-inner {
   display: flex;
   align-items: center;
   padding: 12px 24px;
-  background-color: #777;
+  background-color: #727272;
   color: white;
-  border-radius: 20px;
-  cursor: pointer;
+  border: none;
+  border-radius: 90px;
+  cursor: pointer; /* Added cursor */
 }
 
 .task-button.task-button-inner.icon {
@@ -509,6 +546,10 @@ body {
 
 .task-list {
   margin-top: 40px;
+  padding: 10px; /* Added padding */
+  background-color: #f9f9f9; /* Added background color */
+  border: 1px solid #ccc; /* Added border */
+  border-radius: 8px; /* Added border radius */
 }
 
 .task-item {
@@ -517,4 +558,6 @@ body {
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
+  font-family: 'Inter', sans-serif; /* Added font family */
+  font-size: 16px; /* Added font size */
 }
