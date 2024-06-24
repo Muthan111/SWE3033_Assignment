@@ -75,7 +75,7 @@
       var dontHaveAn = document.getElementById("dontHaveAn");
       if (dontHaveAn) {
         dontHaveAn.addEventListener("click", function (e) {
-          window.location.href = "../RegistrationPage/index.php";
+          window.location.href = "../index.php";
         });
       }
       </script>
