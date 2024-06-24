@@ -13,6 +13,7 @@
       href="https://fonts.googleapis.com/css2?family=Noto Sans:wght@400&display=swap"
     />
 </head>
+
 <body>
     <main class="mainpage" id="Main">
         <div class="background-fill" id="bg-fill">
@@ -116,6 +117,20 @@
             </nav>
         </section>
     </div>
+<?php
+    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+        $errors = join_project($dbc, $_POST['projectCode'], $user_id);
+        // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
+        if (isset($errors) && !empty($errors)) {
+            echo '<p class="errorclass">The following error(s) occurred:<br />';
+            foreach ($errors as $msg) {
+                echo " - $msg<br />\n";
+            }
+            echo '</p><p class="errorclass">Please try again.</p>';
+        } 
+    }
+    
+?>    
         <section class="main-container">
             <div class="header">
                 <h2 class="recent-projects" id="RecentProjectHeader">Recent Projects</h2>
@@ -166,25 +181,12 @@
                         }
 
                     } else{
-                        echo "<p class='lorem-ipsum-dolor1'>Currently not part of any Project</p>";
+                        echo "<p class='lorem-ipsum-dolor1' style='margin-left: 32px;'>Currently not part of any Project</p>";
                     }
-
+                    mysqli_close($dbc); // Close database connection
                     ?>
             </div>
-            <?php
-                if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-                    $errors = join_project($dbc, $_POST['projectCode'], $user_id);
-                    // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
-                    if (isset($errors) && !empty($errors)) {
-                        echo '<p class="errorclass">The following error(s) occurred:<br />';
-                        foreach ($errors as $msg) {
-                            echo " - $msg<br />\n";
-                        }
-                        echo '</p><p class="errorclass">Please try again.</p>';
-                    } 
-                }
-                mysqli_close($dbc); // Close database connection
-            ?>
+            
             <div class="footer">
                 <button class="project-create" id="ProjectCreateButton">
                     <img class="CreateAddIcon" alt="" src="add-icon.png">
