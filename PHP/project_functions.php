@@ -54,7 +54,7 @@ function create_project($dbc, $creator_id){
 
         $errors[] = "You forgot to enter a description for your project";
 
-    } elseif(strlen($_POST['project-description']) > 25){
+    } elseif(strlen($_POST['project-description']) > 50){
 
         $errors[] = "Your project description is too long";
 
