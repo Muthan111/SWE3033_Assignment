@@ -165,6 +165,15 @@ function join_project($dbc, $project_id, $user_id){
 
     $errors = array_merge(validate_project_id($dbc, $project_id), validate_user_id($dbc, $user_id));
 
+    $q = "SELECT projectID FROM userproject WHERE projectID = '$project_id' AND userID = '$user_id'";
+    $r = @mysqli_query($dbc, $q);
+
+    if(mysqli_num_rows($r) > 0){
+
+        $errors[] = "You have already joined this project";
+
+    }
+
     if (empty($errors)){
 
         $project_id = mysqli_real_escape_string($dbc, $project_id);

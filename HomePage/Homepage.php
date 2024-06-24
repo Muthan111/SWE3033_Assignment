@@ -13,7 +13,27 @@
       href="https://fonts.googleapis.com/css2?family=Noto Sans:wght@400&display=swap"
     />
 </head>
+<?php
+    // This section is to call upon the session variables and dependencies that will be used in this file
+    session_start();
+    
 
+    if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
+
+        // Redirects the user to a page, temporary placeholder for now
+        include('../PHP/redirect_function.php');
+        redirect_user('../LoginPage/login.php');
+    
+    } else{
+
+        $user_id = $_SESSION['user_id'];
+        $username = $_SESSION['username'];
+
+    }
+
+    include ('../PHP/project_functions.php');
+    include ('../PHP/mysqli_connect.php');
+?>
 <body>
     <main class="mainpage" id="Main">
         <div class="background-fill" id="bg-fill">
@@ -34,28 +54,24 @@
                         <img class="add-icon3" alt="" src="add-icon.png" />
                         <div class="join-by-code2">Join by code</div>
                     </button>
+                    <div>
+                        <?php
+                            if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+                                $errors = join_project($dbc, $_POST['projectCode'], $user_id);
+                                // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
+                                if (isset($errors) && !empty($errors)) {
+                                    echo '<p class="errorclass" style="color:red;">The following error(s) occurred:<br />';
+                                    foreach ($errors as $msg) {
+                                        echo " - $msg<br />\n";
+                                    }
+                                    echo '</p><p class="errorclass">Please try again.</p>';
+                                } 
+                            }
+                            
+                        ?> 
+                    </div>
                 </nav>
-                <?php
-                    // This section is to call upon the session variables and dependencies that will be used in this file
-                    session_start();
-                    
-
-                    if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
-
-                        // Redirects the user to a page, temporary placeholder for now
-                        include('../PHP/redirect_function.php');
-                        redirect_user('../LoginPage/login.php');
-                    
-                    } else{
-
-                        $user_id = $_SESSION['user_id'];
-                        $username = $_SESSION['username'];
-
-                    }
-
-                    include ('../PHP/project_functions.php');
-                    include ('../PHP/mysqli_connect.php');
-                ?>
+                
                 <nav class="list5" id="ProjectSelectNavigator">
                     <div class="title6">
                         <b class="participating-projects2">Admin Project List</b>
@@ -113,22 +129,6 @@
                             <option value="chat3">- Chat 3</option>
                         </select>
                     </div>
-                    <div>
-            <?php
-                if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-                    $errors = join_project($dbc, $_POST['projectCode'], $user_id);
-                    // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
-                    if (isset($errors) && !empty($errors)) {
-                        echo '<p class="errorclass">The following error(s) occurred:<br />';
-                        foreach ($errors as $msg) {
-                            echo " - $msg<br />\n";
-                        }
-                        echo '</p><p class="errorclass">Please try again.</p>';
-                    } 
-                }
-                
-            ?> 
-            </div>
                 </nav>
             </nav>
         </section>
