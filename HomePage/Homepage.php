@@ -113,24 +113,27 @@
                             <option value="chat3">- Chat 3</option>
                         </select>
                     </div>
+                    <div>
+            <?php
+                if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+                    $errors = join_project($dbc, $_POST['projectCode'], $user_id);
+                    // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
+                    if (isset($errors) && !empty($errors)) {
+                        echo '<p class="errorclass">The following error(s) occurred:<br />';
+                        foreach ($errors as $msg) {
+                            echo " - $msg<br />\n";
+                        }
+                        echo '</p><p class="errorclass">Please try again.</p>';
+                    } 
+                }
+                
+            ?> 
+            </div>
                 </nav>
             </nav>
         </section>
     </div>
-<?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $errors = join_project($dbc, $_POST['projectCode'], $user_id);
-        // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
-        if (isset($errors) && !empty($errors)) {
-            echo '<p class="errorclass">The following error(s) occurred:<br />';
-            foreach ($errors as $msg) {
-                echo " - $msg<br />\n";
-            }
-            echo '</p><p class="errorclass">Please try again.</p>';
-        } 
-    }
-    
-?>    
+   
         <section class="main-container">
             <div class="header">
                 <h2 class="recent-projects" id="RecentProjectHeader">Recent Projects</h2>
