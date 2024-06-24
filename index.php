@@ -18,12 +18,12 @@
     Created on 04/06/2024 by Sean
 */
 
-require ('../PHP/login_functions.inc.php');
+require ('PHP/login_functions.inc.php');
 
 // Check if user already logged in
 session_start();
 if (isset($_SESSION["user_id"]) && isset($_SESSION["username"])){
-	redirect_user("../HomePage/Homepage.php");
+	redirect_user("HomePage/Homepage.php");
 }
 
 // Initialising variables
@@ -35,7 +35,7 @@ $last_name = "Last Name";
 // Check for form submission:
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-	require ('../PHP/mysqli_connect.php'); // Connect to the db.
+	require ('PHP/mysqli_connect.php'); // Connect to the db.
 
 	$errors = array(); // Initialize an error array.
 
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
       $row = mysqli_fetch_assoc($r);
       // Redirects the user to a page, temporary placeholder for now
-      redirect_user("../LoginPage/login.php");	
+      redirect_user("LoginPage/login.php");	
 		
 		} else { // If it did not run OK.
 			
@@ -157,5 +157,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 } // End of the main Submit conditional.
 
-include ('index_html.php')
+include ('RegistrationPage/index_html.php')
 ?>

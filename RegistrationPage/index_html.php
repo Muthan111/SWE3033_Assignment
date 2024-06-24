@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-    <link rel="stylesheet" href="./index.css"/>
+    <link rel="stylesheet" href="./RegistrationPage/index.css"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"/>
   </head>
   <body>
@@ -14,7 +14,7 @@
             class="scorpio-task-manager-logo"
             loading="lazy"
             alt=""
-            src="scorpio-icon.png"
+            src="RegistrationPage/scorpio-icon.png"
           />
           <h2 class="scorpio-task-manager">Scorpio Task Manager</h2>
           <div class="create-an-account-group">
