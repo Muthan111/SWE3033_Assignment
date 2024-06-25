@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         echo "<script>refresh()</script>";
         exit();
     } else {
-        $error_message = "You have already joined this project";
+        $error_message = "You have already joined this project"; // !!!There's alredy an error message in the join_project function
     }
 }
 ?>

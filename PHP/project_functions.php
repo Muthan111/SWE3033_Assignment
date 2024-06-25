@@ -20,6 +20,7 @@
     9. Fixed a bug where the return_project_list did not account for a situation where there was no project. (21/06/2024)
     10. Fixed bugs regarding input validation and how the errors are processed as arrays. Fixed the join_project function and the SQL. Also fixed another bug in the return_project_list
     function, where 0 is considered as empty... (24/06/2024)
+    11. Added return_project_details function to return all of the details of a specific project for the display project page. (25/06/2024)
 
     TO DO:
     1. Testing
@@ -249,7 +250,7 @@ function return_project_list($dbc, $user_id, $check_admin){
     if(empty($errors)){
 
         if($check_admin < 2){
-            // Sub-query to select the project name where the projec is associated with the user id and whether that user is an admin
+            // Sub-query to select the project name where the project is associated with the user id and whether that user is an admin
             $q = "SELECT projectName, projectID FROM project WHERE projectID IN (SELECT projectID FROM userproject WHERE userID = '$user_id' AND isadmin = '$check_admin')";
         } else{
             // Sub-query to select all of the projects and its details that a user is part of regardless whether the user is an admin or member
@@ -276,13 +277,49 @@ function return_project_list($dbc, $user_id, $check_admin){
 
 }
 
+function return_project_details($dbc, $user_id, $project_id){
+
+    $errors = array_merge(validate_user_id($dbc, $user_id), validate_project_id($dbc, $project_id));
+
+    if(empty($errors)){
+
+        $q = "SELECT isadmin FROM userproject WHERE projectID = '$project_id' AND userID = '$user_id'"; // Checks whether the user is an admin
+        $r = @mysqli_query($dbc, $q);
+
+        // Might be able to improve this to like two lines instead, need to check later
+        if(mysqli_num_rows($r) > 0){
+            $check_admin = mysqli_fetch_array($r)['isadmin'];
+        } else{
+            $check_admin = -1; // USER NOT ALLOWED IN PROJECT
+            $errors[] = "YOU DO NOT HAVE ACCESS TO THIS PROJECT!";
+        }
+
+        if($check_admin < 0){
+            return array($check_admin, $errors);
+        } else{
+            $q = "SELECT * FROM project WHERE projectID = '$project_id'"; // Returns project details in its entirety
+            $r = @mysqli_query($dbc, $q);
+
+            if($r){
+                return array($check_admin, mysqli_fetch_assoc($r));
+            } else{
+                $errors[] = "Project not found!"; // For debugging purposes, there's already a validate function above
+                return array(-1, $errors);
+            }
+        }
+    } else{
+        return array(-1, $errors);
+    }
+
+}
+
 function validate_user_id($dbc, $user_id){
 
     $errors = array();
 
     if (empty($user_id)){
 
-		$errors[] = "You forgot to enter a title for your task";
+		$errors[] = "No User ID deteceted!";
 
 	} else{
 

@@ -11,8 +11,26 @@ if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
     $username = $_SESSION['username'];
 }
 
-include ('../PHP/project_functions.php');
-include ('../PHP/mysqli_connect.php');
+if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])){
+    include ('../PHP/project_functions.php');
+    include ('../PHP/mysqli_connect.php');
+    $project_id = $_GET['id'];
+    $errors = validate_project_id($dbc, $project_id);
+
+    if(!empty($errors)){
+
+        foreach($errors as $msg){
+            echo " - $msg<br />\n";
+        }
+        echo "Please select a valid project!";
+    }
+} else{
+
+    redirect_user('../HomePage/Homepage.php');
+
+}
+
+
 
 ?>
 <head>

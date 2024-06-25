@@ -6,6 +6,7 @@ CHANGELOG:
 2. Assign start date and due date input to form. Changed button to "Create a New Project"  (15/06/2024)
 3. Fixed the Auto-generate button that triggered a POST request because it's type wasnt specified... (15/06/2024)
 4. Added check if user is logged in, if not, the user will be redirected to the login page (24/06/2024)
+5. Fixed bug regarding project id, it no longer removes the HTML due to the error anymore (25/06/2024)
 
 TO DO:
 1. TESTING
@@ -114,8 +115,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                                             echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
                                         }
                                     }
-
-                                    mysqli_close($dbc); // Close database connection
                                 ?>
                             </select>
                         </div>
@@ -170,6 +169,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 }
                 echo '</p><p class="errorclass">Please try again.</p>';
               } 
+            mysqli_close($dbc); // Close database connection
             ?>
         </div>
         <div class="create-task" type = "submit" form = "content" value = "Submit">

@@ -18,6 +18,7 @@
     7. Created join_task function and generate_id function, fixed a bug where a user could have entered a Task ID that was already in used which could have caused an SQL error.
     Updated get_task_list function to account for admin and normal member's task differences. (19/06/2024)
     8. Fixed bugs regarding input validation and how the errors are processed as arrays. (24/06/2024)
+    9. Removed dependencies as they are causing redeclared functions errors. Fixed SQL where it was searching for a User table instead of the account table. Fixed bugs. (25/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -26,10 +27,6 @@
     
     Created on 05/06/2024 by Sean
 */
-
-// Dependencies
-include ('redirect_function.php');
-include ('project_functions.php');
 
 function create_task($dbc, $project_id) {
 
@@ -68,7 +65,7 @@ function create_task($dbc, $project_id) {
     // Validate or generate task id
     if  (empty($_POST['task-id'])){
 
-        $task_id = generate_id($dbc, 4);
+        $task_id = generate_task_id($dbc, 4);
 
     } elseif (strlen($_POST['task-id']) > 4){
 
@@ -163,7 +160,7 @@ function join_task($dbc, $project_id, $task_id, $user_id){
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if user_id is found
-        $q = "SELECT userID from User where userID = '$user_id'";
+        $q = "SELECT userID from account where userID = '$user_id'";
         $r = @mysqli_query($dbc, $q);
 
         if (mysqli_num_rows($r) == 0){
@@ -287,7 +284,7 @@ function update_task_status($dbc, $project_id, $task_id, $status) {
 
 }
 
-function get_task_list($dbc, $project_id, $user_id){
+function return_task_list($dbc, $project_id, $user_id){
     
     $errors = validate_project_id($dbc, $project_id);
 
@@ -302,7 +299,7 @@ function get_task_list($dbc, $project_id, $user_id){
 
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if user_id is found
-        $q = "SELECT userID FROM User WHERE userID = '$user_id'";
+        $q = "SELECT userID FROM account WHERE userID = '$user_id'";
         $r = @mysqli_query($dbc, $q);
 
         if (mysqli_num_rows($r) == 0){
@@ -333,12 +330,12 @@ function get_task_list($dbc, $project_id, $user_id){
         if($row['isadmin'] == 1){
             $q = "SELECT * FROM task WHERE projectID = '$project_id'"; // IF the user is an admin
         } else{
-            $q = "SELECT * FROM task WHERE taskID IN (SELECT taskID FROM userprojecttask WHERE projectID = '$project_id' AND userID = '$user_id'"; // IF the user is assigned
+            $q = "SELECT * FROM task WHERE taskID IN (SELECT taskID FROM userprojecttask WHERE projectID = '$project_id' AND userID = '$user_id')"; // IF the user is assigned
         }
 
         $r = @mysqli_query($dbc, $q);
 
-        return mysqli_fetch_assoc($r);
+        return $r;
 
     }
 
@@ -378,7 +375,7 @@ function return_task_status($dbc, $task_id){
 
 }
 
-function generate_id($dbc, $length_of_string) {
+function generate_task_id($dbc, $length_of_string) {
 
     $id_used = true;
 
