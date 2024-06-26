@@ -459,7 +459,6 @@ body {
   height: 100px;
   border: none;
   background-color: #eee;
-  padding: 10px;
   resize: none;
   border-radius: 6px;
   font-family: 'Inter', sans-serif; /* Added font family */
@@ -473,6 +472,7 @@ body {
   background-color: #f9f9f9; /* Added background color */
   border: 1px solid #ccc; /* Added border */
   border-radius: 8px; /* Added border radius */
+  align-items: center;
 }
 
 .task-inputs.task-name {
@@ -484,7 +484,6 @@ body {
 
 .task-inputs input[type="text"],
 .task-inputs.project-id-value {
-  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -513,7 +512,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
   padding: 12px 24px;
   background-color: #727272;
   color: white;

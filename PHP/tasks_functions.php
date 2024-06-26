@@ -19,6 +19,7 @@
     Updated get_task_list function to account for admin and normal member's task differences. (19/06/2024)
     8. Fixed bugs regarding input validation and how the errors are processed as arrays. (24/06/2024)
     9. Removed dependencies as they are causing redeclared functions errors. Fixed SQL where it was searching for a User table instead of the account table. Fixed bugs. (25/06/2024)
+    10. Fixed some error messages and some SQL functions. (26/06/2024)
 
     TO DO:
     1. Update SQL statements once database is completed
@@ -50,7 +51,7 @@ function create_task($dbc, $project_id) {
     // Validate the task description
 	if (empty($_POST['task-description'])){
 
-		$errors[] = 'You forgot to enter a title for your task';
+		$errors[] = 'You forgot to enter a description for your task';
 
 	} elseif(strlen($_POST['task-description']) > 50){
 
@@ -118,7 +119,7 @@ function create_task($dbc, $project_id) {
 		if ($r) { // If it ran OK.
             
             // Redirects the user to a page, temporary placeholder for now
-            redirect_user("temp");	
+            redirect_user("../CreateTaskPage/create_task.php?id=$project_id");	
 		
 		} else { // If it did not run OK.
 			
@@ -316,10 +317,6 @@ function return_task_list($dbc, $project_id, $user_id){
 
                 $errors[] = "User is not part of this project";
 
-            } else{
-
-                $row = mysqli_fetch_assoc($r);
-
             }
 
         }
@@ -327,7 +324,7 @@ function return_task_list($dbc, $project_id, $user_id){
 
     if(empty($errors)){
 
-        if($row['isadmin'] == 1){
+        if(mysqli_fetch_array($r)['isadmin'] == 1){
             $q = "SELECT * FROM task WHERE projectID = '$project_id'"; // IF the user is an admin
         } else{
             $q = "SELECT * FROM task WHERE taskID IN (SELECT taskID FROM userprojecttask WHERE projectID = '$project_id' AND userID = '$user_id')"; // IF the user is assigned

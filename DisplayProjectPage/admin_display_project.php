@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Project Page</title>
     <style>
+        /* Styles for the main layout and appearance */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -24,6 +25,7 @@
             border-radius: 10px;
         }
 
+        /* Styles for the header */
         header {
             display: flex;
             justify-content: space-between;
@@ -39,6 +41,7 @@
             font-size: 0.8em;
         }
 
+        /* Styles for project details section */
         .project-details {
             display: flex;
             justify-content: space-between;
@@ -60,7 +63,8 @@
             font-weight: bold;
         }
 
-        .project-details span {
+        .project-details span,
+        .project-details input {
             display: block;
             padding: 10px;
             font-size: 1em;
@@ -69,6 +73,11 @@
             border-radius: 5px;
         }
 
+        .project-details input {
+            width: 100%;
+        }
+
+        /* Styles for project description section */
         .project-description {
             margin-bottom: 20px;
         }
@@ -79,17 +88,24 @@
             font-weight: bold;
         }
 
-        .project-description span {
+        .project-description span,
+        .project-description textarea {
             display: block;
             padding: 10px;
             font-size: 1em;
             background: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .project-description textarea {
             height: 100px;
             overflow-y: auto;
         }
 
+        /* Styles for tasks section */
         .tasks {
             margin-bottom: 20px;
         }
@@ -105,44 +121,32 @@
 
         .tasks ul li {
             display: grid;
-            grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+            grid-template-columns: 1.5fr 2fr 1fr 1fr 1fr;
             align-items: center;
             padding: 10px;
             background: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 5px;
             margin-bottom: 10px;
+            gap: 10px;
         }
 
-        .task-details {
-            display: flex;
-            align-items: center;
-        }
-
-        .task-status {
-            padding: 5px 10px;
+        .tasks ul li input,
+        .tasks ul li textarea,
+        .tasks ul li select {
+            padding: 5px;
+            border: 1px solid #ddd;
             border-radius: 5px;
-            color: white;
-            margin-right: 10px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .status-unassigned {
-            background-color: grey;
+        .tasks ul li textarea {
+            resize: none;
+            height: 50px;
         }
 
-        .status-ongoing {
-            background-color: yellow;
-            color: black;
-        }
-
-        .status-completed {
-            background-color: green;
-        }
-
-        .status-expired {
-            background-color: red;
-        }
-
+        /* Styles for task form */
         .task-form {
             display: flex;
             flex-direction: column;
@@ -179,6 +183,7 @@
             background-color: #45a049;
         }
 
+        /* Styles for buttons */
         .buttons {
             display: flex;
             justify-content: space-between;
@@ -208,6 +213,7 @@
 </head>
 <body>
     <div class="container">
+        <!-- Header section displaying project title and dates -->
         <header>
             <h1 id="project-title">Project One</h1>
             <div class="project-dates">
@@ -215,20 +221,26 @@
                 <span id="project-end-date">End Date: 2024-12-31</span>
             </div>
         </header>
+        
+        <!-- Section for project details such as name and ID -->
         <section class="project-details">
             <div class="project-name">
                 <label for="project-name">Project Name</label>
-                <span id="project-name">Example Project Name</span>
+                <input type="text" id="project-name-input" value="Example Project Name">
             </div>
             <div class="project-id">
                 <label for="project-id">Project ID</label>
                 <span id="project-id">12345</span>
             </div>
         </section>
+
+        <!-- Section for project description -->
         <section class="project-description">
             <label for="project-description">Project Description</label>
-            <span id="project-description">This is an example project description.</span>
+            <textarea id="project-description-input">This is an example project description.</textarea>
         </section>
+
+        <!-- Section for managing tasks -->
         <section class="tasks">
             <h2>Tasks</h2>
             <ul id="task-list">
@@ -241,6 +253,7 @@
         </section>
     </div>
 
+    <!-- Task form container, initially hidden -->
     <div id="taskFormContainer" style="display: none;">
         <div class="task-form">
             <label for="task-name">Task Name</label>
@@ -269,37 +282,53 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Data fetched from database
             const projectData = {
-                title: "Project One",
-                startDate: "2024-01-01",
-                endDate: "2024-12-31",
-                name: "Example Project Name",
-                id: "12345",
-                description: "This is an example project description.",
+                title: "<?php echo $project_name;?>", // Redundant
+                startDate: "<?php echo $start?>",
+                endDate: "<?php echo $due?>",
+                name: "<?php echo $project_name?>",
+                id: "<?php echo $project_id?>",
+                description: "<?php echo $project_desc?>",
                 tasks: [
-                    { name: "Task 1", description: "Description for Task One", status: "unassigned", dueDate: "2024-07-10" },
-                    { name: "Task 2", description: "Description for Task Two", status: "ongoing", dueDate: "2024-08-10" },
-                    { name: "Task 3", description: "Description for Task Three", status: "completed", dueDate: "2024-05-10" },
-                    { name: "Task 4", description: "Description for Task Four", status: "expired", dueDate: "2024-04-10" },
+                    <?php
+
+                        $data = return_task_list($dbc, $project_id, $user_id);
+
+                        while($task = mysqli_fetch_assoc($data)){
+                            $now = time(); // or your date as well
+                            $due_date = strtotime($task['dueDate']);
+                            $diff = $now - $your_date;
+
+                            echo "{ name: ". $task['taskName'] .", description: ". $task['taskDescription'] .", 
+                            status: ". return_task_status($dbc, $task['taskID']) .", daysRemaining: ". round($diff / (60 * 60 * 24)) ." },";
+                        }
+                    ?>
+                    // { name: "Task 1", description: "Description for Task One", status: "unassigned", daysRemaining: 200 },
+                    // { name: "Task 2", description: "Description for Task Two", status: "ongoing", daysRemaining: 150 },
+                    // { name: "Task 3", description: "Description for Task Three", status: "completed", daysRemaining: 0 },
+                    // { name: "Task 4", description: "Description for Task Four", status: "expired", daysRemaining: -10 },
                 ]
             };
 
+            // Initialize project details
             document.getElementById('project-title').innerText = projectData.title;
             document.getElementById('project-start-date').innerText = `Start Date: ${projectData.startDate}`;
             document.getElementById('project-end-date').innerText = `End Date: ${projectData.endDate}`;
-            document.getElementById('project-name').innerText = projectData.name;
-            document.getElementById('project-id').innerText = projectData.id;
-            document.getElementById('project-description').innerText = projectData.description;
+            document.getElementById('project-name-input').value = projectData.name;
+            document.getElementById('project-description-input').value = projectData.description;
 
             const taskList = document.getElementById('task-list');
             projectData.tasks.forEach(task => {
                 addTaskToList(taskList, task.name, task.description, task.status, task.dueDate);
             });
 
+            // Event listener to display task creation form
             document.getElementById('createTaskButton').addEventListener('click', function() {
-                document.getElementById('taskFormContainer').style.display = 'block';
+                window.location = "../CreateTaskPage/create_task.php?id=<?php echo $project_id;?>";
             });
 
+            // Event listener to calculate and display days remaining for a task
             document.getElementById('task-due-date').addEventListener('change', function() {
                 const dueDate = new Date(document.getElementById('task-due-date').value);
                 const currentDate = new Date();
@@ -308,6 +337,7 @@
                 document.getElementById('task-days-remaining').value = daysRemaining;
             });
 
+            // Event listener to save a new task
             document.getElementById('saveTaskButton').addEventListener('click', function() {
                 const name = document.getElementById('task-name').value;
                 const description = document.getElementById('task-description').value;
@@ -319,20 +349,40 @@
                 document.getElementById('taskFormContainer').style.display = 'none';
             });
 
+            // Event listener to update project details
             document.getElementById('updateProjectButton').addEventListener('click', function() {
-                alert("Update Project functionality is not implemented yet.");
+                const projectName = document.getElementById('project-name-input').value;
+                const projectDescription = document.getElementById('project-description-input').value;
+
+                document.getElementById('project-title').innerText = projectName;
+                document.getElementById('project-name-input').value = projectName;
+                document.getElementById('project-description-input').value = projectDescription;
+
+                alert("Project updated successfully.");
             });
         });
 
+        // Function to add a task to the task list(Create Task Button)
         function addTaskToList(taskList, name, description, status, dueDate) {
             const taskItem = document.createElement('li');
+            
+            //task name in form
+            const taskName = document.createElement('input');
+            taskName.type = 'text';
+            taskName.value = name;
+            taskName.addEventListener('change', function() {
+                updateTaskName(taskName.value);
+            });
 
-            const taskName = document.createElement('span');
-            taskName.innerText = name;
+            //task description in form
+            const taskDescription = document.createElement('input');
+            taskDescription.type = 'text';
+            taskDescription.value = description;
+            taskDescription.addEventListener('change', function() {
+                updateTaskDescription(taskDescription.value);
+            });
 
-            const taskDescription = document.createElement('span');
-            taskDescription.innerText = description;
-
+            //task status in form
             const taskStatus = document.createElement('select');
             const statuses = ["unassigned", "ongoing", "completed", "expired"];
             statuses.forEach(stat => {
@@ -343,9 +393,10 @@
                 taskStatus.appendChild(option);
             });
             taskStatus.addEventListener('change', function() {
-                updateTaskStatus(taskName.innerText, taskStatus.value);
+                updateTaskStatus(taskName.value, taskStatus.value);
             });
 
+            //Drop down calendar in form
             const taskDueDate = document.createElement('input');
             taskDueDate.type = 'date';
             taskDueDate.value = dueDate;
@@ -354,10 +405,11 @@
                 const currentDate = new Date();
                 const timeDiff = dueDate - currentDate;
                 const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                updateTaskDaysRemaining(taskName.innerText, daysRemaining);
+                updateTaskDaysRemaining(taskName.value, daysRemaining);
                 taskDaysRemaining.value = daysRemaining;
             });
 
+            //Display days remaining in form
             const taskDaysRemaining = document.createElement('input');
             taskDaysRemaining.type = 'text';
             const dueDateObj = new Date(dueDate);
@@ -375,6 +427,15 @@
             taskList.appendChild(taskItem);
         }
 
+        //Update Task
+        function updateTaskName(name) {
+            console.log(`Updated task name to "${name}"`);
+        }
+
+        function updateTaskDescription(description) {
+            console.log(`Updated task description to "${description}"`);
+        }
+
         function updateTaskStatus(name, newStatus) {
             console.log(`Updated task "${name}" to status "${newStatus}"`);
         }
@@ -385,6 +446,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 

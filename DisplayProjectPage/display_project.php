@@ -6,6 +6,7 @@
 
     CHANGELOG:
     1. 	Initial version created (25/06/2024)
+    2.  Changed how the PHP processes both GET and POST requests to allow for the form submission through POST while still maintaining the GET submission of the project ID. (26/06/2024)
 
     TO DO:
     
@@ -24,10 +25,11 @@ if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
 }
 
 // Check if user did this through a get method
-if($_SERVER['REQUEST_METHOD'] === 'GET'){
+if(!empty($_GET['id'])){
     $project_id = $_GET['id'];
     include ('../PHP/project_functions.php');
     include ('../PHP/mysqli_connect.php');
+    include ('../PHP/tasks_functions.php');
 
     list($check, $data) = return_project_details($dbc, $user_id, $project_id);
 
@@ -39,7 +41,7 @@ if($_SERVER['REQUEST_METHOD'] === 'GET'){
         $due = $data['dueDate'];
 
         if ($check == 1){
-            include('admin_update_project.php');
+            include('admin_display_project.php');
         } else{
             include('member_display_project.php');
         }

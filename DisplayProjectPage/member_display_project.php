@@ -208,10 +208,29 @@
             <h2>
                 Tasks
             </h2>
-            <div class="task-input-container">
-                <input type="text" id="taskIDInput" placeholder="Task ID" oninput="enableAddButton()">
-                <button id="addTaskButton" disabled>Add Task</button>
-            </div>
+            
+            <form class="task-input-container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
+                <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
+                <button id="addTaskButton" disabled type="submit" value="Submit">Add Task</button>
+            </form>
+            <?php
+                //NEEDS TESTING
+
+                if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                    $errors = join_task($dbc, $project_id, $_POST['taskIDInput'], $user_id);
+
+                    if(!empty($errors)){
+
+                        echo '<p class="errorclass">The following error(s) occurred:<br />';
+                        foreach ($errors as $msg) {
+                            echo " - $msg<br />\n";
+                        }
+                        echo '</p><p class="errorclass">Please try again.</p>';
+
+                    }
+                }
+
+            ?>
             <table>
                 <thead>
                     <tr>
@@ -239,7 +258,6 @@
                 description: "<?php echo $project_desc?>",
                 tasks: [
                     <?php
-                        include('../PHP/tasks_functions.php');
 
                         $data = return_task_list($dbc, $project_id, $user_id);
 
@@ -281,60 +299,60 @@
             addTaskButton.disabled = taskIDInput.value.trim() === "";
         }
 
-        // Helper function to add a task item to the task list
-        function addTaskToList(taskList, name, description, status, daysRemaining) {
-            const taskRow = document.createElement('tr');
+        // // Helper function to add a task item to the task list
+        // function addTaskToList(taskList, name, description, status, daysRemaining) {
+        //     const taskRow = document.createElement('tr');
             
-            const taskNameCell = document.createElement('td');
-            taskNameCell.innerText = name;
-            taskRow.appendChild(taskNameCell);
+        //     const taskNameCell = document.createElement('td');
+        //     taskNameCell.innerText = name;
+        //     taskRow.appendChild(taskNameCell);
             
-            const taskDescriptionCell = document.createElement('td');
-            taskDescriptionCell.innerText = description;
-            taskRow.appendChild(taskDescriptionCell);
+        //     const taskDescriptionCell = document.createElement('td');
+        //     taskDescriptionCell.innerText = description;
+        //     taskRow.appendChild(taskDescriptionCell);
             
-            const taskStatusCell = document.createElement('td');
-            const taskStatus = document.createElement('span');
-            taskStatus.classList.add('task-status', `status-${status}`);
-            taskStatus.innerText = status.charAt(0).toUpperCase() + status.slice(1);
-            taskStatusCell.appendChild(taskStatus);
-            taskRow.appendChild(taskStatusCell);
+        //     const taskStatusCell = document.createElement('td');
+        //     const taskStatus = document.createElement('span');
+        //     taskStatus.classList.add('task-status', `status-${status}`);
+        //     taskStatus.innerText = status.charAt(0).toUpperCase() + status.slice(1);
+        //     taskStatusCell.appendChild(taskStatus);
+        //     taskRow.appendChild(taskStatusCell);
 
-            const daysRemainingCell = document.createElement('td');
-            daysRemainingCell.innerText = daysRemaining;
-            taskRow.appendChild(daysRemainingCell);
+        //     const daysRemainingCell = document.createElement('td');
+        //     daysRemainingCell.innerText = daysRemaining;
+        //     taskRow.appendChild(daysRemainingCell);
 
-            taskList.appendChild(taskRow);
-        }
+        //     taskList.appendChild(taskRow);
+        // }
 
-        // Function to handle adding a new task
-        function addTask() {
-            const taskIDInput = document.getElementById('taskIDInput');
-            const taskName = taskIDInput.value.trim();
+        // // Function to handle adding a new task
+        // function addTask() {
+        //     const taskIDInput = document.getElementById('taskIDInput');
+        //     const taskName = taskIDInput.value.trim();
             
-            if (taskName === '') return; // If task name is empty, do nothing
+        //     if (taskName === '') return; // If task name is empty, do nothing
             
-            // Generate a mock ID for the new task (you can modify this as needed)
-            const taskId = Math.floor(Math.random() * 10000) + 1;
+        //     // Generate a mock ID for the new task (you can modify this as needed)
+        //     const taskId = Math.floor(Math.random() * 10000) + 1;
 
-            // Mock new task object
-            const newTask = {
-                name: `Task ${taskId}: ${taskName}`,
-                description: "New Task Description", // Example description
-                status: "unassigned", // Example status
-                daysRemaining: 30 // Example days remaining
-            };
+        //     // Mock new task object
+        //     const newTask = {
+        //         name: `Task ${taskId}: ${taskName}`,
+        //         description: "New Task Description", // Example description
+        //         status: "unassigned", // Example status
+        //         daysRemaining: 30 // Example days remaining
+        //     };
 
-            // Add new task to the task list
-            addTaskToList(taskList, newTask.name, newTask.description, newTask.status, newTask.daysRemaining);
+        //     // Add new task to the task list
+        //     addTaskToList(taskList, newTask.name, newTask.description, newTask.status, newTask.daysRemaining);
 
-            // Clear input and disable button
-            taskIDInput.value = '';
-            enableAddButton();
-        }
+        //     // Clear input and disable button
+        //     taskIDInput.value = '';
+        //     enableAddButton();
+        // }
 
-        // Event listener for Add Task button
-        document.getElementById('addTaskButton').addEventListener('click', addTask);
+        // // Event listener for Add Task button
+        // document.getElementById('addTaskButton').addEventListener('click', addTask);
     </script>
 </body>
 </html>
