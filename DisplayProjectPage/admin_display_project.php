@@ -298,10 +298,9 @@
                         while($task = mysqli_fetch_assoc($data)){
                             $now = time(); // or your date as well
                             $due_date = strtotime($task['dueDate']);
-                            $diff = $now - $your_date;
+                            $diff = $due_date - $now;
 
-                            echo "{ name: ". $task['taskName'] .", description: ". $task['taskDescription'] .", 
-                            status: ". return_task_status($dbc, $task['taskID']) .", daysRemaining: ". round($diff / (60 * 60 * 24)) ." },";
+                            echo "{ name: \"". $task['taskName'] ."\", description: \"". $task['description'] ."\", status: \"". return_task_status($dbc, $task['taskID']) ."\", daysRemaining: ". round($diff / (60 * 60 * 24)) ." },";
                         }
                     ?>
                     // { name: "Task 1", description: "Description for Task One", status: "unassigned", daysRemaining: 200 },

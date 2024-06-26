@@ -113,7 +113,7 @@ function create_task($dbc, $project_id) {
         // Make the query
         // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         //Project ID needs to be created first
-        $q = "INSERT INTO task (taskID, projectID, taskName, description, dueDate) VALUES ('$task_id', '$project_id', '$task_title', '$task_description', '$due_date')";		
+        $q = "INSERT INTO task (taskID, projectID, taskName, description, dueDate, status) VALUES ('$task_id', '$project_id', '$task_title', '$task_description', '$due_date', 3)";		
 		$r = @mysqli_query ($dbc, $q); // Run the query.
 
 		if ($r) { // If it ran OK.
@@ -171,7 +171,7 @@ function join_task($dbc, $project_id, $task_id, $user_id){
         } else{
 
             // Checks if the user is actually part of the project
-            $q = "SELECT projectID WHERE projectID = '$project_id' AND userID = '$user_id";
+            $q = "SELECT projectID FROM userproject WHERE projectID = '$project_id' AND userID = '$user_id'";
             $r = @mysqli_query($dbc, $q);
 
             if (mysqli_num_rows($r) == 0){
@@ -351,9 +351,12 @@ function return_task_status($dbc, $task_id){
         status code 1 = "Ongoing"
         status code 2 = "Completed"
         status code 3 = "Unassigned"
+        status code 0 = "Expired
         */
 
-        switch($r){
+        switch(mysqli_fetch_array($r)['status']){
+            case 0:
+                return "Expired";
             case 1:
                 return "Ongoing";
             case 2:
@@ -426,11 +429,7 @@ function validate_task_id ($dbc, $task_id){
         }
 	}
 
-    if (!empty($errors)){
-
-        return $errors;
-
-    }
+    return $errors;
 
 }
 

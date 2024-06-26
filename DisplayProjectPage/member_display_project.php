@@ -208,11 +208,6 @@
             <h2>
                 Tasks
             </h2>
-            
-            <form class="task-input-container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
-                <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
-                <button id="addTaskButton" disabled type="submit" value="Submit">Add Task</button>
-            </form>
             <?php
                 //NEEDS TESTING
 
@@ -231,6 +226,11 @@
                 }
 
             ?>
+            <form class="task-input-container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
+                <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
+                <button id="addTaskButton" disabled type="submit" value="Submit">Add Task</button>
+            </form>
+            
             <table>
                 <thead>
                     <tr>
@@ -264,10 +264,9 @@
                         while($task = mysqli_fetch_assoc($data)){
                             $now = time(); // or your date as well
                             $due_date = strtotime($task['dueDate']);
-                            $diff = $now - $your_date;
+                            $diff = $due_date - $now;
 
-                            echo "{ name: ". $task['taskName'] .", description: ". $task['taskDescription'] .", 
-                            status: ". return_task_status($dbc, $task['taskID']) .", daysRemaining: ". round($diff / (60 * 60 * 24)) ." },";
+                            echo "{ name: \"". $task['taskName'] ."\", description: \"". $task['description'] ."\", status: \"". return_task_status($dbc, $task['taskID']) ."\", daysRemaining: ". round($diff / (60 * 60 * 24)) ." },";
                         }
                     ?>
                     // { name: "Task 1", description: "Description for Task One", status: "unassigned", daysRemaining: 200 },
@@ -299,31 +298,31 @@
             addTaskButton.disabled = taskIDInput.value.trim() === "";
         }
 
-        // // Helper function to add a task item to the task list
-        // function addTaskToList(taskList, name, description, status, daysRemaining) {
-        //     const taskRow = document.createElement('tr');
+        // Helper function to add a task item to the task list
+        function addTaskToList(taskList, name, description, status, daysRemaining) {
+            const taskRow = document.createElement('tr');
             
-        //     const taskNameCell = document.createElement('td');
-        //     taskNameCell.innerText = name;
-        //     taskRow.appendChild(taskNameCell);
+            const taskNameCell = document.createElement('td');
+            taskNameCell.innerText = name;
+            taskRow.appendChild(taskNameCell);
             
-        //     const taskDescriptionCell = document.createElement('td');
-        //     taskDescriptionCell.innerText = description;
-        //     taskRow.appendChild(taskDescriptionCell);
+            const taskDescriptionCell = document.createElement('td');
+            taskDescriptionCell.innerText = description;
+            taskRow.appendChild(taskDescriptionCell);
             
-        //     const taskStatusCell = document.createElement('td');
-        //     const taskStatus = document.createElement('span');
-        //     taskStatus.classList.add('task-status', `status-${status}`);
-        //     taskStatus.innerText = status.charAt(0).toUpperCase() + status.slice(1);
-        //     taskStatusCell.appendChild(taskStatus);
-        //     taskRow.appendChild(taskStatusCell);
+            const taskStatusCell = document.createElement('td');
+            const taskStatus = document.createElement('span');
+            taskStatus.classList.add('task-status', `status-${status}`);
+            taskStatus.innerText = status.charAt(0).toUpperCase() + status.slice(1);
+            taskStatusCell.appendChild(taskStatus);
+            taskRow.appendChild(taskStatusCell);
 
-        //     const daysRemainingCell = document.createElement('td');
-        //     daysRemainingCell.innerText = daysRemaining;
-        //     taskRow.appendChild(daysRemainingCell);
+            const daysRemainingCell = document.createElement('td');
+            daysRemainingCell.innerText = daysRemaining;
+            taskRow.appendChild(daysRemainingCell);
 
-        //     taskList.appendChild(taskRow);
-        // }
+            taskList.appendChild(taskRow);
+        }
 
         // // Function to handle adding a new task
         // function addTask() {
