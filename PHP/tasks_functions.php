@@ -221,6 +221,103 @@ function join_task($dbc, $project_id, $task_id, $user_id){
 
 }
 
+function update_task($dbc, $project_id, $task_id){
+
+    $errors = array_merge(validate_project_id($dbc, $project_id), validate_task_id($dbc, $task_id));
+
+    // Validate the task title
+	if (empty($_POST['task-title'])){
+
+		$errors[] = 'You forgot to enter a title for your task';
+
+	} elseif(strlen($_POST['task-title']) > 30){
+
+        $errors[] = 'The title entered is too long';
+
+    } else{
+
+		$task_title = mysqli_real_escape_string($dbc, trim($_POST['task-title']));
+
+	}
+
+    // Validate the task description
+	if (empty($_POST['task-description'])){
+
+		$errors[] = 'You forgot to enter a description for your task';
+
+	} elseif(strlen($_POST['task-description']) > 50){
+
+        $errors[] = 'The title entered is too long';
+
+    } else{
+
+		$task_description = mysqli_real_escape_string($dbc, trim($_POST['task-description']));
+
+	}
+
+    // Validate due date
+    if (empty($_POST['task-due-date'])){
+
+        $errors[] = "No specified due date!";
+
+    } elseif($_POST['task-due-date'] < date("Y-m-d")){
+
+        $errors[] = "Selected due date has already elapsed! Please select another date";
+        
+    } else{
+
+        $due_date = mysqli_real_escape_string($dbc, trim($_POST['task-due-date']));
+
+    }
+
+    // Validate status
+    if(empty($_POST['task-status'])){
+
+        $errors[] = "Task not assigned a status";
+
+    } elseif($_POST['task_status'] < 0 || $_POST['task_status'] > 3){
+
+        $errors[] = "Invalid task status selected";
+
+    } else{
+
+        $task_status = mysqli_real_escape_string($dbc, trim($_POST['task-status']));
+
+    }
+
+    if(empty($errors)){
+
+        $q = "UPDATE task taskName = '$task_title', description = '$task_description', dueDate = '$due_date', status = '$task_status' WHERE taskID = '$task_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if($r){
+
+            redirect_user("../DisplayProjectPage/display_project.php?id='$project_id'");
+
+        } else { // If it did not run OK.
+			
+			// Public message:
+            // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
+            echo '<h1>System Error</h1>
+			<p class="error">The task encountered an error on our server, your task was not created. We apologised for any incovenience.</p>'; 
+			
+			// Debugging message:
+			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
+						
+		} // End of if ($r) IF.
+
+		mysqli_close($dbc); // Close the database connection.
+
+		exit();
+
+    } else{
+
+        // Returns error messages
+        return $errors;
+
+    }
+}
+
 function update_task_status($dbc, $project_id, $task_id, $status) {
 
     $errors = array_merge(validate_project_id($dbc, $project_id), validate_task_id ($dbc, $task_id)); // Initialize error array and check if task ID and project ID is valid // WILL THIS WORK???
@@ -237,8 +334,9 @@ function update_task_status($dbc, $project_id, $task_id, $status) {
         status code 1 = "Ongoing"
         status code 2 = "Completed"
         status code 3 = "Unassigned"
+        status code 0 = "Expired
         */
-        if ($status > 3 && $status < 1){
+        if ($status > 3 && $status < 0){
 
             $errors[] = "Incorrect status code";
 

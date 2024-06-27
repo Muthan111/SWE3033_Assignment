@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./admin_display_project.css"/>
 </head>
 <body>
-    <div class="container">
+    <form class="container">
         <!-- Header section displaying project title and dates -->
         <header>
             <h1 id="project-title">Project One</h1>
@@ -40,13 +40,32 @@
             <h2>Tasks</h2>
             <ul id="task-list">
                 <!-- Tasks will be added here dynamically -->
+                <?php
+
+                    $data = return_task_list($dbc, $project_id, $user_id);
+
+                    while($task = mysqli_fetch_assoc($data)){
+
+                        echo "
+                        <li>
+                            <input type='text' name='task-title[]' value='" . $task['taskName'] . "'>
+                            <input type='hidden' name='task-id[]' value='" . $task['taskID'] . "'>
+                            <input type='text' name='task-description[]' value='" . $task['description'] . "'>
+                            <input type='date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
+                            <input type='text' readonly='' id='daysRemaining'>
+                        </li>
+                        ";
+
+                    }
+
+                ?>
             </ul>
             <div class="buttons">
                 <button id="createTaskButton">Create Task</button>
                 <button id="updateProjectButton">Update Project</button>
             </div>
         </section>
-    </div>
+    </form>
 
     <!-- Task form container, initially hidden -->
     <div id="taskFormContainer" style="display: none;">
@@ -76,150 +95,150 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Data fetched from database
-            const projectData = {
-                title: "<?php echo $project_name;?>", // Redundant
-                startDate: "<?php echo $start?>",
-                endDate: "<?php echo $due?>",
-                name: "<?php echo $project_name?>",
-                id: "<?php echo $project_id?>",
-                description: "<?php echo $project_desc?>",
-                tasks: [
-                    <?php
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     // Data fetched from database
+        //     const projectData = {
+        //         title: "<?php echo $project_name;?>", // Redundant
+        //         startDate: "<?php echo $start?>",
+        //         endDate: "<?php echo $due?>",
+        //         name: "<?php echo $project_name?>",
+        //         id: "<?php echo $project_id?>",
+        //         description: "<?php echo $project_desc?>",
+        //         tasks: [
+        //             <?php
 
-                        $data = return_task_list($dbc, $project_id, $user_id);
+        //                 $data = return_task_list($dbc, $project_id, $user_id);
 
-                        while($task = mysqli_fetch_assoc($data)){
-                            $now = time(); // or your date as well
-                            $due_date = strtotime($task['dueDate']);
-                            $diff = $due_date - $now;
+        //                 while($task = mysqli_fetch_assoc($data)){
+        //                     $now = time(); // or your date as well
+        //                     $due_date = strtotime($task['dueDate']);
+        //                     $diff = $due_date - $now;
 
-                            echo "{ name: \"". $task['taskName'] ."\", description: \"". $task['description'] ."\", status: \"". return_task_status($dbc, $task['taskID']) ."\", daysRemaining: ". round($diff / (60 * 60 * 24)) ." },";
-                        }
-                    ?>
-                    // { name: "Task 1", description: "Description for Task One", status: "unassigned", daysRemaining: 200 },
-                    // { name: "Task 2", description: "Description for Task Two", status: "ongoing", daysRemaining: 150 },
-                    // { name: "Task 3", description: "Description for Task Three", status: "completed", daysRemaining: 0 },
-                    // { name: "Task 4", description: "Description for Task Four", status: "expired", daysRemaining: -10 },
-                ]
-            };
+        //                     echo "{ name: \"". $task['taskName'] ."\", description: \"". $task['description'] ."\", status: \"". return_task_status($dbc, $task['taskID']) ."\", daysRemaining: ". round($diff / (60 * 60 * 24)) ." },";
+        //                 }
+        //             ?>
+        //             // { name: "Task 1", description: "Description for Task One", status: "unassigned", daysRemaining: 200 },
+        //             // { name: "Task 2", description: "Description for Task Two", status: "ongoing", daysRemaining: 150 },
+        //             // { name: "Task 3", description: "Description for Task Three", status: "completed", daysRemaining: 0 },
+        //             // { name: "Task 4", description: "Description for Task Four", status: "expired", daysRemaining: -10 },
+        //         ]
+        //     };
 
-            // Initialize project details
-            document.getElementById('project-title').innerText = projectData.title;
-            document.getElementById('project-start-date').innerText = `Start Date: ${projectData.startDate}`;
-            document.getElementById('project-end-date').innerText = `End Date: ${projectData.endDate}`;
-            document.getElementById('project-name-input').value = projectData.name;
-            document.getElementById('project-description-input').value = projectData.description;
+        //     // Initialize project details
+        //     document.getElementById('project-title').innerText = projectData.title;
+        //     document.getElementById('project-start-date').innerText = `Start Date: ${projectData.startDate}`;
+        //     document.getElementById('project-end-date').innerText = `End Date: ${projectData.endDate}`;
+        //     document.getElementById('project-name-input').value = projectData.name;
+        //     document.getElementById('project-description-input').value = projectData.description;
 
-            const taskList = document.getElementById('task-list');
-            projectData.tasks.forEach(task => {
-                addTaskToList(taskList, task.name, task.description, task.status, task.dueDate);
-            });
+        //     const taskList = document.getElementById('task-list');
+        //     projectData.tasks.forEach(task => {
+        //         addTaskToList(taskList, task.name, task.description, task.status, task.dueDate);
+        //     });
 
-            // Event listener to display task creation form
-            document.getElementById('createTaskButton').addEventListener('click', function() {
-                window.location = "../CreateTaskPage/create_task.php?id=<?php echo $project_id;?>";
-            });
+        //     // Event listener to display task creation form
+        //     document.getElementById('createTaskButton').addEventListener('click', function() {
+        //         window.location = "../CreateTaskPage/create_task.php?id=<?php echo $project_id;?>";
+        //     });
 
-            // Event listener to calculate and display days remaining for a task
-            document.getElementById('task-due-date').addEventListener('change', function() {
-                const dueDate = new Date(document.getElementById('task-due-date').value);
-                const currentDate = new Date();
-                const timeDiff = dueDate - currentDate;
-                const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                document.getElementById('task-days-remaining').value = daysRemaining;
-            });
+        //     // Event listener to calculate and display days remaining for a task
+        //     document.getElementById('task-due-date').addEventListener('change', function() {
+        //         const dueDate = new Date(document.getElementById('task-due-date').value);
+        //         const currentDate = new Date();
+        //         const timeDiff = dueDate - currentDate;
+        //         const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        //         document.getElementById('task-days-remaining').value = daysRemaining;
+        //     });
 
-            // Event listener to save a new task
-            document.getElementById('saveTaskButton').addEventListener('click', function() {
-                const name = document.getElementById('task-name').value;
-                const description = document.getElementById('task-description').value;
-                const status = document.getElementById('task-status').value;
-                const dueDate = document.getElementById('task-due-date').value;
+        //     // Event listener to save a new task
+        //     document.getElementById('saveTaskButton').addEventListener('click', function() {
+        //         const name = document.getElementById('task-name').value;
+        //         const description = document.getElementById('task-description').value;
+        //         const status = document.getElementById('task-status').value;
+        //         const dueDate = document.getElementById('task-due-date').value;
 
-                addTaskToList(taskList, name, description, status, dueDate);
+        //         addTaskToList(taskList, name, description, status, dueDate);
 
-                document.getElementById('taskFormContainer').style.display = 'none';
-            });
+        //         document.getElementById('taskFormContainer').style.display = 'none';
+        //     });
 
-            // Event listener to update project details
-            document.getElementById('updateProjectButton').addEventListener('click', function() {
-                const projectName = document.getElementById('project-name-input').value;
-                const projectDescription = document.getElementById('project-description-input').value;
+        //     // Event listener to update project details
+        //     document.getElementById('updateProjectButton').addEventListener('click', function() {
+        //         const projectName = document.getElementById('project-name-input').value;
+        //         const projectDescription = document.getElementById('project-description-input').value;
 
-                document.getElementById('project-title').innerText = projectName;
-                document.getElementById('project-name-input').value = projectName;
-                document.getElementById('project-description-input').value = projectDescription;
+        //         document.getElementById('project-title').innerText = projectName;
+        //         document.getElementById('project-name-input').value = projectName;
+        //         document.getElementById('project-description-input').value = projectDescription;
 
-                alert("Project updated successfully.");
-            });
-        });
+        //         alert("Project updated successfully.");
+        //     });
+        // });
 
-        // Function to add a task to the task list(Create Task Button)
-        function addTaskToList(taskList, name, description, status, dueDate) {
-            const taskItem = document.createElement('li');
+        // // Function to add a task to the task list(Create Task Button)
+        // function addTaskToList(taskList, name, description, status, dueDate) {
+        //     const taskItem = document.createElement('li');
             
-            //task name in form
-            const taskName = document.createElement('input');
-            taskName.type = 'text';
-            taskName.value = name;
-            taskName.addEventListener('change', function() {
-                updateTaskName(taskName.value);
-            });
+        //     //task name in form
+        //     const taskName = document.createElement('input');
+        //     taskName.type = 'text';
+        //     taskName.value = name;
+        //     taskName.addEventListener('change', function() {
+        //         updateTaskName(taskName.value);
+        //     });
 
-            //task description in form
-            const taskDescription = document.createElement('input');
-            taskDescription.type = 'text';
-            taskDescription.value = description;
-            taskDescription.addEventListener('change', function() {
-                updateTaskDescription(taskDescription.value);
-            });
+        //     //task description in form
+        //     const taskDescription = document.createElement('input');
+        //     taskDescription.type = 'text';
+        //     taskDescription.value = description;
+        //     taskDescription.addEventListener('change', function() {
+        //         updateTaskDescription(taskDescription.value);
+        //     });
 
-            //task status in form
-            const taskStatus = document.createElement('select');
-            const statuses = ["unassigned", "ongoing", "completed", "expired"];
-            statuses.forEach(stat => {
-                const option = document.createElement('option');
-                option.value = stat;
-                option.innerText = stat.charAt(0).toUpperCase() + stat.slice(1);
-                if (stat === status) option.selected = true;
-                taskStatus.appendChild(option);
-            });
-            taskStatus.addEventListener('change', function() {
-                updateTaskStatus(taskName.value, taskStatus.value);
-            });
+        //     //task status in form
+        //     const taskStatus = document.createElement('select');
+        //     const statuses = ["unassigned", "ongoing", "completed", "expired"];
+        //     statuses.forEach(stat => {
+        //         const option = document.createElement('option');
+        //         option.value = stat;
+        //         option.innerText = stat.charAt(0).toUpperCase() + stat.slice(1);
+        //         if (stat === status) option.selected = true;
+        //         taskStatus.appendChild(option);
+        //     });
+        //     taskStatus.addEventListener('change', function() {
+        //         updateTaskStatus(taskName.value, taskStatus.value);
+        //     });
 
-            //Drop down calendar in form
-            const taskDueDate = document.createElement('input');
-            taskDueDate.type = 'date';
-            taskDueDate.value = dueDate;
-            taskDueDate.addEventListener('change', function() {
-                const dueDate = new Date(taskDueDate.value);
-                const currentDate = new Date();
-                const timeDiff = dueDate - currentDate;
-                const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                updateTaskDaysRemaining(taskName.value, daysRemaining);
-                taskDaysRemaining.value = daysRemaining;
-            });
+        //     //Drop down calendar in form
+        //     const taskDueDate = document.createElement('input');
+        //     taskDueDate.type = 'date';
+        //     taskDueDate.value = dueDate;
+        //     taskDueDate.addEventListener('change', function() {
+        //         const dueDate = new Date(taskDueDate.value);
+        //         const currentDate = new Date();
+        //         const timeDiff = dueDate - currentDate;
+        //         const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        //         updateTaskDaysRemaining(taskName.value, daysRemaining);
+        //         taskDaysRemaining.value = daysRemaining;
+        //     });
 
-            //Display days remaining in form
-            const taskDaysRemaining = document.createElement('input');
-            taskDaysRemaining.type = 'text';
-            const dueDateObj = new Date(dueDate);
-            const currentDate = new Date();
-            const timeDiff = dueDateObj - currentDate;
-            const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            taskDaysRemaining.value = daysRemaining;
-            taskDaysRemaining.readOnly = true;
+        //     //Display days remaining in form
+        //     const taskDaysRemaining = document.createElement('input');
+        //     taskDaysRemaining.type = 'text';
+        //     const dueDateObj = new Date(dueDate);
+        //     const currentDate = new Date();
+        //     const timeDiff = dueDateObj - currentDate;
+        //     const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        //     taskDaysRemaining.value = daysRemaining;
+        //     taskDaysRemaining.readOnly = true;
 
-            taskItem.appendChild(taskName);
-            taskItem.appendChild(taskDescription);
-            taskItem.appendChild(taskStatus);
-            taskItem.appendChild(taskDueDate);
-            taskItem.appendChild(taskDaysRemaining);
-            taskList.appendChild(taskItem);
-        }
+        //     taskItem.appendChild(taskName);
+        //     taskItem.appendChild(taskDescription);
+        //     taskItem.appendChild(taskStatus);
+        //     taskItem.appendChild(taskDueDate);
+        //     taskItem.appendChild(taskDaysRemaining);
+        //     taskList.appendChild(taskItem);
+        // }
 
         //Update Task
         function updateTaskName(name) {
