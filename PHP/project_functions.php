@@ -170,10 +170,14 @@ function join_project($dbc, $project_id, $user_id){
         return true; // User has already joined the project
     } else {
         // Insert user into userproject table
-        $q = "INSERT INTO userproject (userID, projectID, isadmin) VALUES ('$user_id', '$project_id', 0)";
-        $r = @mysqli_query($dbc, $q);
-        return false; // User has not joined the project
+        $validate = validate_project_id($dbc, $project_id);
+        if (empty($validate)){
+            $q = "INSERT INTO userproject (userID, projectID, isadmin) VALUES ('$user_id', '$project_id', 0)";
+            $r = @mysqli_query($dbc, $q);
+            return false; // User has not joined the project
+        }
     }
+
 }
 
 function validate_project_id ($dbc, $project_id){

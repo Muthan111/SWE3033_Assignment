@@ -29,7 +29,7 @@ if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
 include ("../PHP/project_functions.php");
 include ("../PHP/mysqli_connect.php");
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create-project'])){
 
     // Incomplete due to no start date and due date
     $errors = create_project($dbc, $user_id);
@@ -39,7 +39,23 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         redirect_user("Homepage.HTML"); // Might change to the specific project page
 
     }
-}?>
+}
+
+$error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
+    $projectCode = $_POST['projectCode'];
+    $already_joined = join_project($dbc, $projectCode, $user_id);
+
+    if (!$already_joined) {
+        $redirect_url = '../DisplayProjectPage/display_project.php?id='. $projectCode;
+        echo "<script>window.open('$redirect_url', '_blank');</script>";
+        exit();
+    } else {
+        $error_message = "You have already joined this project"; 
+    }
+}
+?>
 
 <head>
     <meta charset="utf-8" />
@@ -81,7 +97,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         </div>
                         <div class="select-container">
                             <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                            <select class="menu-item14">
+                            <select class="menu-item14" id="adminProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
                                     list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
@@ -103,7 +119,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         </div>
                         <div class="select-container">
                             <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                            <select class="menu-item14">
+                            <select class="menu-item14" id="memberProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
                                     list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
@@ -137,57 +153,113 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
             </section>    
         </div>
         <section class="main-container">
-        <form class="main-content" action="CreateProject.php" method="post">
-        <h1>Create a New Project</h1>
-        <div class="generate-id form-group">
-            <input type="text" id="project-id" name="project-id" value="<?php echo generate_id($dbc, 4) ?>">
-            <button id="Auto-Generate" onclick="refresh()" type="button">Auto Generate</button>
-        </div>
-        <div class="form-group">
-            <label for="project-title">Project Title</label>
-            <input type="text" id="project-title" name="project-title" placeholder="Project Title">
-        </div>
-        <div class="form-group">
-            <label for="project-start-date">Project Start Date</label>
-            <input name="project-start-date" type="date" id="project-start-date">
-        </div>
-        <div class="form-group">
-            <label for="project-end-date">Project End Date</label>
-            <input name="project-due-date" type="date" id="project-end-date">
-        </div>
-        <div class="form-group">
-            <label for="project-description">Project Description</label>
-            <textarea id="project-description" name="project-description" placeholder="Project Description"></textarea>
-        </div>
-        <div>
-            <?php
-            // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
-            if (isset($errors) && !empty($errors)) {
-                echo '<p class="errorclass">The following error(s) occurred:<br />';
-                foreach ($errors as $msg) {
-                    echo " - $msg<br />\n";
-                }
-                echo '</p><p class="errorclass">Please try again.</p>';
-              } 
-            mysqli_close($dbc); // Close database connection
-            ?>
-        </div>
-        <div class="create-task" type = "submit" form = "content" value = "Submit">
-            <button>Create a Project</button>
-        </div>
-    </form>
+            <form class="main-content" id="create-project-form" action="CreateProject.php" method="post">
+                <h1>Create a New Project</h1>
+                <div class="generate-id form-group">
+                    <input type="text" id="project-id" name="project-id" value="<?php echo generate_id($dbc, 4) ?>">
+                    <button id="Auto-Generate" onclick="refresh()" type="button">Auto Generate</button>
+                </div>
+                <div class="form-group">
+                    <label for="project-title">Project Title</label>
+                    <input type="text" id="project-title" name="project-title" placeholder="Project Title">
+                </div>
+                <div class="form-group">
+                    <label for="project-start-date">Project Start Date</label>
+                    <input name="project-start-date" type="date" id="project-start-date">
+                </div>
+                <div class="form-group">
+                    <label for="project-end-date">Project End Date</label>
+                    <input name="project-due-date" type="date" id="project-end-date">
+                </div>
+                <div class="form-group">
+                    <label for="project-description">Project Description</label>
+                    <textarea id="project-description" name="project-description" placeholder="Project Description"></textarea>
+                </div>
+                <div>
+                    <?php
+                    // PRINTS OUT THE ERRORS, NEED TO DESIGN THE OUTPUT SOON
+                    if (isset($errors) && !empty($errors)) {
+                        echo '<p class="errorclass">The following error(s) occurred:<br />';
+                        foreach ($errors as $msg) {
+                            echo " - $msg<br />\n";
+                        }
+                        echo '</p><p class="errorclass">Please try again.</p>';
+                    } 
+                    mysqli_close($dbc); // Close database connection
+                    ?>
+                </div>
+                <button name= "create-project" class="create-project" type="submit" form ="create-project-form" value="Submit">Create a Project</button>
+            </form>
         </section>
+
+        <div id="joinCodePopup" class="popup">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <form id="joinCodeForm" method="post">
+                    <input type="text" id="projectCode" placeholder="Enter Project Code" class="popupInputField" name="projectCode" required>
+                    <button type="submit" value="Submit">Join Project</button>
+                    <div id="error-message" style="color: red;"><?php echo $error_message; ?></div>
+                    <input type="hidden" id="phpErrorMessage" value="<?php echo $error_message; ?>" />
+                </form>
+            </div>
+        </div>
     </main>
+
+
     <script>
+        var goHome = document.getElementById("HomeButton");
+        if (goHome) {
+            goHome.addEventListener("click", function (e) {
+                window.location.href = "../index.php";
+                }
+            );
+        }
+
         document.getElementById('adminProjectSelect').addEventListener('change', function(e){
-            window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
         
         document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
-            window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
+            window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
+
         function refresh() {
             window.top.location = window.top.location;
+        }
+
+        // Get the popup
+        var popup = document.getElementById("joinCodePopup");
+
+        // Get the button that opens the popup
+        var btn = document.getElementById("JoinByCodeButton");
+
+        // Get the <span> element that closes the popup
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the popup 
+        btn.onclick = function() {
+            popup.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the popup
+        span.onclick = function() {
+            popup.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the popup, close it
+        window.onclick = function(event) {
+            if (event.target == popup) {
+                popup.style.display = "none";
+            }
+        }
+
+        // Show error message if exists
+        var phpErrorMessage = document.getElementById("phpErrorMessage").value;
+        if (phpErrorMessage) {
+            var errorMessage = document.getElementById("error-message");
+            errorMessage.style.display = "block";
+            errorMessage.innerText = phpErrorMessage;
+            popup.style.display = "block";
         }
     </script>
 </body>

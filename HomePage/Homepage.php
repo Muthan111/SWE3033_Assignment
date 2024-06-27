@@ -23,10 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
     if (!$already_joined) {
         $redirect_url = '../DisplayProjectPage/display_project.php?id='. $projectCode;
         echo "<script>window.open('$redirect_url', '_blank');</script>";
-        echo "<script>refresh()</script>";
         exit();
     } else {
-        $error_message = "You have already joined this project"; // !!!There's alredy an error message in the join_project function
+        $error_message = "You have already joined this project"; 
     }
 }
 ?>
@@ -87,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                         </select>
                     </div>
                 </nav>
+
                 <nav class="list5" id="ProjectSelectNavigatorAdmin">
                     <div class="title6">
                         <b class="participating-projects2">Member Project List</b>
@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                         <select class="menu-item14" id="memberProjectSelect">
                             <option value="" disabled selected>Select Project</option>
                             <?php
-                                list($check, $data) = return_project_list($dbc, $user_id, 0); // Is an admin
+                                list($check, $data) = return_project_list($dbc, $user_id, 0); // Is not an admin
 
                                 if($check == 1){
                                     while($project = mysqli_fetch_assoc($data)){
@@ -104,10 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                         $project_id = $project['projectID'];
                                         echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
                                     }
-                                }?>
+                                }
+                            ?>
                         </select>
                     </div>
                 </nav>
+
+
                 <nav class="list6" id="ChatSelectNavigation">
                                 <b class="title7" id="ProjectForum">
                                     <b class="project-forum2">Project Forum</b>
