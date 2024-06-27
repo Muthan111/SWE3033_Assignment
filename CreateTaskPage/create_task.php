@@ -38,7 +38,6 @@ if(!empty($_GET['id'])){
         if (!$already_joined) {
             $redirect_url = '../DisplayProjectPage/display_project.php?id='. $projectCode;
             echo "<script>window.open('$redirect_url', '_blank');</script>";
-            exit();
         } else {
             $error_message = "You have already joined this project"; 
         }
