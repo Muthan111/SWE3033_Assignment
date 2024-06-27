@@ -1,17 +1,5 @@
 <!DOCTYPE html>
 <?php
-session_start();
-
-if(!isset($_SESSION["user_id"]) || !isset($_SESSION["username"])){
-    include('../PHP/redirect_function.php');
-    redirect_user('../LoginPage/login.php');
-} else{
-    $user_id = $_SESSION['user_id'];
-    $username = $_SESSION['username'];
-}
-
-include ('../PHP/project_functions.php');
-include ('../PHP/mysqli_connect.php');
 
 $error_message = '';
 
@@ -155,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             <?php
                 //NEEDS TESTING
 
-                if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                     $errors = join_task($dbc, $project_id, $_POST['taskIDInput'], $user_id);
 
                     if(!empty($errors)){
@@ -172,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             ?>
             <form class="task-input-container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
                 <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
-                <button id="addTaskButton" disabled type="submit" value="Submit">Add Task</button>
+                <button id="addTaskButton" disabled type="submit" value="Submit" name="addTask">Add Task</button>
             </form>
             
             <table>

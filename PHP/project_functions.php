@@ -21,6 +21,7 @@
     10. Fixed bugs regarding input validation and how the errors are processed as arrays. Fixed the join_project function and the SQL. Also fixed another bug in the return_project_list
     function, where 0 is considered as empty... (24/06/2024)
     11. Added return_project_details function to return all of the details of a specific project for the display project page. (25/06/2024)
+    12. Created update project function. (27/06/2024)
 
     TO DO:
     1. Testing
@@ -176,6 +177,73 @@ function join_project($dbc, $project_id, $user_id){
             $r = @mysqli_query($dbc, $q);
             return false; // User has not joined the project
         }
+    }
+
+}
+
+function update_project($dbc, $user_id, $project_id){
+
+    $errors = array_merge(validate_project_id($dbc, $project_id), validate_user_id($dbc, $user_id));
+
+    // Validate the project name
+	if (empty($_POST['project-title'])){
+
+		$errors[] = 'You forgot to enter a name for your project';
+
+	} elseif(strlen($_POST['project-title']) > 20){ // Arbitarily set as 100 for now
+
+        $errors[] = "Your project name is too long";
+
+    } else{
+
+		$project_name = mysqli_real_escape_string($dbc, trim($_POST['project-title']));
+
+	}
+
+    // Validate project description
+    if (empty($_POST['project-description'])){
+
+        $errors[] = "You forgot to enter a description for your project";
+
+    } elseif(strlen($_POST['project-description']) > 50){
+
+        $errors[] = "Your project description is too long";
+
+    }
+    else{
+
+        $project_description = mysqli_real_escape_string($dbc, trim($_POST['project-description']));
+
+    }
+
+    if(empty($errors)){
+
+        $q = "UPDATE project SET projectName = '$project_name', projectDescription = '$project_description' WHERE projectID = '$project_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if ($r){
+            // redirect_user("../DisplayProjectPage/display_project.php?id=$project_id");
+        } else { // If it did not run OK.
+			
+			// Public message:
+            // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
+            echo '<h1>System Error</h1>
+			<p class="error">The task encountered an error on our server, your task was not created. We apologised for any incovenience.</p>'; 
+			
+			// Debugging message:
+			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
+						
+		} // End of if ($r) IF.
+
+		mysqli_close($dbc); // Close the database connection.
+
+		exit();
+
+    } else{
+
+        // Returns error messages
+        return $errors;
+
     }
 
 }
