@@ -93,6 +93,7 @@
                             </select>
                         </div>
                     </nav>
+                    <a class="logout-link" href="../logout.php">LOGOUT</a>
                 </nav>
             </section>
         </div>

@@ -64,69 +64,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                     </button>
                 </nav>
                 
-                <nav class="list5" id="ProjectSelectNavigator">
-                    <div class="title6">
-                        <b class="participating-projects2">Admin Project List</b>
-                    </div>
-                    <div class="select-container">
-                        <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                        <select class="menu-item14" id="adminProjectSelect">
-                            <option value="" disabled selected>Select Project</option>
-                            <?php
-                                list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
+                        <nav class="list5" id="ProjectSelectNavigator">
+                            <div class="title6">
+                                <b class="participating-projects2">Admin Project List</b>
+                            </div>
+                            <div class="select-container">
+                                <img src="select-icon.png" alt="Project Select Dropdown Icon" />
+                                <select class="menu-item14" id="adminProjectSelect">
+                                    <option value="" disabled selected>Select Project</option>
+                                    <?php
+                                        list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
 
-                                if($check == 1){
-                                    while($project = mysqli_fetch_assoc($data)){
-                                        $project_name = $project['projectName'];
-                                        $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
-                                    }
-                                }
-                            ?>
-                        </select>
-                    </div>
-                </nav>
-
-                <nav class="list5" id="ProjectSelectNavigatorAdmin">
-                    <div class="title6">
-                        <b class="participating-projects2">Member Project List</b>
-                    </div>
-                    <div class="select-container">
-                        <img src="select-icon.png" alt="Project Select Dropdown Icon" />
-                        <select class="menu-item14" id="memberProjectSelect">
-                            <option value="" disabled selected>Select Project</option>
-                            <?php
-                                list($check, $data) = return_project_list($dbc, $user_id, 0); // Is not an admin
-
-                                if($check == 1){
-                                    while($project = mysqli_fetch_assoc($data)){
-                                        $project_name = $project['projectName'];
-                                        $project_id = $project['projectID'];
-                                        echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
-                                    }
-                                }
-                            ?>
-                        </select>
-                    </div>
-                </nav>
-
-
-                <nav class="list6" id="ChatSelectNavigation">
-                                <b class="title7" id="ProjectForum">
-                                    <b class="project-forum2">Project Forum</b>
-                                </b>
-                                <div class="select-container">
-                                    <img src="chat-icon.png" alt="Project Chat Select Dropdown Icon" />
-                                    <select class="menu-item15" id="SelectChat">
-                                        <option value="" disabled selected>Select Chat</option>
-                                        <option value="chat1">- Chat 1</option>
-                                        <option value="chat2">- Chat 2</option>
-                                        <option value="chat3">- Chat 3</option>
-                                    </select>
-                                </div>
-                            </nav>
+                                        if($check == 1){
+                                            while($project = mysqli_fetch_assoc($data)){
+                                                $project_name = $project['projectName'];
+                                                $project_id = $project['projectID'];
+                                                echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                            </div>
                         </nav>
-                    </section>               
+
+                        <nav class="list5" id="ProjectSelectNavigatorAdmin">
+                            <div class="title6">
+                                <b class="participating-projects2">Member Project List</b>
+                            </div>
+                            <div class="select-container">
+                                <img src="select-icon.png" alt="Project Select Dropdown Icon" />
+                                <select class="menu-item14" id="memberProjectSelect">
+                                    <option value="" disabled selected>Select Project</option>
+                                    <?php
+                                        list($check, $data) = return_project_list($dbc, $user_id, 0); // Is not an admin
+
+                                        if($check == 1){
+                                            while($project = mysqli_fetch_assoc($data)){
+                                                $project_name = $project['projectName'];
+                                                $project_id = $project['projectID'];
+                                                echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                            }
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </nav>
+
+
+                        <nav class="list6" id="ChatSelectNavigation">
+                                        <b class="title7" id="ProjectForum">
+                                            <b class="project-forum2">Project Forum</b>
+                                        </b>
+                                        <div class="select-container">
+                                            <img src="chat-icon.png" alt="Project Chat Select Dropdown Icon" />
+                                            <select class="menu-item15" id="SelectChat">
+                                                <option value="" disabled selected>Select Chat</option>
+                                                <option value="chat1">- Chat 1</option>
+                                                <option value="chat2">- Chat 2</option>
+                                                <option value="chat3">- Chat 3</option>
+                                            </select>
+                                        </div>
+                        </nav>
+                        <a class="logout-link" href="../logout.php">LOGOUT</a>
+                    </nav>
+            </section>               
         </div>
    
         <section class="main-container">
