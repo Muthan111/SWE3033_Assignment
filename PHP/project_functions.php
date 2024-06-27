@@ -218,11 +218,11 @@ function update_project($dbc, $user_id, $project_id){
 
     if(empty($errors)){
 
-        $q = "UPDATE project projectName = '$project_name', projectDescription = '$project_description' WHERE projectID = '$project_id'";
+        $q = "UPDATE project SET projectName = '$project_name', projectDescription = '$project_description' WHERE projectID = '$project_id'";
         $r = @mysqli_query($dbc, $q);
 
         if ($r){
-            redirect_user("../DisplayProjectPage/display_project.php?id=$project_id");
+            // redirect_user("../DisplayProjectPage/display_project.php?id=$project_id");
         } else { // If it did not run OK.
 			
 			// Public message:
