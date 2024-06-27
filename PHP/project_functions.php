@@ -235,10 +235,6 @@ function update_project($dbc, $user_id, $project_id){
 						
 		} // End of if ($r) IF.
 
-		mysqli_close($dbc); // Close the database connection.
-
-		exit();
-
     } else{
 
         // Returns error messages
