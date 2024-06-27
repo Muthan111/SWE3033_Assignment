@@ -149,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                             </select>
                         </div>
                     </nav>
+                    <a class="logout-link" href="../logout.php">LOGOUT</a>
                 </nav>
             </section>    
         </div>

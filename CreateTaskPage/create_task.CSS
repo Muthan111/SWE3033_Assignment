@@ -363,6 +363,16 @@ body {
     width: calc(100% - 30px); /* Adjust the width considering icon and padding */
 }
 
+.logout-link {
+  flex: 1;
+  position: relative;
+  line-height: 150%;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #888;
+  left: 10px;
+}
+
 /* ---------------create-task-start-here-----------------------------*/
  
 .main-container {
