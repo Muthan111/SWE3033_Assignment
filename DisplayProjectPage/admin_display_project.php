@@ -11,19 +11,20 @@
         
         if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['UpdateProject'])){
 
+            echo "TEST 0";
             $error_messages = update_project($dbc, $user_id, $project_id);
+            echo "TEST 1";
 
             $task_id = $_POST['task-id'];
             $task_name = $_POST['task-title'];
             $task_desc = $_POST['task-description'];
             $due_date = $_POST['task-due-date'];
             $status = $_POST['task-status'];
-
-            echo "TEST";
-
+            echo "TEST 2";
+            
             foreach($task_id AS $key => $value){
 
-                
+                echo "TEST 3";
 
                 $error = validate_task_id($dbc, $value);
 
@@ -33,11 +34,13 @@
 
                 if(!empty($error)){
                     $error_messages = array_merge($error_messages, $error);
+                    echo "TEST 4";
+                    break;
                 }
 
             }
 
-            echo "TEST";
+            echo "TEST 5";
 
             echo "<script>window.top.location = window.top.location;</script>";
 

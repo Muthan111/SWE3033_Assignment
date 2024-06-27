@@ -304,81 +304,12 @@ function update_task($dbc, $project_id, $task_id, $task_title, $task_description
 						
 		} // End of if ($r) IF.
 
-		mysqli_close($dbc); // Close the database connection.
-
-		exit();
-
     } else{
 
         // Returns error messages
         return $errors;
 
     }
-}
-
-function update_task_status($dbc, $project_id, $task_id, $status) {
-
-    $errors = array_merge(validate_project_id($dbc, $project_id), validate_task_id ($dbc, $task_id)); // Initialize error array and check if task ID and project ID is valid // WILL THIS WORK???
-
-    // Validate status
-    if (empty($status)) {
-
-        $errors[] = "Status has not been properly initialised";
-
-    } else{
-
-        // Depending on the status code, the task will be assigned one of the following statuses
-        /*
-        status code 1 = "Ongoing"
-        status code 2 = "Completed"
-        status code 3 = "Unassigned"
-        status code 0 = "Expired
-        */
-        if ($status > 3 && $status < 0){
-
-            $errors[] = "Incorrect status code";
-
-        }
-
-    }
-
-    if (empty($errors)){
-
-        $project_id = mysqli_real_escape_string($dbc, $project_id);
-
-        // Make the query
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-        $q = "UPDATE task SET status = '$status' WHERE projectID = '$project_id' AND taskID = '$task_id'";		
-		$r = @mysqli_query ($dbc, $q); // Run the query.
-
-		if ($r) { // If it ran OK.
-            
-            // Redirects the user to a page, temporary placeholder for now
-            redirect_user("temp");	
-		
-		} else { // If it did not run OK.
-			
-			// Public message:
-            // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
-            echo '<h1>System Error</h1>
-			<p class="error">The task encountered an error on our server, your task was not updated. We apologised for any incovenience.</p>'; 
-			
-			// Debugging message:
-			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
-						
-		} // End of if ($r) IF.
-
-		mysqli_close($dbc); // Close the database connection.
-
-		exit();
-
-    } else{
-
-        // Returns error messages
-        return $errors;
-
-    }
-
 }
 
 function return_task_list($dbc, $project_id, $user_id){
