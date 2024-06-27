@@ -28,6 +28,23 @@ if(!empty($_GET['id'])){
     $current_project_id = $_GET['id'];
     $errors = validate_project_id($dbc, $current_project_id);
 
+
+    $error_message = '';
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
+        $projectCode = $_POST['projectCode'];
+        $already_joined = join_project($dbc, $projectCode, $user_id);
+
+        if (!$already_joined) {
+            $redirect_url = '../DisplayProjectPage/display_project.php?id='. $projectCode;
+            echo "<script>window.open('$redirect_url', '_blank');</script>";
+            exit();
+        } else {
+            $error_message = "You have already joined this project"; 
+        }
+    }
+
+
     if(empty($errors)){
 
         $q = "SELECT isadmin FROM userproject WHERE projectID = '$current_project_id' AND userID = '$user_id'";
@@ -43,7 +60,7 @@ if(!empty($_GET['id'])){
             $errors[]="YOU DO NOT HAVE ACCESS TO THIS PAGE!";
         }
 
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['task-submit'])){
 
             $errors = create_task($dbc, $current_project_id);
 

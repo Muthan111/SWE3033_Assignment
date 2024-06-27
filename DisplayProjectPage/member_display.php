@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-    <link rel="stylesheet" href="./sidebar.CSS" />
+    <link rel="stylesheet" href="./member_display.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700&display=swap"
@@ -123,7 +123,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                         </div>
                     </nav>
                 </nav>
-            </section>    
+            </section>
+        </div>
+            <section class="main-container">
+                    <!------------------------------------------------------------------- HAU WEN PART ----------------------------------------------------------------------------------->
+        <header>
+            <h1 id="project-title">Project One</h1>
+            <div class="project-dates">
+                <span id="project-start-date">Start Date: 2024-01-01</span> |
+                <span id="project-end-date">End Date: 2024-12-31</span>
+        </header>
+        <div class="project-details">
+            <div class="project-name">
+                <label for="project-name">Project Name</label>
+                <span id="project-name">Example Project Name</span>
+            </div>
+            <div class="project-id">
+                <label for="project-id">Project ID</label>
+                <span id="project-id">12345</span>
+            </div>
+        </div>
+        <div class="project-description">
+            <label for="project-description">Project Description</label>
+            <span id="project-description">This is an example project description.</span>
+        </div>
+        <div class="tasks">
+            <h2>
+                Tasks
+            </h2>
+            <?php
+                //NEEDS TESTING
+
+                if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                    $errors = join_task($dbc, $project_id, $_POST['taskIDInput'], $user_id);
+
+                    if(!empty($errors)){
+
+                        echo '<p class="errorclass">The following error(s) occurred:<br />';
+                        foreach ($errors as $msg) {
+                            echo " - $msg<br />\n";
+                        }
+                        echo '</p><p class="errorclass">Please try again.</p>';
+
+                    }
+                }
+
+            ?>
+            <form class="task-input-container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
+                <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
+                <button id="addTaskButton" disabled type="submit" value="Submit">Add Task</button>
+            </form>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Task Description</th>
+                        <th>Task Status</th>
+                        <th>Days Remaining</th>
+                    </tr>
+                </thead>
+                <tbody id="task-list">
+                    <!-- Tasks will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+                    <!-------------------------------------------------------------- HAU WEN PART -------------------------------------------------------------->
+            </section>   
             <div id="joinCodePopup" class="popup">
             <div class="popup-content">
                 <span class="close">&times;</span>

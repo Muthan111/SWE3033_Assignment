@@ -360,6 +360,187 @@ body {
     width: calc(100% - 30px); /* Adjust the width considering icon and padding */
 }
 
+
+
+/* --------------------------------------------------------------------------HAU WEN PART ---------------------------------------------------------*/
+
+.main-container {
+  flex: 1;
+  max-width: 800px;
+  left: 2%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 137px;
+  padding-left: 272px;
+  z-index: 1;
+  background-color: var(--color-white); /* Added background color */
+}
+
+header {
+  padding: 10px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 2em;
+  font-family: var(--small-text);
+  font-weight: 600;
+}
+
+.project-dates {
+  font-size: 0.8em;
+  font-family: var(--small-text);
+  font-weight: 500;
+}
+
+.project-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.project-details div {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.project-details label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-family: var(--small-text);
+}
+
+.project-details span {
+  display: block;
+  padding: 10px;
+  font-size: 1em;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: var(--small-text);
+}
+
+.project-description {
+  margin-bottom: 20px;
+}
+
+.project-description label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-family: var(--small-text);
+}
+
+.project-description span {
+  display: block;
+  padding: 10px;
+  font-size: 1em;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 100px;
+  overflow-y: auto;
+  font-family: var(--small-text);
+}
+
+.tasks {
+  margin-bottom: 20px;
+}
+
+.tasks h2 {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  font-family: var(--small-text);
+  font-weight: 600;
+}
+
+.tasks .task-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.tasks .task-input-container input {
+  width: calc(100% - 100px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 25px 0 0 25px;
+  border-right: none;
+  font-size: 1em;
+  font-family: var(--small-text);
+}
+
+.tasks .task-input-container button {
+  width: 100px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 0 25px 25px 0;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+  border-left: none;
+  font-family: var(--small-text);
+}
+
+.tasks .task-input-container button:hover {
+  background-color: #0056b3;
+}
+
+.tasks table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tasks th,
+.tasks td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-family: var(--small-text);
+}
+
+.tasks th {
+  background: #f9f9f9;
+  font-weight: 600;
+}
+
+.task-status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  margin-right: 10px;
+  display: inline-block;
+  font-family: var(--small-text);
+}
+
+.status-unassigned {
+  background-color: grey;
+}
+
+.status-ongoing {
+  background-color: yellow;
+  color: black;
+}
+
+.status-completed {
+  background-color: green;
+}
+
+.status-expired {
+  background-color: red;
+}
+/* ----------------------------------------------------------------HAU WEN PART----------------------------------------------------------------------------- */
+
 .popup {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */

@@ -43,7 +43,7 @@ if(!empty($_GET['id'])){
         if ($check == 1){
             include('admin_display_project.php');
         } else{
-            include('member_display_project.php');
+            include('member_display.php');
         }
 
     } else{

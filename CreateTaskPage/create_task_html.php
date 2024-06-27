@@ -121,7 +121,7 @@
                         <div class="task-date">
                             <input name="task-due-date" type="date" id="project-end-date" placeholder="DD/MM/YYYY">
                         </div>
-                        <button class="task-button">
+                        <button name ="task-submit" class="task-button" value="Submit">
                             <div class="task-button-inner" onclick="createNewTask()">
                                 <div class="icon">+</div>
                                 <div>Create a New Task</div>
@@ -146,37 +146,80 @@
                                     ";
 
                                 }
-
                         ?>
                     </div>
                 </form>
             </section>
+            <div id="joinCodePopup" class="popup">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <form id="joinCodeForm" method="post">
+                    <input type="text" id="projectCode" placeholder="Enter Project Code" class="popupInputField" name="projectCode" required>
+                    <button type="submit" value="Submit">Join Project</button>
+                    <div id="error-message" style="color: red;"><?php echo $error_message; ?></div>
+                    <input type="hidden" id="phpErrorMessage" value="<?php echo $error_message; ?>" />
+                </form>
+            </div>
+        </div>
     </main>
     <script>
-        // var goHome = document.getElementById("HomeButton");
-        // if (goHome) {
-        //     goHome.addEventListener("click", function (e) {
-        //         window.location.href = "../index.php";
-        //         }
-        //     );
-        // }
-
-        // document.getElementById('adminProjectSelect').addEventListener('change', function(e){
-        //     window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
-        //     });
+        var goHome = document.getElementById("HomeButton");
+        if (goHome) {
+            goHome.addEventListener("click", function (e) {
+                window.location.href = "../index.php";
+                }
+            );
+        }
+        document.getElementById('adminProjectSelect').addEventListener('change', function(e){
+            window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
+            });
         
-        // document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
-        //     window.location.href = "../DisplayProjectPage/display_project_page.php?id="+ this.value;
-        //     });
-
-        //     function generateProjectID() {
-        //     const projectID = 'PROJ-' + Math.floor(Math.random() * 1000000);
-        //     document.getElementById('generatedProjectID').innerText = projectID;
-        // }
+        document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
+            window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
+            });
 
         function generateTaskID() {
             window.top.location = window.top.location;
         }
+
+        // Get the popup
+        var popup = document.getElementById("joinCodePopup");
+
+        // Get the button that opens the popup
+        var btn = document.getElementById("JoinByCodeButton");
+
+        // Get the <span> element that closes the popup
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the popup 
+        btn.onclick = function() {
+            popup.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the popup
+        span.onclick = function() {
+            popup.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the popup, close it
+        window.onclick = function(event) {
+            if (event.target == popup) {
+                popup.style.display = "none";
+            }
+        }
+
+        // Show error message if exists
+        var phpErrorMessage = document.getElementById("phpErrorMessage").value;
+        if (phpErrorMessage) {
+            var errorMessage = document.getElementById("error-message");
+            errorMessage.style.display = "block";
+            errorMessage.innerText = phpErrorMessage;
+            popup.style.display = "block";
+        }
+        //     function generateProjectID() {
+        //     const projectID = 'PROJ-' + Math.floor(Math.random() * 1000000);
+        //     document.getElementById('generatedProjectID').innerText = projectID;
+        // }
 
         // function createNewTask() {
         //     const taskName = document.getElementById("taskName").value;
