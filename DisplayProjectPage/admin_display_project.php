@@ -236,10 +236,10 @@
         //         addTaskToList(taskList, task.name, task.description, task.status, task.dueDate);
         //     });
 
-        //     // Event listener to display task creation form
-        //     document.getElementById('createTaskButton').addEventListener('click', function() {
-        //         window.location = "../CreateTaskPage/create_task.php?id=<?php echo $project_id;?>";
-        //     });
+            // Event listener to display task creation form
+            document.getElementById('createTaskButton').addEventListener('click', function() {
+                window.location = "../CreateTaskPage/create_task.php?id=<?php echo $project_id;?>";
+            });
 
         //     // Event listener to calculate and display days remaining for a task
         //     document.getElementById('task-due-date').addEventListener('change', function() {

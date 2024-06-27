@@ -89,8 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                     if($check == 1){
                                         while($project = mysqli_fetch_assoc($data)){
                                             $project_name = $project['projectName'];
-                                            $project_id = $project['projectID'];
-                                            echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                            $admin_project_id = $project['projectID'];
+                                            echo "<option value='$admin_project_id'>$project_name - PID:$admin_project_id</option>";
                                         }
                                     }
                                 ?>
@@ -111,12 +111,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                     if($check == 1){
                                         while($project = mysqli_fetch_assoc($data)){
                                             $project_name = $project['projectName'];
-                                            $project_id = $project['projectID'];
-                                            echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                            $member_project_id = $project['projectID'];
+                                            echo "<option value='$member_project_id'>$project_name - PID:$member_project_id</option>";
                                         }
-                                    }
-
-                                    mysqli_close($dbc); // Close database connection
+                                    }    
                                 ?>
                             </select>
                         </div>
@@ -259,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                 ?>
             </ul>
             <div class="buttons">
-                <button id="createTaskButton">Create Task</button>
+                <button id="createTaskButton" form="none">Create Task</button>
                 <button id="updateProjectButton" value="Submit" type="submit" name="UpdateProject">Update Project</button>
             </div>
         </section>
@@ -324,6 +322,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
 
+        // Event listener to display task creation form
+        document.getElementById('createTaskButton').addEventListener('click', function(e) {
+            window.location = "../CreateTaskPage/create_task.php?id=<?php echo $project_id;?>";
+        });
+
         // Get the popup
         var popup = document.getElementById("joinCodePopup");
 
@@ -375,3 +378,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             console.log(`Updated task "${name}" to have ${newDaysRemaining} days remaining`);
         }
     </script>
+<?php mysqli_close($dbc); // Close database connection ?>
