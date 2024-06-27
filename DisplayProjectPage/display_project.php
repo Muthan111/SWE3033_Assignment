@@ -41,7 +41,7 @@ if(!empty($_GET['id'])){
         $due = $data['dueDate'];
 
         if ($check == 1){
-            include('admin_display_project.php');
+            include('admin_display.php');
         } else{
             include('member_display.php');
         }
