@@ -181,7 +181,7 @@ function join_task($dbc, $project_id, $task_id, $user_id){
             } else{
 
                 // Checks if the user is already part of the task
-                $q = "SELECT userProjectTaskID FROM userprojecttask WHERE projectID = '$project_id' AND userID = '$user_id' AND taskID = '$task_id'";
+                $q = "SELECT * FROM userprojecttask WHERE projectID = '$project_id' AND userID = '$user_id' AND taskID = '$task_id'";
                 $r = @mysqli_query($dbc, $q);
 
                 if(mysqli_num_rows($r) > 0 ){
