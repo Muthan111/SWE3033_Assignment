@@ -377,5 +377,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         function updateTaskDaysRemaining(name, newDaysRemaining) {
             console.log(`Updated task "${name}" to have ${newDaysRemaining} days remaining`);
         }
+
+        // Event listener to calculate and display days remaining for a task
+        document.getElementById('task-due-date').addEventListener('change', function() {
+            const dueDate = new Date(document.getElementById('task-due-date').value);
+            const currentDate = new Date();
+            const timeDiff = dueDate - currentDate;
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            document.getElementById('daysRemaining').value = daysRemaining;
+        });
     </script>
 <?php mysqli_close($dbc); // Close database connection ?>

@@ -14,6 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         $error_message = "You have already joined this project"; 
     }
 }
+
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
+    $errors = join_task($dbc, $project_id, $_POST['taskIDInput'], $user_id);
+}
 ?>
 <html>
 <head>
@@ -63,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                     if($check == 1){
                                         while($project = mysqli_fetch_assoc($data)){
                                             $project_name = $project['projectName'];
-                                            $project_id = $project['projectID'];
-                                            echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                            $admin_project_id = $project['projectID'];
+                                            echo "<option value='$admin_project_id'>$project_name - PID:$admin_project_id</option>";
                                         }
                                     }
                                 ?>
@@ -85,12 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                     if($check == 1){
                                         while($project = mysqli_fetch_assoc($data)){
                                             $project_name = $project['projectName'];
-                                            $project_id = $project['projectID'];
-                                            echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
+                                            $member_project_id = $project['projectID'];
+                                            echo "<option value='$member_project_id'>$project_name - PID:$member_project_id</option>";
                                         }
                                     }
-
-                                    mysqli_close($dbc); // Close database connection
                                 ?>
                             </select>
                         </div>
@@ -124,16 +126,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         <div class="project-details">
             <div class="project-name">
                 <label for="project-name">Project Name</label>
-                <span id="project-name">Example Project Name</span>
+                <span id="project-name"><?php echo $project_name;?></span>
             </div>
             <div class="project-id">
                 <label for="project-id">Project ID</label>
-                <span id="project-id">12345</span>
+                <span id="project-id"><?php echo $project_id; ?></span>
             </div>
         </div>
         <div class="project-description">
             <label for="project-description">Project Description</label>
-            <span id="project-description">This is an example project description.</span>
+            <span id="project-description"><?php echo $project_desc; ?></span>
         </div>
         <div class="tasks">
             <h2>
@@ -141,25 +143,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             </h2>
             <?php
                 //NEEDS TESTING
-
-                if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
-                    $errors = join_task($dbc, $project_id, $_POST['taskIDInput'], $user_id);
-
-                    if(!empty($errors)){
-
-                        echo '<p class="errorclass">The following error(s) occurred:<br />';
-                        foreach ($errors as $msg) {
-                            echo " - $msg<br />\n";
-                        }
-                        echo '</p><p class="errorclass">Please try again.</p>';
-
+                if(!empty($errors)){
+                    echo '<p class="errorclass">The following error(s) occurred:<br />';
+                    foreach ($errors as $msg) {
+                        echo " - $msg<br />\n";
                     }
+                    echo '</p><p class="errorclass">Please try again.</p>';
                 }
+
+
 
             ?>
             <form class="task-input-container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
                 <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
-                <button id="addTaskButton" disabled type="submit" value="Submit" name="addTask">Add Task</button>
+                <button id="addTaskButton" type="submit" value="Submit" name="addTask">Add Task</button>
             </form>
             
             <table>
@@ -172,7 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                     </tr>
                 </thead>
                 <tbody id="task-list">
-                    <!-- Tasks will be added here dynamically -->
+                    <?php
+                        
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -243,3 +242,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             popup.style.display = "block";
         }
     </script>
+<?php mysqli_close($dbc); // Close database connection ?>
