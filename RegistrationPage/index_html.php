@@ -14,7 +14,7 @@
             class="scorpio-task-manager-logo"
             loading="lazy"
             alt=""
-            src="RegistrationPage/scorpio-icon.png"
+            src="../images/scorpio-icon.png"
           />
           <h2 class="scorpio-task-manager">Scorpio Task Manager</h2>
           <div class="create-an-account-group">

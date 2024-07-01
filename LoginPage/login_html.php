@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
-    <link rel="stylesheet" href="./Login.css" />
+    <link rel="stylesheet" href="./login.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"/>
   </head>
   <body>
@@ -15,7 +15,7 @@
               class="frame-child"
               loading="lazy"
               alt=""
-              src="scorpio-icon.png"
+              src="../images/scorpio-icon.png"
             />
           </div>
           <div class="scorpio-task-manager-wrapper">

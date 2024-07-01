@@ -38,7 +38,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
         <div class="background-fill" id="bg-fill">
             <section class="homepage-sidebar2" id="SidebarSection">
                 <h1 class="app-title" id="ScorpioTaskManager">Scorpio Task Manager</h1>
-                <img class="scorpio-icon" loading="lazy" alt="" src="scorpio-icon.png" />
+                <img class="scorpio-icon" loading="lazy" alt="" src="../images/scorpio-icon.png" />
     
                 <nav class="sidebarui">
                     <nav class="navigation" id="JoinProjectNavigator">
@@ -46,11 +46,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                             <b class="join-projects2">Join Projects</b>
                         </b>
                         <button class="homebutton" id="HomeButton">
-                            <img class="home-icon3" alt="" src="home-icon.png" />
+                            <img class="home-icon3" alt="" src="../images/home-icon.png" />
                             <div class="home2">Home</div>
                         </button>
                         <button class="joinbycodebutton" id="JoinByCodeButton">
-                            <img class="add-icon3" alt="" src="add-icon.png" />
+                            <img class="add-icon3" alt="" src="../images/add-icon.png" />
                             <div class="join-by-code2">Join by code</div>
                         </button>
                     </nav>
@@ -59,7 +59,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                             <b class="participating-projects2">Admin Project List</b>
                         </div>
                         <div class="select-container">
-                            <img src="select-icon.png" alt="Project Select Dropdown Icon" />
+                            <img src="../images/select-icon.png" alt="Project Select Dropdown Icon" />
                             <select class="menu-item14" id="adminProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
@@ -80,7 +80,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                             <b class="participating-projects2">Member Project List</b>
                         </div>
                         <div class="select-container">
-                            <img src="select-icon.png" alt="Project Select Dropdown Icon" />
+                            <img src="../images/select-icon.png" alt="Project Select Dropdown Icon" />
                             <select class="menu-item14" id="memberProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
@@ -102,7 +102,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                             <b class="project-forum2">Project Forum</b>
                         </b>
                         <div class="select-container">
-                            <img src="chat-icon.png" alt="Project Chat Select Dropdown Icon" />
+                            <img src="../images/chat-icon.png" alt="Project Chat Select Dropdown Icon" />
                             <select class="menu-item15" id="SelectChat">
                                 <option value="" disabled selected>Select Chat</option>
                                 <option value="chat1">- Chat 1</option>
