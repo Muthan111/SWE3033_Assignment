@@ -269,7 +269,7 @@ function update_task($dbc, $project_id, $task_id, $task_title, $task_description
     }
 
     // Validate status
-    if(empty($task_status)){
+    if(empty($task_status) && $task_status != 0){
 
         $errors[] = "Task not assigned a status";
 
