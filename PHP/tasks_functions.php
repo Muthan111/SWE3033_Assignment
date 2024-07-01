@@ -292,6 +292,7 @@ function update_task($dbc, $project_id, $task_id, $task_title, $task_description
 
         if($r){
             // redirect_user("../DisplayProjectPage/display_project.php?id='$project_id'");
+            return $errors;
         } else { // If it did not run OK.
 			
 			// Public message:

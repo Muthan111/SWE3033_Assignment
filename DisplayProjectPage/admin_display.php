@@ -3,7 +3,8 @@
         
 if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['UpdateProject'])){
 
-    $error_messages = update_project($dbc, $user_id, $project_id);
+    $error_messages = array();
+    $error_messages = array_merge($error_messages, update_project($dbc, $user_id, $project_id));
 
     $task_id = $_POST['task-id'];
     $task_name = $_POST['task-title'];
@@ -17,7 +18,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['UpdateProject'])){
         $error = validate_task_id($dbc, $value);
 
         if(empty($error)){
-            $error = update_task($dbc, $project_id, $value, $task_name[$key], $task_desc[$key], $due_date[$key], $status[$key]);
+            $error = array();
+            $error = array_merge($error, update_task($dbc, $project_id, $value, $task_name[$key], $task_desc[$key], $due_date[$key], $status[$key]));
         }
 
         if(!empty($error)){

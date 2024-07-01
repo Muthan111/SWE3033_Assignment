@@ -223,6 +223,7 @@ function update_project($dbc, $user_id, $project_id){
 
         if ($r){
             // redirect_user("../DisplayProjectPage/display_project.php?id=$project_id");
+            return $errors;
         } else { // If it did not run OK.
 			
 			// Public message:

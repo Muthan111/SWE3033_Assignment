@@ -18,7 +18,7 @@
     Created on 04/06/2024 by Sean
 */
 
-require ('PHP/login_functions.inc.php');
+require ('PHP/redirect_function.php');
 
 // Check if user already logged in
 session_start();
@@ -122,20 +122,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		
 	if (empty($errors)) {
 
-		// Make the query:
-    // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-		$q = "INSERT INTO account (username, firstName, lastName, email, password) VALUES ('$username', '$first_name', '$last_name', '$email', '$password')";		
-		$r = @mysqli_query ($dbc, $q); // Run the query.
-		if ($r) { // If it ran OK.
+        // Make the query:
+        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
+        $q = "INSERT INTO account (username, firstName, lastName, email, password) VALUES ('$username', '$first_name', '$last_name', '$email', '$password')";		
+        $r = @mysqli_query ($dbc, $q); // Run the query.
+        if ($r) { // If it ran OK.
             
-      // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
-      $q = "SELECT userID, username FROM account WHERE email = '$email'";
-      $r = @mysqli_query ($dbc, $q);
+            // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
+            $q = "SELECT userID, username FROM account WHERE email = '$email'";
+            $r = @mysqli_query ($dbc, $q);
 
-      $row = mysqli_fetch_assoc($r);
-      // Redirects the user to a page, temporary placeholder for now
-      redirect_user("LoginPage/login.php");	
-		
+            $row = mysqli_fetch_assoc($r);
+            // Redirects the user to a page, temporary placeholder for now
+            redirect_user("LoginPage/login.php");	
+                
 		} else { // If it did not run OK.
 			
 			// Public message:
