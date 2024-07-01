@@ -200,7 +200,7 @@ function join_task($dbc, $project_id, $task_id, $user_id){
         $r = @mysqli_query($dbc, $q);
 
         if($r){
-            redirect_user("Temp"); // Redirect user back to the project page
+            //redirect_user("Temp"); // Redirect user back to the project page
         } else{
             // Public message:
             // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED

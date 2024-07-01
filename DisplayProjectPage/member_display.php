@@ -150,9 +150,6 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                     }
                     echo '</p><p class="errorclass">Please try again.</p>';
                 }
-
-
-
             ?>
             <form class="task-input-container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
                 <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
@@ -165,12 +162,27 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                         <th>Task Name</th>
                         <th>Task Description</th>
                         <th>Task Status</th>
+                        <th>Due Date</th>
                         <th>Days Remaining</th>
                     </tr>
                 </thead>
                 <tbody id="task-list">
                     <?php
-                        
+                        $data = return_task_list($dbc, $project_id, $user_id);
+
+                        if($data != null){
+                            
+                            while ($task = mysqli_fetch_assoc($data)){
+                                echo"
+                                <td>" . $task['taskName'] . "</td>
+                                <td>" . $task['description'] . "</td>
+                                <td>" . return_task_status($dbc, $task['taskID']) . "</td>
+                                <td id='task-due-date'>" . $task['dueDate'] . "</td>
+                                <td id='daysRemaining'></td>
+                                ";
+                            }
+
+                        }
                     ?>
                 </tbody>
             </table>
@@ -241,5 +253,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
             errorMessage.innerText = phpErrorMessage;
             popup.style.display = "block";
         }
+
+        const dueDate = new Date(document.getElementById('task-due-date').innerHTML);
+        const currentDate = new Date();
+        const timeDiff = dueDate - currentDate;
+        const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        document.getElementById('daysRemaining').innerHTML = daysRemaining;
     </script>
 <?php mysqli_close($dbc); // Close database connection ?>
