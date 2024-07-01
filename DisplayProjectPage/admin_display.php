@@ -32,6 +32,9 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['UpdateProject'])){
     if (empty($error_messages)){
         $project_name = $_POST['project-title'];
         $project_desc = $_POST['project-description'];
+        echo '<script type="text/javascript">
+            window.onload = function () { alert("Project Updated Successfully"); } 
+        </script>'; 
     }
 }
 
