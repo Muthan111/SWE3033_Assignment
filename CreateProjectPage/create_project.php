@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             </section>    
         </div>
         <section class="main-container">
-            <form class="main-content" id="create-project-form" action="CreateProject.php" method="post">
+            <form class="main-content" id="create-project-form" action="create_project.php" method="post">
                 <h1>Create a New Project</h1>
                 <div class="generate-id form-group">
                     <input type="text" id="project-id" name="project-id" value="<?php echo generate_id($dbc, 4) ?>">

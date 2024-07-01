@@ -131,7 +131,7 @@ function create_project($dbc, $creator_id){
 
             if ($r){
                 // Redirects the user to a page, temporary placeholder for now
-                redirect_user("../HomePage/Homepage.php");	
+                redirect_user("../HomePage/homepage.php");	
             } else{
                 // Public message:
                 // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
