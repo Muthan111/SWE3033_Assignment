@@ -22,9 +22,7 @@
     10. Fixed some error messages and some SQL functions. (26/06/2024)
 
     TO DO:
-    1. Update SQL statements once database is completed
-    2. Update HTML code once web pages are completed
-    3. Join task function
+    1. Testing
     
     Created on 05/06/2024 by Sean
 */
