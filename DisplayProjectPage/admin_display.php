@@ -259,8 +259,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                             </select>";
                                 }
                             echo "
-                                <input type='date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
-                                <input type='text' readonly='' id='daysRemaining'>
+                                <input type='date' id='task-due-date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
+                                <input type='text' readonly='' id='daysRemaining' value=''>
                             </li>
                             ";
 
@@ -275,33 +275,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
             </div>
         </section>
     </form>
-
-    <!-- Task form container, initially hidden -->
-    <div id="taskFormContainer" style="display: none;">
-        <div class="task-form">
-            <label for="task-name">Task Name</label>
-            <input type="text" id="task-name">
-
-            <label for="task-description">Task Description</label>
-            <input type="text" id="task-description">
-
-            <label for="task-status">Task Status</label>
-            <select id="task-status">
-                <option value="unassigned">Unassigned</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
-                <option value="expired">Expired</option>
-            </select>
-
-            <label for="task-due-date">Due Date</label>
-            <input type="date" id="task-due-date">
-
-            <label for="task-days-remaining">Days Remaining</label>
-            <input type="text" id="task-days-remaining" readonly>
-
-            <button id="saveTaskButton">Save Task</button>
-        </div>
-    </div>
 
              <!------------------------------------------------------------ HAU WEN PART ---------------------------------------------------------------------------->
         </section>
@@ -390,6 +363,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         function updateTaskDaysRemaining(name, newDaysRemaining) {
             console.log(`Updated task "${name}" to have ${newDaysRemaining} days remaining`);
         }
+        
+        const dueDate = new Date(document.getElementById('task-due-date').value);
+        const currentDate = new Date();
+        const timeDiff = dueDate - currentDate;
+        const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        document.getElementById('daysRemaining').value = daysRemaining;
 
         // Event listener to calculate and display days remaining for a task
         document.getElementById('task-due-date').addEventListener('change', function() {
