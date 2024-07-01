@@ -174,11 +174,13 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                             
                             while ($task = mysqli_fetch_assoc($data)){
                                 echo"
-                                <td>" . $task['taskName'] . "</td>
-                                <td>" . $task['description'] . "</td>
-                                <td>" . return_task_status($dbc, $task['taskID']) . "</td>
-                                <td id='task-due-date'>" . $task['dueDate'] . "</td>
-                                <td id='daysRemaining'></td>
+                                <tr>
+                                    <td>" . $task['taskName'] . "</td>
+                                    <td>" . $task['description'] . "</td>
+                                    <td>" . return_task_status($dbc, $task['taskID']) . "</td>
+                                    <td class='task-due-date'>" . $task['dueDate'] . "</td>
+                                    <td class='daysRemaining'></td>
+                                </tr>
                                 ";
                             }
 
@@ -254,10 +256,17 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
             popup.style.display = "block";
         }
 
-        const dueDate = new Date(document.getElementById('task-due-date').innerHTML);
-        const currentDate = new Date();
-        const timeDiff = dueDate - currentDate;
-        const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        document.getElementById('daysRemaining').innerHTML = daysRemaining;
+        const dates = document.getElementsByClassName('task-due-date');
+        const days = document.getElementsByClassName('daysRemaining');
+
+        for (var i = 0, length = dates.length; i < length; i++){
+            dueDate = new Date(dates[i].innerHTML);
+            currentDate = new Date()
+            window.alert(dueDate);
+            timeDiff = dueDate - currentDate;
+            daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            window.alert(daysRemaining);
+            days[i].innerHTML = daysRemaining;
+        }
     </script>
 <?php mysqli_close($dbc); // Close database connection ?>

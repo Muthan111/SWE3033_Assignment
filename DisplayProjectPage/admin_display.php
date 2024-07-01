@@ -259,8 +259,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                             </select>";
                                 }
                             echo "
-                                <input type='date' id='task-due-date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
-                                <input type='text' readonly='' id='daysRemaining' value=''>
+                                <input type='date' class='task-due-date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
+                                <input type='text' readonly='' class='daysRemaining' value=''>
                             </li>
                             ";
 
@@ -363,20 +363,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         function updateTaskDaysRemaining(name, newDaysRemaining) {
             console.log(`Updated task "${name}" to have ${newDaysRemaining} days remaining`);
         }
-        
-        const dueDate = new Date(document.getElementById('task-due-date').value);
-        const currentDate = new Date();
-        const timeDiff = dueDate - currentDate;
-        const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        document.getElementById('daysRemaining').value = daysRemaining;
+       
+        const dates = document.getElementsByClassName('task-due-date');
+        const days = document.getElementsByClassName('daysRemaining');
 
-        // Event listener to calculate and display days remaining for a task
-        document.getElementById('task-due-date').addEventListener('change', function() {
-            const dueDate = new Date(document.getElementById('task-due-date').value);
-            const currentDate = new Date();
-            const timeDiff = dueDate - currentDate;
-            const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            document.getElementById('daysRemaining').value = daysRemaining;
-        });
+        for (var i = 0, length = dates.length; i < length; i++){
+            dueDate = new Date(dates[i].value);
+            currentDate = new Date()
+            timeDiff = dueDate - currentDate;
+            daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            days[i].value = daysRemaining;
+
+            dates[i].addEventListener('change', function(){
+                dueDate = new Date(dates[i].value);
+                currentDate = new Date()
+                timeDiff = dueDate - currentDate;
+                daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                days[i].value = daysRemaining;
+            })
+        }
     </script>
 <?php mysqli_close($dbc); // Close database connection ?>
