@@ -262,10 +262,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
         for (var i = 0, length = dates.length; i < length; i++){
             dueDate = new Date(dates[i].innerHTML);
             currentDate = new Date()
-            window.alert(dueDate);
             timeDiff = dueDate - currentDate;
             daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            window.alert(daysRemaining);
             days[i].innerHTML = daysRemaining;
         }
     </script>
