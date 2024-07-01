@@ -6,26 +6,32 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['UpdateProject'])){
     $error_messages = array();
     $error_messages = array_merge($error_messages, update_project($dbc, $user_id, $project_id));
 
-    $task_id = $_POST['task-id'];
-    $task_name = $_POST['task-title'];
-    $task_desc = $_POST['task-description'];
-    $due_date = $_POST['task-due-date'];
-    $status = $_POST['task-status'];
-    
-    
-    foreach($task_id AS $key => $value){
+    if(!empty($_POST['task-id'])){
+        $task_id = $_POST['task-id'];
+        $task_name = $_POST['task-title'];
+        $task_desc = $_POST['task-description'];
+        $due_date = $_POST['task-due-date'];
+        $status = $_POST['task-status'];
+        
+        foreach($task_id AS $key => $value){
 
-        $error = validate_task_id($dbc, $value);
+            $error = validate_task_id($dbc, $value);
 
-        if(empty($error)){
-            $error = array();
-            $error = array_merge($error, update_task($dbc, $project_id, $value, $task_name[$key], $task_desc[$key], $due_date[$key], $status[$key]));
+            if(empty($error)){
+                $error_messages = array_merge($error_messages, update_task($dbc, $project_id, $value, $task_name[$key], $task_desc[$key], $due_date[$key], $status[$key]));
+            }
+
+            if(!empty($error)){
+                $error_messages = array_merge($error_messages, $error);
+                break;
+            }
         }
 
-        if(!empty($error)){
-            $error_messages = array_merge($error_messages, $error);
-            break;
-        }
+    }
+
+    if (empty($error_messages)){
+        $project_name = $_POST['project-title'];
+        $project_desc = $_POST['project-description'];
     }
 }
 
@@ -90,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                     list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
                                     if($check == 1){
                                         while($project = mysqli_fetch_assoc($data)){
-                                            $project_name = $project['projectName'];
+                                            $admin_project_name = $project['projectName'];
                                             $admin_project_id = $project['projectID'];
                                             echo "<option value='$admin_project_id'>$project_name - PID:$admin_project_id</option>";
                                         }
@@ -112,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
 
                                     if($check == 1){
                                         while($project = mysqli_fetch_assoc($data)){
-                                            $project_name = $project['projectName'];
+                                            $member_project_name = $project['projectName'];
                                             $member_project_id = $project['projectID'];
                                             echo "<option value='$member_project_id'>$project_name - PID:$member_project_id</option>";
                                         }
@@ -195,65 +201,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
 
                     $data = return_task_list($dbc, $project_id, $user_id);
 
-                    while($task = mysqli_fetch_assoc($data)){
+                    if($data != null){
+                        while($task = mysqli_fetch_assoc($data)){
 
-                        echo "
-                        <li>
-                            <input type='text' name='task-title[]' value='" . $task['taskName'] . "'>
-                            <input type='hidden' name='task-id[]' value='" . $task['taskID'] . "'>
-                            <input type='text' name='task-description[]' value='" . $task['description'] . "'>";
-                            switch($task['status']){
-                                case 1:
-                                    echo "
-                                        <select name='task-status[]'>
-                                            <option value='1' selected>Ongoing</option>
-                                            <option value='2'>Completed</option>
-                                            <option value='3'>Unassigned</option>
-                                            <option value='0'>Expired</option>
-                                        </select>";
-                                    break;
-                                case 2:
-                                    echo "
-                                        <select name='task-status[]'>
-                                            <option value='1'>Ongoing</option>
-                                            <option value='2' selected>Completed</option>
-                                            <option value='3'>Unassigned</option>
-                                            <option value='0'>Expired</option>
-                                        </select>";
-                                    break;
-                                case 3:
-                                    echo "
-                                        <select name='task-status[]'>
-                                            <option value='1'>Ongoing</option>
-                                            <option value='2'>Completed</option>
-                                            <option value='3' selected>Unassigned</option>
-                                            <option value='0'>Expired</option>
-                                        </select>";
-                                    break;
-                                case 0:
-                                    echo "
-                                        <select name='task-status[]'>
-                                            <option value='1'>Ongoing</option>
-                                            <option value='2'>Completed</option>
-                                            <option value='3'>Unassigned</option>
-                                            <option value='0' selected>Expired</option>
-                                        </select>";
-                                    break;
-                                default:
-                                    echo "
-                                        <select name='task-status[]'>
-                                            <option value='1'>Ongoing</option>
-                                            <option value='2'>Completed</option>
-                                            <option value='3'>Unassigned</option>
-                                            <option value='0'>Expired</option>
-                                        </select>";
-                            }
-                        echo "
-                            <input type='date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
-                            <input type='text' readonly='' id='daysRemaining'>
-                        </li>
-                        ";
+                            echo "
+                            <li>
+                                <input type='text' name='task-title[]' value='" . $task['taskName'] . "'>
+                                <input type='hidden' name='task-id[]' value='" . $task['taskID'] . "'>
+                                <input type='text' name='task-description[]' value='" . $task['description'] . "'>";
+                                switch($task['status']){
+                                    case 1:
+                                        echo "
+                                            <select name='task-status[]'>
+                                                <option value='1' selected>Ongoing</option>
+                                                <option value='2'>Completed</option>
+                                                <option value='3'>Unassigned</option>
+                                                <option value='0'>Expired</option>
+                                            </select>";
+                                        break;
+                                    case 2:
+                                        echo "
+                                            <select name='task-status[]'>
+                                                <option value='1'>Ongoing</option>
+                                                <option value='2' selected>Completed</option>
+                                                <option value='3'>Unassigned</option>
+                                                <option value='0'>Expired</option>
+                                            </select>";
+                                        break;
+                                    case 3:
+                                        echo "
+                                            <select name='task-status[]'>
+                                                <option value='1'>Ongoing</option>
+                                                <option value='2'>Completed</option>
+                                                <option value='3' selected>Unassigned</option>
+                                                <option value='0'>Expired</option>
+                                            </select>";
+                                        break;
+                                    case 0:
+                                        echo "
+                                            <select name='task-status[]'>
+                                                <option value='1'>Ongoing</option>
+                                                <option value='2'>Completed</option>
+                                                <option value='3'>Unassigned</option>
+                                                <option value='0' selected>Expired</option>
+                                            </select>";
+                                        break;
+                                    default:
+                                        echo "
+                                            <select name='task-status[]'>
+                                                <option value='1'>Ongoing</option>
+                                                <option value='2'>Completed</option>
+                                                <option value='3'>Unassigned</option>
+                                                <option value='0'>Expired</option>
+                                            </select>";
+                                }
+                            echo "
+                                <input type='date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
+                                <input type='text' readonly='' id='daysRemaining'>
+                            </li>
+                            ";
 
+                        }
                     }
 
                 ?>
