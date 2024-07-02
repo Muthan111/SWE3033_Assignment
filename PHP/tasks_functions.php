@@ -117,7 +117,8 @@ function create_task($dbc, $project_id) {
 
 		if ($r) { // If it ran OK.
             
-            // Redirects the user to a page, temporary placeholder for now
+            // !!! DO NOT REMOVE, THIS REDIRECT WILL ENSURE THE USER IS BACK TO THE CREATE TASK PAGE PROPERLY.
+            // !!! IF REMOVED, IT WILL ONLY SHOW A WHITE SCREEN AFTER THE USER SUBMITS THE FORM
             redirect_user("../CreateTaskPage/create_task.php?id=$project_id");	
 		
 		} else { // If it did not run OK.
@@ -321,6 +322,8 @@ function update_task($dbc, $project_id, $task_id, $task_title, $task_description
 			
 			// Debugging message:
 			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';
+
+            return $errors;
 						
 		} // End of if ($r) IF.
 
@@ -345,7 +348,6 @@ function return_task_list($dbc, $project_id, $user_id){
 
         $user_id = mysqli_real_escape_string($dbc, $user_id);
 
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if user_id is found
         $q = "SELECT userID FROM account WHERE userID = '$user_id'";
         $r = @mysqli_query($dbc, $q);

@@ -56,7 +56,7 @@ function check_login($dbc, $email = '', $pass = '') {
 		} 
 
         else{ // Not a match in user table!
-            $errors[] = 'The username and password entered do not match those on file.';
+            $errors[] = 'The email and password entered do not match those on file.';
         }
 		
 	} // End of empty($errors) IF.
