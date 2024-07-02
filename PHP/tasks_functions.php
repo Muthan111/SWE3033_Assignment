@@ -3,7 +3,6 @@
 /*  
     Description: This page includes all functions related to tasks.
     create_task() function creates a task.
-    update_task_status() function updates the status of a task.
     get_task_list() function returns an associated array which contains a list of tasks that matches the project_id
     
     CHANGELOG:
@@ -20,6 +19,8 @@
     8. Fixed bugs regarding input validation and how the errors are processed as arrays. (24/06/2024)
     9. Removed dependencies as they are causing redeclared functions errors. Fixed SQL where it was searching for a User table instead of the account table. Fixed bugs. (25/06/2024)
     10. Fixed some error messages and some SQL functions. (26/06/2024)
+    11. Update join_task function, made sure that the user cant join a task that is not part of the project. Also added a section where the task will change its status to "Ongoing"
+    when the user joins it. (02/07/2024)
 
     TO DO:
     1. Testing
@@ -146,7 +147,15 @@ function create_task($dbc, $project_id) {
 
 function join_task($dbc, $project_id, $task_id, $user_id){
 
-    $errors = array_merge(validate_project_id($dbc, $project_id), validate_task_id($dbc, $task_id)); // Initialize error array and check if task ID and project ID is valid // Will this work?
+    $errors = array_merge(validate_project_id($dbc, $project_id), validate_task_id($dbc, $task_id)); // Initialize error array and check if task ID and project ID is valid
+
+    // Check if task is part of the project
+    $q = "SELECT taskID FROM task WHERE taskID = '$task_id' AND projectID = '$project_id'";
+    $r = @mysqli_query($dbc, $q);
+
+    if (mysqli_num_rows($r) == 0){
+        $errors[] = "Task is not part of this project!";
+    }
 
     // Validate user ID
     if(empty($user_id)){
@@ -157,7 +166,6 @@ function join_task($dbc, $project_id, $task_id, $user_id){
 
         $user_id = mysqli_real_escape_string($dbc, $user_id);
 
-        // NEED TO UPDATE SQL ONCE DATABASE IS COMPLETED
         // Find out if user_id is found
         $q = "SELECT userID from account where userID = '$user_id'";
         $r = @mysqli_query($dbc, $q);
@@ -200,7 +208,20 @@ function join_task($dbc, $project_id, $task_id, $user_id){
         $r = @mysqli_query($dbc, $q);
 
         if($r){
+            // Updates the status of the task to Ongoing
+            $q = "UPDATE task SET status = '1' WHERE taskID = '$task_id'";
+            $r = @mysqli_query($dbc, $q);
             //redirect_user("Temp"); // Redirect user back to the project page
+
+            if(!$r){
+                // Public message:
+                // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
+                echo '<h1>System Error</h1>
+                <p class="error">The task encountered an error on our server, you were not added to this task. We apologised for any incovenience.</p>'; 
+                
+                // Debugging message:
+                echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>';    
+            }
         } else{
             // Public message:
             // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
