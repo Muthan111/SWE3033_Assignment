@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                         <a class="logout-link" href="../logout.php">LOGOUT</a>
             </nav>
             </section>               
-    </div>
+        </div>
 
 
     <?php
@@ -142,12 +142,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         $timeSent = date('y-m-d h:ia');
 
         // Attempt insert query execution
-        $sql = "INSERT INTO chats (userID, chatMsg, timeSent) VALUES ('$user_id','$message', '$timeSent')";
+        $sql = "INSERT INTO chats (userID, chatMsg, timeSent) VALUES ('$user_id','$message', '$timeSent') ORDER BY timeSent ASC;";
         if(mysqli_query($dbc, $sql)){
             // Message successfully inserted
-            echo "<p>Message sent successfully!</p>";
+            //echo "<p>Message sent successfully!</p>";
         } else {
-            echo "<p>ERROR: Message not sent!!!</p>";
+            //echo "<p>ERROR: Message not sent!!!</p>";
         }
     }
 
