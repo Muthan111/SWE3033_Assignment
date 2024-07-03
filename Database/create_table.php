@@ -13,7 +13,7 @@ if ($conn->connect_error) {
 
 // sql to create table
 // Lines 15 to 33 check if the table exists and if it does not, it creates the table
-//Member table
+//account table
 $sqlCheckMember = "SHOW TABLES LIKE 'Account'";
 $resultMember = $conn->query($sqlCheckMember);
 if($resultMember->num_rows == 1) {
@@ -128,9 +128,26 @@ if($resultuserProjectTask->num_rows == 1) {
 }
 
 
+$sqlCheckChats = "SHOW TABLES LIKE 'chats'";
+$resultChats = $conn->query($sqlCheckChats);
+if ($resultChats->num_rows == 1) {
+  echo "Table 'chats' already exists";
+  echo "<br>";
+} else {
+  $sqlChats = "CREATE TABLE chats (
+    chatMsg TEXT NOT NULL,
+    timeSent DATETIME NOT NULL,
+    userID INT(10) NOT NULL,
+    FOREIGN KEY (userID) REFERENCES account(userID)  
+  );";
 
-
-
+  if ($conn->query($sqlChats) === TRUE) {
+    echo "Table 'chats' created successfully";
+  } else {
+    echo "Error creating 'chats' table: " . $conn->error;
+  }
+  echo "<br>";
+}
 
 $conn->close();
 ?>
