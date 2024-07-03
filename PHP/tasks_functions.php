@@ -482,5 +482,31 @@ function validate_task_id ($dbc, $task_id){
 
 }
 
+function delete_task($dbc, $task_id){
+
+    $errors = validate_task_id($dbc, $task_id);
+
+    if (empty($errors)){
+
+        $q = "DELETE FROM task WHERE taskID = '$task_id'";
+        $r = @mysqli_query($dbc, $q);
+
+        if(!$r){
+            // Public message:
+            // NEED TO UPDATE HTML CODE ONCE WEB PAGES ARE COMPLETED
+            echo '<h1>System Error</h1>
+			<p class="error">The task encountered an error on our server, your task was not created. We apologised for any incovenience.</p>'; 
+			
+			// Debugging message:
+			echo '<p>' . mysqli_error($dbc) . '<br /><br />Query: ' . $q . '</p>'; 
+        }
+
+    } else{
+
+        return $errors;
+
+    }
+
+}
 
 ?>

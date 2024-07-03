@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
     <form class="container" action="display_project.php?id=<?php echo $project_id ?>" method="post">
         <!-- Header section displaying project title and dates -->
         <header>
-            <h1 id="project-title">Project One</h1>
+            <h1 id="project-title">Admin Project Details</h1>
             <div class="project-dates">
                 <span id="project-start-date">Start Date: 2024-01-01</span> |
                 <span id="project-end-date">End Date: 2024-12-31</span>
@@ -216,51 +216,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                     case 1:
                                         echo "
                                             <select name='task-status[]'>
+                                                <option value='3' disabled>Assign Status</option>
                                                 <option value='1' selected>Ongoing</option>
                                                 <option value='2'>Completed</option>
-                                                <option value='3'>Unassigned</option>
                                                 <option value='0'>Expired</option>
                                             </select>";
                                         break;
                                     case 2:
                                         echo "
                                             <select name='task-status[]'>
+                                                <option value='3' disabled>Assign Status</option>                                            
                                                 <option value='1'>Ongoing</option>
                                                 <option value='2' selected>Completed</option>
-                                                <option value='3'>Unassigned</option>
                                                 <option value='0'>Expired</option>
                                             </select>";
                                         break;
                                     case 3:
                                         echo "
                                             <select name='task-status[]'>
+                                                <option value='3' disabled selected>Assign Status</option>
                                                 <option value='1'>Ongoing</option>
                                                 <option value='2'>Completed</option>
-                                                <option value='3' selected>Unassigned</option>
                                                 <option value='0'>Expired</option>
                                             </select>";
                                         break;
                                     case 0:
                                         echo "
                                             <select name='task-status[]'>
+                                                <option value='3' disabled>Assign Status</option>
                                                 <option value='1'>Ongoing</option>
                                                 <option value='2'>Completed</option>
-                                                <option value='3'>Unassigned</option>
                                                 <option value='0' selected>Expired</option>
                                             </select>";
                                         break;
                                     default:
                                         echo "
                                             <select name='task-status[]'>
+                                                <option value='3' disabled>Assign Status</option>
                                                 <option value='1'>Ongoing</option>
                                                 <option value='2'>Completed</option>
-                                                <option value='3'>Unassigned</option>
                                                 <option value='0'>Expired</option>
                                             </select>";
                                 }
                             echo "
                                 <input type='date' class='task-due-date' name='task-due-date[]' value='" . $task['dueDate'] . "'>
                                 <input type='text' readonly='' class='daysRemaining' value=''>
+                                <button id='deleteButton' form='none' onclick='deleteTask(\"".$task['taskID']."\")'>&#128465;</button>
+
                             </li>
                             ";
 
@@ -362,6 +364,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
 
         function updateTaskDaysRemaining(name, newDaysRemaining) {
             console.log(`Updated task "${name}" to have ${newDaysRemaining} days remaining`);
+        }
+
+        function deleteTask(taskID){
+            window.location.replace("../DisplayProjectPage/delete_task.php?id=<?php echo $project_id;?>&task=" + taskID);
         }
        
         const dates = document.getElementsByClassName('task-due-date');
