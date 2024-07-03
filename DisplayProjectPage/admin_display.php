@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                             echo "
                             <li>
                                 <input type='text' name='task-title[]' value='" . $task['taskName'] . "'>
-                                <input type='hidden' name='task-id[]' value='" . $task['taskID'] . "'>
+                                <input type='text' name='task-id[]' readonly='' value='" . $task['taskID'] . "'>
                                 <input type='text' name='task-description[]' value='" . $task['description'] . "'>";
                                 switch($task['status']){
                                     case 1:
@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                 currentDate = new Date()
                 timeDiff = dueDate - currentDate;
                 daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                days[i].value = daysRemaining;
+                days[i].value = daysRemaining.concat(" days remaining");
             })
         }
     </script>

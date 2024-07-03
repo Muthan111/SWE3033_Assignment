@@ -118,7 +118,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
             <section class="main-container">
                     <!------------------------------------------------------------------- HAU WEN PART ----------------------------------------------------------------------------------->
         <header>
-            <h1 id="project-title">Project One</h1>
+            <h1 id="project-title">Project Details</h1>
             <div class="project-dates">
                 <span id="project-start-date">Start Date: 2024-01-01</span> |
                 <span id="project-end-date">End Date: 2024-12-31</span>
@@ -155,7 +155,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addTask'])){
                 <input type="text" id="taskIDInput" name="taskIDInput" placeholder="Task ID" oninput="enableAddButton()" >
                 <button id="addTaskButton" type="submit" value="Submit" name="addTask">Add Task</button>
             </form>
-            
+            <br>
             <table>
                 <thead>
                     <tr>
