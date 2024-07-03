@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                         while($project = mysqli_fetch_assoc($data)){
                                             $admin_project_name = $project['projectName'];
                                             $admin_project_id = $project['projectID'];
-                                            echo "<option value='$admin_project_id'>$project_name - PID:$admin_project_id</option>";
+                                            echo "<option value='$admin_project_id'>$admin_project_name - PID:$admin_project_id</option>";
                                         }
                                     }
                                 ?>
@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                         while($project = mysqli_fetch_assoc($data)){
                                             $member_project_name = $project['projectName'];
                                             $member_project_id = $project['projectID'];
-                                            echo "<option value='$member_project_id'>$project_name - PID:$member_project_id</option>";
+                                            echo "<option value='$member_project_id'>$member_project_name - PID:$member_project_id</option>";
                                         }
                                     }    
                                 ?>
