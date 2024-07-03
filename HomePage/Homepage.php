@@ -118,9 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                                             <img src="../images/chat-icon.png" alt="Project Chat Select Dropdown Icon" />
                                             <select class="menu-item15" id="SelectChat">
                                                 <option value="" disabled selected>Select Chat</option>
-                                                <option value="chat1">- Chat 1</option>
-                                                <option value="chat2">- Chat 2</option>
-                                                <option value="chat3">- Chat 3</option>
+                                                <option value="chat1">- ScorpioSpeak</option>
                                             </select>
                                         </div>
                         </nav>
@@ -227,6 +225,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         
         document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
             window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
+        });
+
+        document.getElementById('SelectChat').addEventListener('change', function(e) {
+        window.location.href = "../ChatPage/chat_page.php"
         });
 
         // Get the popup

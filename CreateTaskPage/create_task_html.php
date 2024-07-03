@@ -87,9 +87,7 @@
                             <img src="../images/chat-icon.png" alt="Project Chat Select Dropdown Icon" />
                             <select class="menu-item15" id="SelectChat">
                                 <option value="" disabled selected>Select Chat</option>
-                                <option value="chat1">- Chat 1</option>
-                                <option value="chat2">- Chat 2</option>
-                                <option value="chat3">- Chat 3</option>
+                                <option value="chat1">- ScorpioSpeak</option>
                             </select>
                         </div>
                     </nav>
@@ -178,6 +176,10 @@
         document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
             window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
+        
+        document.getElementById('SelectChat').addEventListener('change', function(e) {
+        window.location.href = "../ChatPage/chat_page.php"
+        });
 
         function generateTaskID() {
             window.top.location = window.top.location;
@@ -217,34 +219,6 @@
             errorMessage.innerText = phpErrorMessage;
             popup.style.display = "block";
         }
-        //     function generateProjectID() {
-        //     const projectID = 'PROJ-' + Math.floor(Math.random() * 1000000);
-        //     document.getElementById('generatedProjectID').innerText = projectID;
-        // }
-
-        // function createNewTask() {
-        //     const taskName = document.getElementById("taskName").value;
-        //     const taskId = document.getElementById("taskId").value;
-        //     const projectDescription = document.getElementById("projectDescription").value;
-        //     const projectId = document.getElementById('generatedProjectID').innerText;
-            
-        //     if (taskName && taskId) {
-        //         const taskList = document.getElementById("taskList");
-        //         const taskItem = document.createElement("div");
-        //         taskItem.className = "task-item";
-        //         taskItem.innerHTML = `<strong>Task Name:</strong> ${taskName}<br><strong>Task ID:</strong> ${taskId}<br><strong>Project ID:</strong> ${projectId}<br><strong>Description:</strong> ${projectDescription}`;
-        //         taskList.appendChild(taskItem);
-
-        //         // Clear the input fields after creating the task
-        //         document.getElementById("taskName").value = "";
-        //         document.getElementById("taskId").value = "";
-        //         document.getElementById("projectDescription").value = "";
-
-        //         document.getElementById("myForm").submit(); 
-        //     } else {
-        //         alert("Please enter both task name and task ID");
-        //     }
-        // }
     </script>
     <?php mysqli_close($dbc); // Close database connection ?>
     </body>
