@@ -380,219 +380,237 @@ body {
 /* -----------------------------------------------------------------------HAU WEN PART ------------------------------------------------------------------------------------------*/
 
 .main-container {
-    flex: 1;
-    max-width: 800px;
-    left: 2%;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    position: relative;
-    min-height: 100vh;
-    padding-bottom: 137px;
-    padding-left: 272px;
-    z-index: 1;
-    background-color: var(--color-white); /* Added background color */
-  }
+  flex: 1;
+  max-width: 800px;
+  left: 2%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 137px;
+  padding-left: 272px;
+  z-index: 1;
+  background-color: var(--color-white);
+  font-family: Inter, sans-serif;
+}
 
 /* Styles for the header */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  font-family: Inter, sans-serif;
 }
 
 header h1 {
-    font-size: 2em;
+  font-size: 2em;
 }
 
 .project-dates {
-    font-size: 0.8em;
+  font-size: 0.8em;
 }
 
 /* Styles for project details section */
 .project-details {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-family: Inter, sans-serif;
 }
 
 .project-details div {
-    flex: 1;
-    margin-right: 10px;
+  flex: 1;
+  margin-right: 20px; /* Adjust the margin as needed */
 }
 
 .project-details div:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .project-details label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-family: Inter, sans-serif;
 }
 
-.project-details span,
-.project-details input {
-    display: block;
-    padding: 10px;
-    font-size: 1em;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+.project-details input,
+.project-details span {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: Inter, sans-serif;
 }
 
 .project-details input {
-    width: 97%;
+  width: calc(100% - 20px);
+  margin-right: 20px;
 }
 
 /* Styles for project description section */
 .project-description {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+  font-family: Inter, sans-serif;
 }
 
 .project-description label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .project-description span,
 .project-description textarea {
-    display: block;
-    padding: 10px;
-    font-size: 1em;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
+  display: block;
+  padding: 10px;
+  font-size: 1em;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
 }
 
 .project-description textarea {
-    height: 100px;
-    overflow-y: auto;
+  height: 100px;
+  overflow-y: auto;
 }
 
 /* Styles for tasks section */
 .tasks {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+  font-family: Inter, sans-serif;
 }
 
 .tasks h2 {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .tasks ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .tasks ul li {
-    display: grid;
-    grid-template-columns: 1.5fr 2fr 1fr 1fr 1fr;
-    align-items: center;
-    padding: 10px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    gap: 10px;
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 10px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  gap: 10px;
+  font-family: Inter, sans-serif;
 }
 
 .tasks ul li input,
 .tasks ul li textarea,
 .tasks ul li select {
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
 }
 
 .tasks ul li textarea {
-    resize: none;
-    height: 50px;
+  resize: none;
+  height: 50px;
 }
 
 /* Styles for task form */
 .task-form {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  font-family: Inter, sans-serif;
 }
 
 .task-form label {
-    margin-bottom: 5px;
-    font-weight: bold;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .task-form input,
 .task-form select {
-    padding: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: Inter, sans-serif;
 }
 
 .task-form button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
 }
 
 .task-form button:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 /* Styles for buttons */
 .buttons {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+  font-family: Inter, sans-serif;
 }
 
 .buttons button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: Inter, sans-serif;
 }
 
 .buttons button:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 .buttons #updateProjectButton {
-    background-color: #007BFF;
+  background-color: #007BFF;
 }
 
 .buttons #updateProjectButton:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
-	/* Styles for the delete button */
+/* Styles for the delete button */
 .buttons #deleteButton {
-    cursor: pointer;
-    border: none;
-    background: white;
-    color: black;
-    font-size: 1.5em;
-    padding: 5px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px; /* Fixed width */
-    height: 30px; /* Fixed height */
+  cursor: pointer;
+  border: none;
+  background: white;
+  color: black;
+  font-size: 1.5em;
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px; /* Fixed width */
+  height: 30px; /* Fixed height */
+  font-family: Inter, sans-serif;
 }
 
 /* ----------------------------------------------------------------HAU WEN PART--------------------------------------------------------------- */
@@ -668,8 +686,29 @@ header h1 {
   }
   
   .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.popup-content button:hover {
+  background-color: #525252;
+}
+
+.close {
+  position: absolute;
+  top: 0px;
+  right: 9px;
+  color: #aaa;
+  float: right;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

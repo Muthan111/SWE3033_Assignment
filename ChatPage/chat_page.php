@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
         $timeSent = date('y-m-d h:ia');
 
         // Attempt insert query execution
-        $sql = "INSERT INTO chats (userID, chatMsg, timeSent) VALUES ('$user_id','$message', '$timeSent') ORDER BY timeSent ASC;";
+        $sql = "INSERT INTO chats (userID, chatMsg, timeSent) VALUES ('$user_id','$message', '$timeSent');";
         if(mysqli_query($dbc, $sql)){
             // Message successfully inserted
             //echo "<p>Message sent successfully!</p>";
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
     // Retrieve messages from the database
     $query = 
     "SELECT account.username, chats.chatMsg, chats.timeSent FROM chats
-    INNER JOIN account ON chats.userID = account.userID ORDER BY timeSent ASC";
+    INNER JOIN account ON chats.userID = account.userID  ORDER BY timeSent ASC" ;
     $run = $dbc->query($query);
     ?>
 
