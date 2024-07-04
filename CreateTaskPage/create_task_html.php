@@ -180,6 +180,10 @@
             window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
 
+        document.getElementById('SelectChat').addEventListener('change', function(e) {
+        window.location.href = "../ChatPage/chat_page.php"
+        });
+
         function generateTaskID() {
             window.top.location = window.top.location;
         }
