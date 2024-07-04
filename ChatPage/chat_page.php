@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
       href="https://fonts.googleapis.com/css2?family=Noto Sans:wght@400&display=swap"
     />
 </head>
-<body>
+<body onload="show_chat_history()">
     <main class="mainpage" id="Main">
         <div class="background-fill" id="bg-fill">
             <section class="homepage-sidebar2" id="SidebarSection">
@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
     // Retrieve messages from the database
     $query = 
     "SELECT account.username, chats.chatMsg, chats.timeSent FROM chats
-    INNER JOIN account ON chats.userID = account.userID";
+    INNER JOIN account ON chats.userID = account.userID ORDER BY timeSent ASC";
     $run = $dbc->query($query);
     ?>
 
@@ -168,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
 
 
 
-        <div id="chatMessages">
+        <div class="chat-messages" id="chatMessages">
             <?php 
             $messageOwner = 0;
             if ($user_id){
@@ -301,6 +301,13 @@ if (phpErrorMessage) {
     popup.style.display = "block";
 }
 
+function show_chat_history(){
+ 
+ var element = document.getElementById("chatMessages");
+    element.scrollTop = element.scrollHeight;
+  
+ }
+            
 function refresh() {
     window.top.location = window.top.location;
 }
