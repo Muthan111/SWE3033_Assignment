@@ -501,8 +501,9 @@ body {
   background-color: #777;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 22px;
   cursor: pointer;
+  width: 150px;
 }
 
 .generate-id button:hover {

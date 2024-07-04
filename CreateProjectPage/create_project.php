@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                 <h1>Create a New Project</h1>
                 <div class="generate-id form-group">
                     <input type="text" id="project-id" name="project-id" value="<?php echo generate_id($dbc, 4) ?>">
-                    <button id="Auto-Generate" onclick="refresh()" type="button">Auto Generate</button>
+                    <button class="Auto-Generate" id="Auto-Generate" onclick="refresh()" type="button">Auto Generate</button>
                 </div>
                 <div class="form-group">
                     <label for="project-title">Project Title</label>
