@@ -64,7 +64,7 @@ if($resultuserProject->num_rows == 1) {
     projectID VARCHAR(10) NOT NULL,
     isadmin BOOLEAN,
     PRIMARY KEY (userID, projectID),
-    FOREIGN KEY (userID) REFERENCES Account(userID),
+    FOREIGN KEY (userID) REFERENCES Account(userID) ,
     FOREIGN KEY (projectID) REFERENCES Project(projectID)
 );";
 
@@ -116,8 +116,8 @@ if($resultuserProjectTask->num_rows == 1) {
     projectID VARCHAR(10),
     taskID VARCHAR(10),
     PRIMARY KEY (userID,projectID,taskID),
-    FOREIGN KEY (userID, projectID) REFERENCES userProject(userID, projectID),
-    FOREIGN KEY (taskID) REFERENCES Task(taskID)
+    FOREIGN KEY (userID, projectID) REFERENCES userProject(userID, projectID) ON DELETE CASCADE,
+    FOREIGN KEY (taskID) REFERENCES Task(taskID) ON DELETE CASCADE
   );";
   if ($conn->query($sqluserProjectTask) === TRUE) {
     echo "Table userProjectTask created successfully";
