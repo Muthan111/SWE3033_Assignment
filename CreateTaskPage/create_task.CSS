@@ -1,4 +1,3 @@
-
 .app-title,
 .scorpio-icon {
   position: fixed;
@@ -400,8 +399,9 @@ body {
   align-items: center;
   margin-bottom: 20px;
   padding: 10px; /* Added padding */
-  background-color: #f4f4f4; /* Added background color */
+  background-color: var(--color-white); /* Changed background color */
   border-bottom: 1px solid #e0e0e0; /* Added border */
+  border-radius: var(--br-5xs); /* Added border radius */
 }
 
 .project-id-box {
@@ -451,7 +451,7 @@ body {
   border-radius: 8px; /* Added border radius */
 }
 
-.description-box.description-title {
+.description-box .description-title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px; /* Added margin */
@@ -479,6 +479,7 @@ body {
   display: flex;
   margin-bottom: 20px;
   padding: 10px; /* Added padding */
+  gap: 20px;
   background-color: #f9f9f9; /* Added background color */
   border: 1px solid #ccc; /* Added border */
   border-radius: 8px; /* Added border radius */
@@ -488,6 +489,7 @@ body {
 .task-inputs.task-name {
   flex: 1;
   margin-right: 20px;
+  margin-bottom: 20px;
   font-family: 'Inter', sans-serif; /* Added font family */
   font-size: 16px; /* Added font size */
 }
@@ -505,6 +507,7 @@ body {
   display: flex;
   align-items: center;
   margin-right: 10px; /* Added margin */
+  margin-bottom: 20px;
   font-family: 'Noto Sans', sans-serif; /* Added font family */
   font-weight: 400; /* Added font weight */
   font-size: 12px; /* Added font size */
@@ -517,28 +520,38 @@ body {
   border-radius: 4px;
   cursor: pointer; /* Added cursor */
 }
+.project-id-box .auto-generate-button {
+  cursor: pointer; /* Added cursor */
+  margin-left: 10px; /* Add margin to create space */
+}
+
+.createtaskbutton-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 
 .task-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 24px;
-  background-color: #727272;
+  background-color: #525252;
   color: white;
   border: none;
-  border-radius: 90px;
-  cursor: pointer; /* Added cursor */
+  padding: 12px 24px; /* Adjusted padding for larger size */
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  border-radius: 50px; /* Rounded border */
 }
 
 .task-button.task-button-inner {
   display: flex;
   align-items: center;
-  padding: 12px 24px;
-  background-color: #727272;
+  padding: 12px 24px; /* Adjusted padding for larger size */
+  background-color: #525252;
   color: white;
   border: none;
-  border-radius: 90px;
-  cursor: pointer; /* Added cursor */
+  border-radius: 50px; /* Rounded border */
+  cursor: pointer;
 }
 
 .task-button.task-button-inner.icon {
@@ -546,7 +559,7 @@ body {
   height: 24px;
   margin-right: 10px;
   background-color: #555;
-  border-radius: 50%;
+  border-radius: 50%; /* Fully rounded icon */
   display: flex;
   align-items: center;
   justify-content: center;

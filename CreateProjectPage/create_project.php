@@ -163,11 +163,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                 </div>
                 <div class="form-group">
                     <label for="project-start-date">Project Start Date</label>
-                    <input name="project-start-date" type="date" id="project-start-date">
+                    <input name="project-start-date" type="date" id="project-start-date " style="text-transform: uppercase;">
                 </div>
                 <div class="form-group">
                     <label for="project-end-date">Project End Date</label>
-                    <input name="project-due-date" type="date" id="project-end-date">
+                    <input name="project-due-date" type="date" id="project-end-date" style="text-transform: uppercase;">
                 </div>
                 <div class="form-group">
                     <label for="project-description">Project Description</label>

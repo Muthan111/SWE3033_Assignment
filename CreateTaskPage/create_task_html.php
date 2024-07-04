@@ -39,7 +39,7 @@
                         </div>
                         <div class="select-container">
                             <img src="../images/select-icon.png" alt="Project Select Dropdown Icon" />
-                            <select class="menu-item14" id="memberProjectSelect">
+                            <select class="menu-item14" id="adminProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
                                     list($check, $data) = return_project_list($dbc, $user_id, 1); // Is an admin
@@ -55,13 +55,13 @@
                             </select>
                         </div>
                     </nav>
-                    <nav class="list5" id="ProjectSelectNavigatorAdmin">
+                    <nav class="list5" id="ProjectSelectNavigatorMember">
                         <div class="title6">
                             <b class="participating-projects2">Member Project List</b>
                         </div>
                         <div class="select-container">
                             <img src="../images/select-icon.png" alt="Project Select Dropdown Icon" />
-                            <select class="menu-item14" id="adminProjectSelect">
+                            <select class="menu-item14" id="memberProjectSelect">
                                 <option value="" disabled selected>Select Project</option>
                                 <?php
                                     list($check, $data) = return_project_list($dbc, $user_id, 0); // Not an admin
@@ -73,8 +73,6 @@
                                             echo "<option value='$project_id'>$project_name - PID:$project_id</option>";
                                         }
                                     }
-
-                                    
                                 ?>
                             </select>
                         </div>
@@ -100,33 +98,38 @@
                     <div class="header">
                         <div class="header-title">Create a New Task</div>
                         <div class="project-id-box">
+                        <div class="project-id-title">Project ID:</div>
                             <div class="project-id-title"><?php echo $current_project_id?></div>
                         </div>
                     </div>
-                    <div class="description-box">
-                        <div class="description-title">Task Description</div>
-                        <div class="description-inner-box">
-                            <textarea id="projectDescription" name="task-description" placeholder="Enter task description..."></textarea>
-                        </div>
-                    </div>
+                   
                     <div class="task-inputs">
                         <div class="task-name">
                             <input type="text" placeholder="Task Name" id="taskName" name="task-title">
                         </div>
                         <div class="project-id-box">
                             <input type="text" class="project-id-value" value="<?php echo generate_task_id($dbc, 4) ?>" id="taskId" name="task-id">
-                            <div class="project-id-value" onclick="generateTaskID()">Auto Generate</div>
+                            <input type="button" class="project-id-value auto-generate-button" onclick="generateTaskID()" value="Auto Generate">
                         </div>
                         <div class="task-date">
-                            <input name="task-due-date" type="date" id="project-end-date" placeholder="DD/MM/YYYY">
-                        </div>
-                        <button name ="task-submit" class="task-button" value="Submit">
-                            <div class="task-button-inner" onclick="createNewTask()">
-                                <div class="icon">+</div>
-                                <div>Create a New Task</div>
-                            </div>
-                        </button>
+                    <input name="task-due-date" type="date" id="project-end-date" placeholder="DD/MM/YYYY" style="text-transform: uppercase;">
+                </div>
+                        
+                        
                     </div>
+                    <div class="description-box">
+                        <div class="description-title">Task Description</div>
+                        <div class="description-inner-box">
+                            <textarea id="projectDescription" name="task-description" placeholder="Enter task description..."></textarea>
+                        </div>
+                        <div class="createtaskbutton-container">
+                        <button name="task-submit" class="task-button" value="Submit">
+                    <div class="task-button-inner">
+                        <div class="icon">+</div>
+                        <div>Create a New Task</div>
+                    </div>
+                </button>
+                </div>
                     <div class="task-list" id="taskList">
                         <h2>Task List</h2>
                         <?php
@@ -176,10 +179,6 @@
         document.getElementById('memberProjectSelect').addEventListener('change', function(e) {
             window.location.href = "../DisplayProjectPage/display_project.php?id="+ this.value;
             });
-        
-        document.getElementById('SelectChat').addEventListener('change', function(e) {
-        window.location.href = "../ChatPage/chat_page.php"
-        });
 
         function generateTaskID() {
             window.top.location = window.top.location;
@@ -219,6 +218,34 @@
             errorMessage.innerText = phpErrorMessage;
             popup.style.display = "block";
         }
+        //     function generateProjectID() {
+        //     const projectID = 'PROJ-' + Math.floor(Math.random() * 1000000);
+        //     document.getElementById('generatedProjectID').innerText = projectID;
+        // }
+
+        // function createNewTask() {
+        //     const taskName = document.getElementById("taskName").value;
+        //     const taskId = document.getElementById("taskId").value;
+        //     const projectDescription = document.getElementById("projectDescription").value;
+        //     const projectId = document.getElementById('generatedProjectID').innerText;
+            
+        //     if (taskName && taskId) {
+        //         const taskList = document.getElementById("taskList");
+        //         const taskItem = document.createElement("div");
+        //         taskItem.className = "task-item";
+        //         taskItem.innerHTML = <strong>Task Name:</strong> ${taskName}<br><strong>Task ID:</strong> ${taskId}<br><strong>Project ID:</strong> ${projectId}<br><strong>Description:</strong> ${projectDescription};
+        //         taskList.appendChild(taskItem);
+
+        //         // Clear the input fields after creating the task
+        //         document.getElementById("taskName").value = "";
+        //         document.getElementById("taskId").value = "";
+        //         document.getElementById("projectDescription").value = "";
+
+        //         document.getElementById("myForm").submit(); 
+        //     } else {
+        //         alert("Please enter both task name and task ID");
+        //     }
+        // }
     </script>
     <?php mysqli_close($dbc); // Close database connection ?>
     </body>

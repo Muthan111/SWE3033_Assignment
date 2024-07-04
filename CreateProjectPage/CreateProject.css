@@ -376,160 +376,160 @@ body {
 
 
 .main-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    position: relative;
-    min-height: 100vh; /* Ensure main-container takes at least full viewport height */
-    padding-bottom: 137px; /* Adjust padding to accommodate footer height */
-    padding-left: 272px;
-    z-index: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  min-height: 100vh; /* Ensure main-container takes at least full viewport height */
+  padding-bottom: 137px; /* Adjust padding to accommodate footer height */
+  padding-left: 272px;
+  z-index: 0;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    margin: 0;
-    padding: 0;
+  font-family: Inter, sans-serif;
+  display: flex;
+  margin: 0;
+  padding: 0;
 }
 
 .sidebar {
-    width: 250px;
-    background-color: #f4f4f4;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    z-index: 20; /* Fixed z-index error */
+  width: 250px;
+  background-color: #f4f4f4;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  z-index: 20; /* Fixed z-index error */
 }
 
 .sidebar h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .sidebar nav a {
-    display: block;
-    padding: 10px;
-    margin: 5px 0;
-    color: #333;
-    text-decoration: none;
+  display: block;
+  padding: 10px;
+  margin: 5px 0;
+  color: #333;
+  text-decoration: none;
 }
 
 .sidebar nav a:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 .dropdown {
-    margin: 20px 0;
-    z-index: 30; /* Fixed z-index error */
+  margin: 20px 0;
+  z-index: 30; /* Fixed z-index error */
 }
 
 .dropdown button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f4f4f4;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    text-align: left;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  text-align: left;
 }
 
 .dropdown-content {
-    display: none;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    z-index: 40; /* Fixed z-index error */
+  display: none;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  z-index: 40; /* Fixed z-index error */
 }
 
 .dropdown-content a {
-    padding: 10px;
-    display: block;
-    text-decoration: none;
-    color: #333;
+  padding: 10px;
+  display: block;
+  text-decoration: none;
+  color: #333;
 }
 
 .dropdown-content a:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 
 .main-content {
-    flex-grow: 1;
-    padding: 40px;
-    background-color: #fff;
-    width: 780px;
-    z-index: 50; /* Fixed z-index error */
+  flex-grow: 1;
+  padding: 40px;
+  background-color: #fff;
+  width: 780px;
+  z-index: 50; /* Fixed z-index error */
 }
 
 .form-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 10px;
-    font-size: 18px;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 18px;
 }
 
 .form-group input,.form-group textarea {
-    width: 100%;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
 }
 
 .form-group textarea {
-    resize: vertical;
-    height: 150px;
+  resize: vertical;
+  height: 150px;
 }
 
 .generate-id {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    z-index: 60; /* Fixed z-index error */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  z-index: 60; /* Fixed z-index error */
 }
 
 .generate-id input {
-    flex-grow: 1;
-    margin-right: 10px;
+  flex-grow: 1;
+  margin-right: 10px;
 }
 
 .generate-id button {
-    padding: 15px;
-    background-color: #777;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 15px;
+  background-color: #777;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .generate-id button:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
 .create-project {
-    display: flex;
-    justify-content: center;
-    z-index: 70; /* Fixed z-index error */
-    padding: 15px 30px;
-    background-color: #777;
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    font-size: 16px;
+  display: flex;
+  justify-content: center;
+  z-index: 70; /* Fixed z-index error */
+  padding: 15px 30px;
+  background-color: #777;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .create-project:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
-.errorclass{
-    font-family: var(--small-text);
-    color: red;
-    z-index: 80; /* Fixed z-index error */
+.errorclass {
+  font-family: Inter, sans-serif;
+  color: red;
+  z-index: 80; /* Fixed z-index error */
 }
 
 .popup {
@@ -554,20 +554,20 @@ body {
   padding: 20px;
   border: 1px solid #888;
   border-radius: var(--br-5xs); /* Same border radius as the page */
-  width: 200px; 
-  font-family: var(--small-text); /* Use the same font family */
+  width: 200px;
+  font-family: Inter, sans-serif; /* Use the same font family */
   font-size: var(--small-text-size); /* Use the same font size */
   line-height: 150%;
-  font-weight: 500; 
+  font-weight: 500;
 }
 
-.popupInputField{
+.popupInputField {
   width: 100%;
   padding: var(--padding-5xs);
   border: 1px solid #888;
-  border-radius: var(--br-5xs); 
-  font-family: var(--small-text); 
-  font-size: var(--small-text-size); 
+  border-radius: var(--br-5xs);
+  font-family: Inter, sans-serif;
+  font-size: var(--small-text-size);
   box-sizing: border-box;
 }
 
@@ -582,9 +582,9 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  font-family: var(--small-text); 
-  font-size: var(--small-text-size); 
-  font-weight: 500; 
+  font-family: Inter, sans-serif;
+  font-size: var(--small-text-size);
+  font-weight: 500;
 }
 
 .popup-content button:hover {
