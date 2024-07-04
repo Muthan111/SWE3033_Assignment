@@ -496,7 +496,7 @@ body {
 
 .task-inputs input[type="text"],
 .task-inputs.project-id-value {
-  padding: 10px;
+  padding: 10px 20px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-family: 'Inter', sans-serif; /* Added font family */
@@ -522,7 +522,12 @@ body {
 }
 .project-id-box .auto-generate-button {
   cursor: pointer; /* Added cursor */
+  padding: 10px 20px;
   margin-left: 10px; /* Add margin to create space */
+  background-color: #525252;
+  color: white;
+  border: none;
+  border-radius: 50px;
 }
 
 .createtaskbutton-container {
@@ -571,6 +576,8 @@ body {
   background-color: #f9f9f9; /* Added background color */
   border: 1px solid #ccc; /* Added border */
   border-radius: 8px; /* Added border radius */
+  max-height: 400px; /* Adjust the height as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .task-item {
