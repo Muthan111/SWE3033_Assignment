@@ -439,7 +439,7 @@ header h1 {
 .project-details input,
 .project-details span {
   display: block;
-  width: 100%;
+  width: 94%;
   padding: 10px;
   font-size: 1em;
   background: #f9f9f9;
@@ -500,14 +500,14 @@ header h1 {
 
 .tasks ul li {
   display: grid;
-  grid-template-columns: 1.5fr 2fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1.8fr 1.3fr 1.3fr 1fr 0.5fr;
   align-items: center;
   padding: 10px;
   background: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 5px;
   margin-bottom: 10px;
-  gap: 10px;
+  gap: 5px;
   font-family: Inter, sans-serif;
 }
 
