@@ -133,19 +133,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
 
     <?php
     // Check if form is submitted
-    if (isset($_POST['submit'])){
+    if (isset($_POST['submit'])) {
         // Escape user inputs for security
         $message = mysqli_real_escape_string($dbc, $_REQUEST['message']);
         date_default_timezone_set('Asia/Singapore');
-        $timeSent = date('y-m-d h:ia');
-
+        $timeSent = date('Y-m-d H:i'); // Use full year and 24-hour format
+    
         // Attempt insert query execution
         $sql = "INSERT INTO chats (userID, chatMsg, timeSent) VALUES ('$user_id','$message', '$timeSent');";
-        if(mysqli_query($dbc, $sql)){
+        if (mysqli_query($dbc, $sql)) {
             // Message successfully inserted
-            //echo "<p>Message sent successfully!</p>";
+            // echo "<p>Message sent successfully!</p>";
         } else {
-            //echo "<p>ERROR: Message not sent!!!</p>";
+            // Output MySQL error
+            // echo "<p>ERROR: Message not sent!!! " . mysqli_error($dbc) . "</p>";
         }
     }
 
@@ -188,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['projectCode'])) {
                 <div class="message-content">
                     <div class="message-header">
                         <div class="displayUsername"><?php echo $row['username']?></div>
-                        <div class="displayTimeSent"><?php echo $row['timeSent']?></div>
+                        <div class="displayTimeSent"><?php echo date('Y-m-d H:i', strtotime($row['timeSent']))?></div>
                     </div>
                     <div class="msgUser1">
                         <span><?php echo $row['chatMsg']?></span>
